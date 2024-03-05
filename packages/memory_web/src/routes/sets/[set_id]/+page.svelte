@@ -3,12 +3,41 @@
 
 <script lang="ts">
     import { enhance } from "$app/forms";
-
+    import * as Popover from "$lib/components/ui/popover";
+    import SimpleLineIconsOptionsVertical from '~icons/simple-line-icons/options-vertical';
     //https://www.shadcn-svelte.com/docs/components/card
     import * as Card from "$lib/components/ui/card";
     import { Button } from "$lib/components/ui/button";
+	import Input from "$lib/components/ui/input/input.svelte";
+	import { Label } from "$lib/components/ui/label";
+	import Textarea from "$lib/components/ui/textarea/textarea.svelte";
+    import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import SetCard from "./set-card.svelte";
+    import { toast } from "svelte-sonner";
+
    
     export let data;
+    export let form;
+
+    $: {
+        if (form?.error) {
+            toast.error(form.error, {
+            // description: "Sunday, December 03, 2023 at 9:00 AM",
+            // action: {
+            //     label: "Undo",
+            //     onClick: () => console.log("Undo")
+            // }
+            });
+        }else if (form?.status) {
+            toast.success(form.status, {
+            // description: "Sunday, December 03, 2023 at 9:00 AM",
+            // action: {
+            //     label: "Undo",
+            //     onClick: () => console.log("Undo")
+            // }
+            });
+        }
+    }
 
 </script>
 
@@ -19,16 +48,17 @@
         return async ({ update }) => {
           update({ reset: false });
         };
-      }}>
+      }} >
     <input name="id" value={data.set.id} hidden>
     <Card.Header>
         <Card.Title>{data.set?.title}</Card.Title>
         <Card.Description>{data.set?.visibility}</Card.Description>
     </Card.Header>
     <Card.Footer class="flex justify-end gap-3">
-        <Button formaction="?/delete" type="submit" variant="outline">Delete</Button>
+        
         <Button type="submit">Edit</Button>
-        <Button formaction="?/add_card" type="submit">Add Card</Button>
+        <Button formaction="?/delete" type="submit" variant="destructive">Delete</Button>
+   
     </Card.Footer>
     </form>
 
@@ -36,27 +66,26 @@
 {#if data.set.cards != undefined}
 {#each data.set.cards as card}
 <Card.Root >
-    <form method="POST" use:enhance={() => {
+    <form id={card.id} method="POST" use:enhance={() => {
         return async ({ update }) => {
             update({ reset: false });
         };
     }}>
     <input name="id" value={card.id} hidden>
-    <input name="set_id" value={data.set.id} hidden>
-    <div class="card">
-        <div class="card-side">
-            <p class="card-content">{card.front}</p>
-        </div>
-        <div class="card-side">
-            <p class="card-content">{card.back}</p>
-        </div>
-    </div>
+    <SetCard default_editable={false} card={card}/>
+    
+    
 
     </form>
 
 </Card.Root>
-    
+
 {/each}
+<Card.Root >
+<form id="new-card"  method="POST" use:enhance>
+<SetCard default_editable={true} card={null}/>
+</form>
+</Card.Root>
 {/if}
 {/if}
 {#if data.set == undefined}
@@ -65,36 +94,3 @@
 
 
 </section>
-
-<style>
-    .card{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        height: 150px;
-        padding: 10px;
-    }
-    .card .card-side:nth-child(1){
-        border-right: 2px solid #fff;
-        align-items: flex-center;
-        width: 50%;
-    
-    }
-    .card-side .card-content{
-        width: 100%;
-        
-        
-        height: 100%;
-
-    }
-
-    .card-side{
-        padding-left: 5px;
-        padding-right: 5px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 10px;
-    }
-</style>

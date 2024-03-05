@@ -8,7 +8,10 @@
 	import Search from './search.svelte';
 	import UserNav from './user-nav.svelte';
 	import MainNav from './main-nav.svelte';
+	import { Toaster } from "$lib/components/ui/sonner";
+
 </script>
+<Toaster />
 <div class="hidden flex-col md:flex">
 	<div class="border-b">
 		<div class="flex h-16 items-center px-4">

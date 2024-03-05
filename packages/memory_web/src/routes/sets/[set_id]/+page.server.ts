@@ -32,7 +32,46 @@ export async function load({params,fetch}) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-    add_card: async ({fetch,params}) => {
+    update_card: async ({fetch,params,request}) => {
+        const data = await request.formData();
+        const front = data.get('front');
+        const back = data.get('back');
+        const card_id = data.get('id');
+        const set_id = params.set_id;
+
+        if (set_id === null || set_id === "") {
+            return fail(400,{
+                error:"set_id is missing"
+            })
+        }
+        //request the url at localhost:8000/api/auth/signup
+        const response = await fetch(`/api/sets/${set_id}`, { 
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "UpdateCard":{card_id:card_id,"front":front ,"back":back }})
+        }
+        );
+        if (response.status == 401){
+            redirect(301,"/auth/login"); 
+        }
+        if (response.status !== 200) {
+            return fail(400,{
+                error:await response.text()
+            });
+            
+        }
+        return {
+            status: "Updated Card"
+        }
+
+
+    },
+    add_card: async ({fetch,params,request}) => {
+        const data = await request.formData();
+		const front = data.get('front');
+        const back = data.get('back');
 		// TODO log the user in
 
         const set_id = params.set_id;
@@ -49,7 +88,7 @@ export const actions = {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "AddCard":{"front":"Front Of Card" ,"back":"Back Of Card" }})
+            body: JSON.stringify({ "AddCard":{"front":front ,"back":back }})
         }
         );
         if (response.status == 401){
@@ -60,6 +99,9 @@ export const actions = {
                 error:await response.text()
             });
             
+        }
+        return {
+            status: "Added Card"
         }
 	},
     delete: async ({fetch,params }) => {
@@ -92,7 +134,7 @@ export const actions = {
         }
         redirect(301,"/sets"); 
 	},
-    delete_card: async ({request,params }) => {
+    delete_card: async ({request,params,fetch }) => {
 		// TODO log the user in
         const data = await request.formData();
 		const card_id = data.get('id');
@@ -121,6 +163,9 @@ export const actions = {
                 error:await response.text()
             });
             
+        }
+        return {
+            status: "Deleted Card"
         }
 	}
 }
