@@ -10,7 +10,11 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  
   build:
+    defaults:
+          run:
+            working-directory: ./packages/memory_server
     
     runs-on: ubuntu-latest
     strategy:
@@ -21,9 +25,6 @@ jobs:
     - uses: Swatinem/rust-cache@v2
       with:
         save-if: ${{ github.ref == 'refs/heads/master' }}
-
-          
-      
     - uses: actions/checkout@v3
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.10.0
