@@ -12,9 +12,7 @@ env:
 jobs:
   
   build:
-    defaults:
-      run:
-        working-directory: packages/memory_server
+        
     
     runs-on: ubuntu-latest
     strategy:
@@ -31,6 +29,8 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
     - name: Build
+      working-directory: packages/memory_server
       run: cargo build --verbose
     - name: Run tests
+      working-directory: packages/memory_server
       run: cargo test --verbose
