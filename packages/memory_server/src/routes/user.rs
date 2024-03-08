@@ -1,12 +1,13 @@
+use std::str::FromStr;
+
 use actix_identity::Identity;
 
 use actix_session::Session;
 use actix_web::{
-    post,
-    web::{Data, Form, Json},
-    HttpMessage, HttpRequest, HttpResponse, Responder,
+    get, post, web::{self, Data, Form, Json, Path}, HttpMessage, HttpRequest, HttpResponse, Responder
 };
-use mongodb::error::WriteFailure;
+use bson::oid::ObjectId;
+use mongodb::error::{Error, WriteFailure};
 
 use serde::Deserialize;
 use tracing::{debug, info, trace, warn};
@@ -48,6 +49,36 @@ pub async fn signup(
             .unwrap();
             HttpResponse::Ok().into()
         }
+    };
+}
+
+#[get("me")]
+pub async fn get_user(
+    id: Identity,
+    db: Data<MongoDatabase>,
+) -> impl Responder {
+    return match user::get_user(&db, id.id().unwrap()).await {
+        Ok(Some(user)) => HttpResponse::Ok().json(user),
+        Ok(None) => HttpResponse::NotFound().body("User not found"),
+        Err(err) => {
+            warn!("Failed to get user: {}", err);
+            HttpResponse::InternalServerError().body("Failed to get user")
+        }
+    };
+}
+
+#[get("check_username/{username}")]
+pub async fn check_username(
+    db: Data<MongoDatabase>,
+    username: Path<String>
+) -> impl Responder {
+    return match user::check_username(&db,&username).await {
+        Ok(_) => HttpResponse::Ok().await.unwrap(),
+        Err(a) =>  match a.get_custom::<String>() {
+                Some(err) => HttpResponse::Conflict().json(err),
+                None => HttpResponse::InternalServerError().await.unwrap()
+            }
+        
     };
 }
 

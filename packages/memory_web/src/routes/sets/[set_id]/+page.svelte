@@ -3,21 +3,17 @@
 
 <script lang="ts">
     import { enhance } from "$app/forms";
-    import * as Popover from "$lib/components/ui/popover";
-    import SimpleLineIconsOptionsVertical from '~icons/simple-line-icons/options-vertical';
-    //https://www.shadcn-svelte.com/docs/components/card
     import * as Card from "$lib/components/ui/card";
     import { Button } from "$lib/components/ui/button";
-	import Input from "$lib/components/ui/input/input.svelte";
-	import { Label } from "$lib/components/ui/label";
-	import Textarea from "$lib/components/ui/textarea/textarea.svelte";
-    import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	
 	import SetCard from "./set-card.svelte";
     import { toast } from "svelte-sonner";
+	import { user } from "$lib/store";
 
    
     export let data;
     export let form;
+    let own_set = data.set?.user_id == $user?.id;
 
     $: {
         if (form?.error) {
@@ -41,7 +37,7 @@
 
 </script>
 
-<section class="flex flex-col w-8/12 h-full gap-5 justify-items-center ">
+<section class="flex flex-col max-w-screen-md h-full gap-5 justify-items-center ">
 {#if data.set != undefined}
 <Card.Root>
     <form method="POST" use:enhance={() => {

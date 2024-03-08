@@ -1,14 +1,51 @@
-<script>
+<script lang="ts">
 	import { enhance } from "$app/forms";
   import * as Card from "$lib/components/ui/card";
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { Button } from "$lib/components/ui/button";
+	import { user } from "$lib/store";
 
+  let username: string = "";
+  let username_error: string = "";
+  let valid_username = false;
+  $: {
+    if (username.length < 3) {
+      valid_username = false;
+      username_error ="More chars please"
+    }
+    else if(username.length > 20){
+      valid_username=false;
+      username_error ="Not that many!"
+    }else{
+      check_username(username).then((res) => {
+        valid_username = true;
+        username_error =""
+
+      }).catch((e) => {
+        valid_username=false;
+        username_error = e.message;
+      });
+      
+    }
+  };
+
+  async function check_username(username: string){
+    console.log(username)
+    const response = await fetch(`/api/users/check_username/${username}`)
+    if (response.ok) {
+      console.log("valid")
+      return true;
+    } else if (response.status === 409) {
+      throw new Error(await response.json());
+      //return response.json();
+    }
+    throw new Error("Failed to connect to Server");
+  }
 </script>
 
 
-<div class="container">
+<span class="signup-container">
   <Card.Root class="w-[350px]">
     <Card.Header>
       <Card.Title>Create an account</Card.Title>
@@ -20,6 +57,11 @@
           <Label for="email">Email</Label>
           <Input name="email" type="email" placeholder="Email" />
           <br>
+          <Label for="username">Username <span class="text-rose-500">{username_error}</span></Label>
+          
+            <Input bind:value={username} class={valid_username ? "border-green-500": "border-rose-500"} name="username" type="username" placeholder="Username" />
+
+          <br>
           <Label for="password">Password</Label>
           <Input name="password" type="password" placeholder="Password" />
       </Card.Content>
@@ -30,23 +72,15 @@
     </form>
   </Card.Root>
   
-</div>
+</span>
 
 
 <style>
-  .form{
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    background-color: var(--accent);
-    border-radius: 10px;
-    padding: 10px;
-    width: 300px;
-
-  }
-  .container {
+  
+  .signup-container {
     display: flex;
     justify-content: center;
+    padding: 0;
     
     align-items: center;
     height: 100%;

@@ -83,7 +83,22 @@ pub async fn initialize_db(client: &MongoDatabase) -> Result<(), mongodb::error:
                 .build(),
             None,
         )
+        
         .await?;
+
+    client
+        .db()
+        .collection::<User>("users")
+        .create_index(
+            IndexModel::builder()
+                .keys(doc! {"username":1})
+                .options(IndexOptions::builder().unique(true).build())
+                .build(),
+            None,
+        )
+        
+        .await?;
+
 
     Ok(())
 }

@@ -73,7 +73,7 @@ pub async fn delete_set_from_id(client: &reqwest::Client, address: &String, id: 
 }
 
 
-pub async fn signup_user(client: &reqwest::Client, address: &String, user: &UserSignup) -> Result<Response, reqwest::Error> {
+pub async fn signup_user(client: &reqwest::Client, address: &str, user: &UserSignup) -> Result<Response, reqwest::Error> {
   
     let response = client
         .post(&format!("{}/api/users/signup", address))
@@ -84,7 +84,7 @@ pub async fn signup_user(client: &reqwest::Client, address: &String, user: &User
     response
 }
 
-pub async fn login_user(client: &reqwest::Client, address: &String, email: &String,password:&String) -> Result<Response, reqwest::Error> {
+pub async fn login_user(client: &reqwest::Client, address: &str, email: &str,password:&str) -> Result<Response, reqwest::Error> {
     let mut map = HashMap::new();
     map.insert("email", email);
     map.insert("password", password);
@@ -92,6 +92,17 @@ pub async fn login_user(client: &reqwest::Client, address: &String, email: &Stri
     let response = client
         .post(&format!("{}/api/users/login", address))
         .json(&map)
+        .send()
+        .await;
+    
+    response
+}
+
+pub async fn get_user(client: &reqwest::Client, address: &str) -> Result<Response, reqwest::Error> {
+
+
+    let response = client
+        .get(&format!("{}/api/users/me", address))
         .send()
         .await;
     

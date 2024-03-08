@@ -1,29 +1,31 @@
-<script>
-	import Sidebar from '$lib/Sidebar.svelte';
-	import Header from '$lib/Header.svelte';
-	
-
-
+<script lang="ts">
 	import '../app.pcss';
 	import Search from './search.svelte';
 	import UserNav from './user-nav.svelte';
 	import MainNav from './main-nav.svelte';
 	import { Toaster } from "$lib/components/ui/sonner";
+	export let data;
+
 
 </script>
 <Toaster />
-<div class="hidden flex-col md:flex">
+<div class="flex-col flex">
 	<div class="border-b">
 		<div class="flex h-16 items-center px-4">
-			<h1 class="ml-10">Memory</h1>
-			<MainNav class="mx-6 ml-20" />
-			<div class="ml-auto flex items-center space-x-4">
-				<Search />
-				<UserNav />
+			<h1 class="ml-10 ">Memory</h1>
+			<MainNav  class="mx-6 ml-20 w-max min-w-max " />
+			<span class="w-full"></span>
+			<div class="w-full flex-row flex items-center justify-end">
+				<span class=" min-w-[200px] max-w-[300px] w-full md:block hidden">
+				<Search  />
+				</span>
+				<span class="pl-2">
+				<UserNav user={data.user} />
+				</span>
 			</div>
 		</div>
 	</div>
-	<div class="flex-1 space-y-4 p-8 pt-6">
+	<div class="flex-1 space-y-4 p-1 pt-6 sm:p-8">
 		<slot/>
 		
 	</div>

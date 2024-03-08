@@ -8,7 +8,9 @@ export const actions = {
         const data = await request.formData();
 		const email = data.get('email');
 		const password = data.get('password');
-        if (email === null || password === null) {
+        const username = data.get('username');
+
+        if (email === null || password === null || username === null || email === "" || password === "" || username === "" ) {
             return fail(401,{
                 error:"Email or password is missing"
             });
@@ -19,7 +21,7 @@ export const actions = {
             headers: { 
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "email":email,"password": password })
+            body: JSON.stringify({ "email":email,"username":username,"password": password })
         });
         if (response.status !== 200) {
             return fail(401,{

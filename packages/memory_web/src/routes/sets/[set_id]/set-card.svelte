@@ -1,14 +1,11 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
-    import * as Popover from "$lib/components/ui/popover";
-    import SimpleLineIconsOptionsVertical from '~icons/simple-line-icons/options-vertical';
     //https://www.shadcn-svelte.com/docs/components/card
     import { Button } from "$lib/components/ui/button";
-	import Input from "$lib/components/ui/input/input.svelte";
-	import { Label } from "$lib/components/ui/label";
 	import Textarea from "$lib/components/ui/textarea/textarea.svelte";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import type { Card } from "$lib/types";
+	import { MoreVertical } from "lucide-svelte";
+	import Formatter from "./formatter.svelte";
     export let card:Card | null;
     export let default_editable: boolean;
 
@@ -22,16 +19,26 @@
 <div class="card relative">
         
     <div class="card-side" id="front">
+        {#if editable}
         <Textarea disabled={!editable} class="h-full" placeholder="Front of card"  value={card?.front} name="front" />
+        {/if}
+        {#if !editable && card != null}
+        <Formatter data={card?.front}/>
+        {/if}
     </div>
     <div class="card-side">
-        <Textarea disabled={!editable} class="h-full" placeholder="Back of card" value={card?.back}  name="back" />
+        {#if editable}
+        <Textarea disabled={!editable} class="h-full" placeholder="Back of card"  value={card?.back} name="back" />
+        {/if}
+        {#if !editable && card != null}
+        <Formatter data={card?.back}/>
+        {/if}
     </div>
     {#if card != null}
-    <div class="popover absolute right-3 top-4 z-10">
+    <div >
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-            <SimpleLineIconsOptionsVertical />
+            <MoreVertical />
 
             
         </DropdownMenu.Trigger>
