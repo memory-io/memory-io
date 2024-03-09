@@ -1,32 +1,8 @@
-import type {  StudySetWithCards } from "$lib/types.js";
 import { fail, redirect } from "@sveltejs/kit";
 export const ssr = true
 
 
-/** @type {import('./$types').PageLoad} */
-export async function load({params,fetch}) {
-    const set_id = params.set_id;
 
-    //request the url at localhost:8000/api/auth/signup
-    const response = await fetch(`/api/sets/${set_id}`, { 
-        method: 'GET',
-    });
-    if (response.status == 401){
-        redirect(301,"/auth/login");
-    }
-    if (response.status !== 200) {
-        console.log(response)
-        return {
-            error:"error loading sets"
-        };
-        
-    }
-
-    const data: StudySetWithCards = await response.json();
-	return {
-		set: data
-	};
-}
 
 
 

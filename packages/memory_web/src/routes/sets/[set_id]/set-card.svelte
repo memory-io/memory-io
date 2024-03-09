@@ -5,7 +5,7 @@
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import type { Card } from "$lib/types";
 	import { MoreVertical } from "lucide-svelte";
-	import Formatter from "./formatter.svelte";
+	import Formatter from "../../../lib/formatter.svelte";
     export let card:Card | null;
     export let default_editable: boolean;
 
@@ -23,7 +23,9 @@
         <Textarea disabled={!editable} class="h-full" placeholder="Front of card"  value={card?.front} name="front" />
         {/if}
         {#if !editable && card != null}
-        <Formatter data={card?.front}/>
+        <span class="pr-2 overflow-auto">
+            <Formatter data={card?.front}/>
+        </span>
         {/if}
     </div>
     <div class="card-side">
@@ -31,11 +33,13 @@
         <Textarea disabled={!editable} class="h-full" placeholder="Back of card"  value={card?.back} name="back" />
         {/if}
         {#if !editable && card != null}
+        <span class="pl-4 text-wrap ">
         <Formatter data={card?.back}/>
+        </span>
         {/if}
     </div>
     {#if card != null}
-    <div >
+    <div class="m-w-8">
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
             <MoreVertical />
@@ -74,7 +78,7 @@
 </div>
 {#if editable}
     {#if card != null}
-        <Button form={card.id} type="submit" variant="outline" formaction="?/update_card">Save</Button>
+        <Button form={card.id}  type="submit" variant="outline" formaction="?/update_card">Save</Button>
     {/if}
     {#if card == null}
         <Button form="new-card" type="submit" variant="outline" formaction="?/add_card">Add Card</Button>
@@ -94,14 +98,15 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        height: 150px;
+        min-height: 150px;
         padding: 10px;
+        
     }
-    .card #front{
+    #front{
         border-right: 2px solid #fff;
         align-items: flex-center;
-        width: 50%;
-    
+        width: 30%;
+        min-width: 30%;
     }
     .card-side .card-content{
         width: 100%;
@@ -112,6 +117,8 @@
         padding-left: 5px;
         padding-right: 5px;
         width: 100%;
+        overflow-wrap: anywhere;
+        
         display: flex;
         flex-direction: column;
         justify-content: space-between;

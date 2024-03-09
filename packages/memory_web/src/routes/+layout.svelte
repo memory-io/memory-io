@@ -16,7 +16,7 @@
 			<MainNav  class="mx-6 ml-20 w-max min-w-max " />
 			<span class="w-full"></span>
 			<div class="w-full flex-row flex items-center justify-end">
-				<span class=" min-w-[200px] max-w-[300px] w-full md:block hidden">
+				<span class=" min-w-[200px] max-w-[300px] w-full sm:block hidden">
 				<Search  />
 				</span>
 				<span class="pl-2">
