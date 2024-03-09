@@ -16,7 +16,7 @@ use tracing::{debug, error, info, warn};
 
 use crate::{
     models::{
-        card::{self, NewCard}, set::{self, CreateSet, PatchSet, Set, SetVisibility}, user::{self, UserSignup}, MongoDatabase
+        card::{self, Card}, set::{self, CreateSet, PatchSet, Set, SetVisibility}, user::{self, UserSignup}, MongoDatabase
     },
     startup::ServerConfig,
 };
@@ -51,11 +51,11 @@ pub async fn patch_set(
     set_id: web::Path<String>,
     action: web::Json<PatchSet>,
 ) -> impl Responder {
-    let id = ObjectId::from_str(&id.id().unwrap()).unwrap();
+    let user_id = ObjectId::from_str(&id.id().unwrap()).unwrap();
     let set_id = ObjectId::from_str(&set_id).unwrap();
     match &*action{
         PatchSet::AddCard{front, back} => {
-            return match card::add_card_to_set(&db, &set_id, &id,NewCard{front:front.to_string(),back:back.to_string()}).await {
+            return match card::add_card_to_set(&db, &set_id, &user_id,Card{id: bson::Uuid::new(),front:front.to_string(),back:back.to_string()}).await {
                 Ok(_) => HttpResponse::Ok().await.unwrap(),
                 Err(err) => {
                     error!("Failed to add card: {}", err);
@@ -63,9 +63,8 @@ pub async fn patch_set(
                 }
             };
         }
-        PatchSet::RemoveCard{card_id} => {
-            let card_id = ObjectId::from_str(card_id).unwrap();
-            return match card::remove_card_from_set(&db, &set_id, &id, &card_id).await {
+        PatchSet::RemoveCard{id} => {
+            return match card::remove_card_from_set(&db, &set_id, &user_id, &id).await {
                 Ok(_) => HttpResponse::Ok().await.unwrap(),
                 Err(err) => {
                     error!("Failed to remove card: {}", err);
@@ -73,9 +72,8 @@ pub async fn patch_set(
                 }
             };
         }
-        PatchSet::UpdateCard{card_id, front, back} => {
-            let card_id = ObjectId::from_str(card_id).unwrap();
-            return match card::update_card_in_set(&db, &set_id, &id, &card_id, NewCard{front:front.to_string(),back:back.to_string()}).await {
+        PatchSet::UpdateCard(card) => {
+            return match card::update_card_in_set(&db, &set_id, &user_id, card).await {
                 Ok(true) => HttpResponse::Ok().await.unwrap(),
                 Ok(false) => HttpResponse::NotFound().body("Card not found"),
                 Err(err) => {
