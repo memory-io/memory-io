@@ -50,7 +50,7 @@ export const actions = {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "UpdateCard":{card_id:card_id,"front":front ,"back":back }})
+            body: JSON.stringify({ "UpdateCard":{id:card_id,"front":front ,"back":back }})
         }
         );
         if (response.status == 401){
@@ -152,7 +152,7 @@ export const actions = {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "RemoveCard":{"card_id":card_id }})
+            body: JSON.stringify({ "RemoveCard":{"id":card_id }})
         }
         );
         if (response.status == 401){

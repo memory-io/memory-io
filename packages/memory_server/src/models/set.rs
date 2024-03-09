@@ -18,7 +18,7 @@ pub struct Set {
     #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
     pub user_id: ObjectId,
     pub title: String,
-    pub cards: Vec<ObjectId>,
+    pub cards: Vec<Card>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -44,14 +44,14 @@ pub struct CreateSet {
     pub user_id: ObjectId,
     pub title: String,
     pub visibility: SetVisibility,
-    pub cards: Vec<ObjectId>,
+    pub cards: Vec<Card>,
 }
 
 #[derive(Deserialize, Debug, Serialize)]
 pub enum PatchSet {
     AddCard { front: String, back: String },
-    UpdateCard {  card_id: String, front: String, back: String },
-    RemoveCard { card_id: String },
+    UpdateCard (Card),
+    RemoveCard { id: bson::Uuid, },
 }
 
 
@@ -66,30 +66,12 @@ pub async fn get_set_with_cards(
     db: &MongoDatabase,
     id: &ObjectId,
 ) -> Result<Option<SetWithCards>, mongodb::error::Error> {
-    let mut a =  db
-        .db()
-        .collection::<Set>("sets")
-        .aggregate(
-            vec![doc! {"$match":{"_id":id}},
-            doc! {
-                "$lookup":{
-                    "from":"cards",
-                    "localField":"cards",
-                    "foreignField":"_id",
-                    "as":"cards"
-                }
-            }],
-            None
-        )
-        .await?;
-    let set = a.next().await;
-    if let Some(set) = set {
-        let set: Document = set?;
-        let set = bson::from_bson(bson::Bson::Document(set))?;
-        Ok(Some(set))
-    } else {
-        Ok(None)
-    }
+    let set = db
+    .db()
+    .collection::<SetWithCards>("sets")
+    .find_one(doc! {"_id":id}, None)
+    .await?;
+    Ok(set)
 }
 
 pub async fn get_set(
@@ -110,20 +92,10 @@ pub async fn delete_set(
     id: &ObjectId,
     user_id: &ObjectId,
 ) -> Result<bool, mongodb::error::Error> {
-    let set = get_set(db, id).await?;
-    if let Some(set) = set {
-        if set.user_id == *user_id {
-            db
-                .db()
-                .collection::<Card>("cards")
-                .delete_many(doc! {"_id":{"$in":set.cards}}, None)
-                .await?;
-            db.db()
-                .collection::<Set>("sets")
-                .delete_one(doc! {"_id":id}, None)
-                .await?;
-        }
-    }
+    db.db()
+        .collection::<Set>("sets")
+        .delete_one(doc! {"_id":id,"user_id":user_id}, None)
+        .await?;
     Ok(true)
 }
 pub async fn get_sets_from_user(

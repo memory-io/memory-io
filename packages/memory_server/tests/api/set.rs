@@ -2,8 +2,7 @@ use std::collections::HashMap;
 
 use crate::helper::{delete_set_from_id, get_set_from_id, login_user, signup_user, spawn_app};
 use memory_server::models::{
-    set::{ PatchSet, Set, SetWithCards},
-    user::{User, UserSignup},
+    card::Card, set::{ PatchSet, Set, SetWithCards}, user::{User, UserSignup}
 };
 use mongodb::{bson::doc};
 use reqwest::{Response,Client};
@@ -86,12 +85,11 @@ async fn test_set_functionality() {
     
     let response = client
     .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
-    .json(&PatchSet::UpdateCard   {
-        card_id: card.id.to_hex(),
+    .json(&PatchSet::UpdateCard   (Card{
+        id: card.id.into(),
         front: "apple".to_string(),
         back: "banana".to_string()
-    
-    }).send()
+    })).send()
     .await
     .expect("Failed to execute update card request.");
     assert_eq!(200, response.status().as_u16());
@@ -113,7 +111,7 @@ async fn test_set_functionality() {
     let response = client
     .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
     .json(&PatchSet::RemoveCard  {
-        card_id:card.id.to_hex(),
+        id: card.id.into()
     }).send()
     .await
     .expect("Failed to execute delete card request.");
@@ -130,9 +128,8 @@ async fn test_set_functionality() {
 
     let set = response.json::<SetWithCards>().await.expect("Failed to get the created set");
 
-    let card = set.cards.iter().find(|a| a.id.to_hex() == card.id.to_hex());
-
-    assert_eq!(card.is_none(),true);
+    let card = set.cards.iter().find(|a| a.front == a.front && a.back == a.back);
+    assert_eq!(card.is_none(), true);
 
     //delete set
     let response = delete_set_from_id(&client, &app.address, &found.id.to_hex()).await.expect("Failed to delete set");
