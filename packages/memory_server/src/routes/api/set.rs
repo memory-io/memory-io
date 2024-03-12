@@ -177,3 +177,22 @@ pub async fn get_set(
         Ok(None) => HttpResponse::NotFound().body("Set not found"),
     };
 }
+
+
+
+#[get("/recents")]
+pub async fn get_recent_sets(
+    db: Data<MongoDatabase>,
+) -> impl Responder {
+    return match set::get_most_recent_public_sets(&db, 20).await {
+        Err(err) => {
+            error!("Failed to get set: {}", err);
+            HttpResponse::InternalServerError().body("Failed to get set")
+        }
+        Ok(sets) => {
+            debug!("Set: {:?}", sets);
+            
+            HttpResponse::Ok().json(sets)
+        }
+    };
+}

@@ -10,9 +10,9 @@
 
 	
 	const urls = new Map([
-		["/", "Overview"],
+		["/", "Explore"],
 		["/sets", "Your Sets"],
-		["/create-set", "Create"],
+		["/a", "Create"],
 	]);
 </script>
 

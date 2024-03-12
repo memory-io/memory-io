@@ -1,0 +1,15 @@
+version: "3.0"
+
+services:
+  server:
+    build: ./packages/memory_server/DockerFile
+    ports:
+      - "8000:8000"
+  website:
+    build: ./packages/memory_web/DockerFile
+    ports:
+      - "3000:3000"
+  mongo_db:
+    image: mongodb/mongodb-community-server
+    ports:
+      - "27017:27017"

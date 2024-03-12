@@ -48,6 +48,7 @@
 <Card.Root>
     
     <Card.Header>
+        
         <Card.Title>{data.set?.title}</Card.Title>
         <Card.Description>{data.set?.visibility}</Card.Description>
     </Card.Header>
@@ -68,7 +69,7 @@
                 <div class ="absolute left-2 top-2 text-secondary-foreground text-sm opacity-50">
                     {`Card ${card_index+1} of ${cards_len}`}
                 </div>
-                <span>
+                <span class="wrap">
                     <Formatter data={front ? data.set.cards[card_index].front:data.set.cards[card_index].back}/>
                 </span>
             </button>
@@ -93,10 +94,14 @@
         };
     }} >
     <input name="id" value={data.set.id} hidden>
-    <Card.Footer class="flex justify-end gap-3">
-        
-        <Button type="submit">Edit</Button>
-        <Button formaction="?/delete" type="submit" variant="destructive">Delete</Button>
+    <Card.Footer class="flex justify-between gap-3">
+        <span>
+            <Button href={`${data.set.id}/learn`} >Learn</Button>
+        </span>
+        <span>
+            <Button type="submit">Edit</Button>
+            <Button formaction="?/delete" type="submit" variant="destructive">Delete</Button>
+        </span>
    
     </Card.Footer>
     </form>
@@ -142,5 +147,10 @@
     .grayed{
         opacity: 0.1;
     }
-    
+    .wrap{
+        overflow-wrap: anywhere;
+    }
+
+
+
 </style>

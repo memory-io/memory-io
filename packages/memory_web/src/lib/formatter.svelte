@@ -2,26 +2,30 @@
     import markedKatex from "marked-katex-extension";
     import { marked } from 'marked'
     import { Render } from '@jill64/svelte-sanitize'
+	import Avatar from "./components/ui/avatar/avatar.svelte";
     export let data: string;
     const options = {
-    throwOnError: false
+    throwOnError: true
     };
-    marked.use(markedKatex(options));
-
-
     
+    marked.use(markedKatex(options))
+
+    $: rendered_data = marked.parse(data);
 
 </script>
 
-{#await marked.parse(data)}
+
+{#await rendered_data }
     <h1>Loading..</h1>
 {:then cleaned} 
-    <Render html={cleaned}  />
+    <Render  html={cleaned}  />
     
 {/await}
 
 
 
+<style>
 
+</style>
 
 

@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-export const ssr = true
+//export const ssr = true
 
 /** @type {import('./$types').Actions} */
 export const actions = {

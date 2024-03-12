@@ -86,6 +86,23 @@ pub async fn get_set(
     Ok(set)
 }
 
+pub async fn get_most_recent_public_sets(
+    db: &MongoDatabase,
+    count: usize
+) -> Result<Vec<Set>, mongodb::error::Error> {
+    let result: Vec<Set> = db
+        .db()
+        .collection::<Set>("sets")
+        .find(
+            doc! {"visibility":"Public"},
+            Some(FindOptions::builder().limit(Some(count as i64)).build()),
+        )
+        .await?
+        .try_collect()
+        .await?;
+    Ok(result)
+}
+
 
 pub async fn delete_set(
     db: &MongoDatabase,
