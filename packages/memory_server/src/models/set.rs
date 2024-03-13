@@ -1,4 +1,3 @@
-
 use bson::Document;
 use futures_util::{StreamExt, TryStreamExt};
 use mongodb::{
@@ -50,10 +49,9 @@ pub struct CreateSet {
 #[derive(Deserialize, Debug, Serialize)]
 pub enum PatchSet {
     AddCard { front: String, back: String },
-    UpdateCard (Card),
-    RemoveCard { id: bson::Uuid, },
+    UpdateCard(Card),
+    RemoveCard { id: bson::Uuid },
 }
-
 
 pub async fn create_set(
     db: &MongoDatabase,
@@ -67,10 +65,10 @@ pub async fn get_set_with_cards(
     id: &ObjectId,
 ) -> Result<Option<SetWithCards>, mongodb::error::Error> {
     let set = db
-    .db()
-    .collection::<SetWithCards>("sets")
-    .find_one(doc! {"_id":id}, None)
-    .await?;
+        .db()
+        .collection::<SetWithCards>("sets")
+        .find_one(doc! {"_id":id}, None)
+        .await?;
     Ok(set)
 }
 
@@ -88,7 +86,7 @@ pub async fn get_set(
 
 pub async fn get_most_recent_public_sets(
     db: &MongoDatabase,
-    count: usize
+    count: usize,
 ) -> Result<Vec<Set>, mongodb::error::Error> {
     let result: Vec<Set> = db
         .db()
@@ -102,7 +100,6 @@ pub async fn get_most_recent_public_sets(
         .await?;
     Ok(result)
 }
-
 
 pub async fn delete_set(
     db: &MongoDatabase,
@@ -133,4 +130,3 @@ pub async fn get_sets_from_user(
 
     Ok(result)
 }
-

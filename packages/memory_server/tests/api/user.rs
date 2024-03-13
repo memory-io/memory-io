@@ -3,12 +3,12 @@ use memory_server::models::user::{User, UserSendable, UserSignup};
 use mongodb::bson::doc;
 
 #[tokio::test]
-async fn signup_login_user()-> anyhow::Result<()>{
+async fn signup_login_user() -> anyhow::Result<()> {
     let app = spawn_app().await;
     let client = reqwest::Client::builder()
-    .cookie_store(true)
-    .build()
-    .unwrap();
+        .cookie_store(true)
+        .build()
+        .unwrap();
 
     // Act
     let user = UserSignup {
@@ -19,10 +19,10 @@ async fn signup_login_user()-> anyhow::Result<()>{
     let response = signup_user(&client, &app.address, &user).await?;
     assert_eq!(response.status(), 200);
 
-    let response = login_user(&client, &app.address, &user.email,"Not the passsword").await?;
+    let response = login_user(&client, &app.address, &user.email, "Not the passsword").await?;
     assert_eq!(response.status(), 401);
 
-    let response = login_user(&client, &app.address, &user.email,&user.password).await?;
+    let response = login_user(&client, &app.address, &user.email, &user.password).await?;
     assert_eq!(response.status(), 200);
 
     let response = get_user(&client, &app.address).await?;
@@ -30,7 +30,6 @@ async fn signup_login_user()-> anyhow::Result<()>{
 
     let recieved_user: UserSendable = response.json().await?;
     assert_eq!(recieved_user.email, user.email);
-
 
     app.db.db().drop(None).await.unwrap();
     Ok(())

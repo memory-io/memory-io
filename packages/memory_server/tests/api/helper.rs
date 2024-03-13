@@ -10,7 +10,6 @@ use memory_server::{
 use mongodb::{bson::doc, options::ClientOptions, Client};
 use reqwest::Response;
 
-
 pub struct TestApp {
     pub address: String,
     pub db: MongoDatabase,
@@ -53,38 +52,52 @@ pub async fn spawn_app() -> TestApp {
     }
 }
 
-
-pub async fn get_set_from_id(client: &reqwest::Client, address: &String, id: &str) -> Result<Response, reqwest::Error> {
+pub async fn get_set_from_id(
+    client: &reqwest::Client,
+    address: &String,
+    id: &str,
+) -> Result<Response, reqwest::Error> {
     let response = client
         .get(&format!("{}/api/sets/{}", address, id))
         .send()
         .await;
-    
+
     response
 }
 
-pub async fn delete_set_from_id(client: &reqwest::Client, address: &String, id: &str) -> Result<Response, reqwest::Error> {
+pub async fn delete_set_from_id(
+    client: &reqwest::Client,
+    address: &String,
+    id: &str,
+) -> Result<Response, reqwest::Error> {
     let response = client
         .delete(&format!("{}/api/sets/{}", address, id))
         .send()
         .await;
-    
+
     response
 }
 
-
-pub async fn signup_user(client: &reqwest::Client, address: &str, user: &UserSignup) -> Result<Response, reqwest::Error> {
-  
+pub async fn signup_user(
+    client: &reqwest::Client,
+    address: &str,
+    user: &UserSignup,
+) -> Result<Response, reqwest::Error> {
     let response = client
         .post(&format!("{}/api/users/signup", address))
         .json(&user)
         .send()
         .await;
-    
+
     response
 }
 
-pub async fn login_user(client: &reqwest::Client, address: &str, email: &str,password:&str) -> Result<Response, reqwest::Error> {
+pub async fn login_user(
+    client: &reqwest::Client,
+    address: &str,
+    email: &str,
+    password: &str,
+) -> Result<Response, reqwest::Error> {
     let mut map = HashMap::new();
     map.insert("email", email);
     map.insert("password", password);
@@ -94,17 +107,15 @@ pub async fn login_user(client: &reqwest::Client, address: &str, email: &str,pas
         .json(&map)
         .send()
         .await;
-    
+
     response
 }
 
 pub async fn get_user(client: &reqwest::Client, address: &str) -> Result<Response, reqwest::Error> {
-
-
     let response = client
         .get(&format!("{}/api/users/me", address))
         .send()
         .await;
-    
+
     response
 }

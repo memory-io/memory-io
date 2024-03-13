@@ -1,3 +1,3 @@
-mod routes;
 pub mod models;
+mod routes;
 pub mod startup;

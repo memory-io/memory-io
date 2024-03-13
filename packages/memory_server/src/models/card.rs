@@ -1,4 +1,3 @@
-
 use futures_util::{StreamExt, TryStreamExt};
 use mongodb::{
     bson::{doc, oid::ObjectId},
@@ -8,30 +7,32 @@ use mongodb::{
 use serde::{Deserialize, Serialize};
 use tracing::warn;
 
-use super::{set::{self, get_set_with_cards, Set, SetWithCards}, MongoDatabase};
+use super::{
+    set::{self, get_set_with_cards, Set, SetWithCards},
+    MongoDatabase,
+};
 
-
-#[derive(Deserialize, Serialize, Debug,Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Card {
     pub id: bson::Uuid,
     pub front: String,
     pub back: String,
 }
 
-
-
 pub async fn add_card_to_set(
     db: &MongoDatabase,
     set_id: &ObjectId,
     user_id: &ObjectId,
-    card: Card
+    card: Card,
 ) -> Result<(), mongodb::error::Error> {
-
-    db.db().collection::<SetWithCards>("sets").update_one(
-        doc! {"_id":set_id,"user_id":user_id},
-        doc! {"$push": {"cards": bson::to_bson(&card).unwrap()}},
-        None
-    ).await?;
+    db.db()
+        .collection::<SetWithCards>("sets")
+        .update_one(
+            doc! {"_id":set_id,"user_id":user_id},
+            doc! {"$push": {"cards": bson::to_bson(&card).unwrap()}},
+            None,
+        )
+        .await?;
     Ok(())
 }
 
@@ -39,31 +40,36 @@ pub async fn update_card_in_set(
     db: &MongoDatabase,
     set_id: &ObjectId,
     user_id: &ObjectId,
-    card: &Card
+    card: &Card,
 ) -> Result<bool, mongodb::error::Error> {
-
-    let result = db.db().collection::<SetWithCards>("sets").update_one(
-        doc! {"_id":set_id,"user_id":user_id,"cards.id":card.id},
-        doc! {"$set": {"cards.$": bson::to_bson(card)?}},
-        None
-    ).await?;
-    return Ok(result.modified_count == 1)
-
+    let result = db
+        .db()
+        .collection::<SetWithCards>("sets")
+        .update_one(
+            doc! {"_id":set_id,"user_id":user_id,"cards.id":card.id},
+            doc! {"$set": {"cards.$": bson::to_bson(card)?}},
+            None,
+        )
+        .await?;
+    return Ok(result.modified_count == 1);
 }
 
 pub async fn remove_card_from_set(
     db: &MongoDatabase,
     set_id: &ObjectId,
     user_id: &ObjectId,
-    card_id: &bson::Uuid
+    card_id: &bson::Uuid,
 ) -> Result<bool, mongodb::error::Error> {
-    
-    let result = db.db().collection::<SetWithCards>("sets").update_one(
-        doc! {"_id":set_id,"user_id":user_id},
-        doc! {"$pull": {"cards":{
-            "id":card_id
-        }}},
-        None
-    ).await?;
+    let result = db
+        .db()
+        .collection::<SetWithCards>("sets")
+        .update_one(
+            doc! {"_id":set_id,"user_id":user_id},
+            doc! {"$pull": {"cards":{
+                "id":card_id
+            }}},
+            None,
+        )
+        .await?;
     Ok(result.modified_count == 1)
 }

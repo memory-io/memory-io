@@ -4,7 +4,9 @@ use actix_identity::Identity;
 
 use actix_session::Session;
 use actix_web::{
-    get, post, web::{self, Data, Form, Json, Path}, HttpMessage, HttpRequest, HttpResponse, Responder
+    get, post,
+    web::{self, Data, Form, Json, Path},
+    HttpMessage, HttpRequest, HttpResponse, Responder,
 };
 use bson::oid::ObjectId;
 use mongodb::error::{Error, WriteFailure};
@@ -16,6 +18,16 @@ use crate::models::{
     user::{self, UserSignup},
     MongoDatabase,
 };
+
+pub fn factory(cfg: &mut web::ServiceConfig) {
+    cfg.service(
+        web::scope("/users")
+            .service(login)
+            .service(signup)
+            .service(get_user)
+            .service(check_username),
+    );
+}
 
 #[post("/signup")]
 pub async fn signup(
@@ -53,10 +65,7 @@ pub async fn signup(
 }
 
 #[get("me")]
-pub async fn get_user(
-    id: Identity,
-    db: Data<MongoDatabase>,
-) -> impl Responder {
+pub async fn get_user(id: Identity, db: Data<MongoDatabase>) -> impl Responder {
     return match user::get_user(&db, id.id().unwrap()).await {
         Ok(Some(user)) => HttpResponse::Ok().json(user),
         Ok(None) => HttpResponse::NotFound().body("User not found"),
@@ -68,17 +77,13 @@ pub async fn get_user(
 }
 
 #[get("check_username/{username}")]
-pub async fn check_username(
-    db: Data<MongoDatabase>,
-    username: Path<String>
-) -> impl Responder {
-    return match user::check_username(&db,&username).await {
+pub async fn check_username(db: Data<MongoDatabase>, username: Path<String>) -> impl Responder {
+    return match user::check_username(&db, &username).await {
         Ok(_) => HttpResponse::Ok().await.unwrap(),
-        Err(a) =>  match a.get_custom::<String>() {
-                Some(err) => HttpResponse::Conflict().json(err),
-                None => HttpResponse::InternalServerError().await.unwrap()
-            }
-        
+        Err(a) => match a.get_custom::<String>() {
+            Some(err) => HttpResponse::Conflict().json(err),
+            None => HttpResponse::InternalServerError().await.unwrap(),
+        },
     };
 }
 

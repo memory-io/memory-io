@@ -1,32 +1,41 @@
-use std::{process::id, str::FromStr};
+use std::str::FromStr;
 
 use actix_identity::Identity;
 
-use actix_session::Session;
 use actix_web::{
     delete, get, patch, post,
     web::{self, Data, Json},
-    Handler, HttpMessage, HttpRequest, HttpResponse, Responder,
+    HttpResponse, Responder,
 };
-use futures_util::TryFutureExt;
+
 use mongodb::{bson::oid::ObjectId, error::WriteFailure};
 
 use serde::Deserialize;
-use tracing::{debug, error, info, warn};
+use tracing::{debug, error};
 
-use crate::{
-    models::{
-        card::{self, Card}, set::{self, CreateSet, PatchSet, Set, SetVisibility}, user::{self, UserSignup}, MongoDatabase
-    },
-    startup::ServerConfig,
+use crate::models::{
+    card::{self, Card},
+    set::{self, CreateSet, PatchSet, SetVisibility},
+    MongoDatabase,
 };
+
+pub fn factory(cfg: &mut web::ServiceConfig) {
+    cfg.service(
+        web::scope("/sets")
+            .service(create_set)
+            .service(get_recent_sets)
+            .service(get_set)
+            .service(get_sets)
+            .service(delete_set)
+            .service(patch_set),
+    );
+}
 
 #[derive(Deserialize)]
 pub struct CreateSetRequest {
     pub title: String,
     pub visibility: SetVisibility,
 }
-
 
 #[delete("/{id}")]
 pub async fn delete_set(
@@ -53,9 +62,20 @@ pub async fn patch_set(
 ) -> impl Responder {
     let user_id = ObjectId::from_str(&id.id().unwrap()).unwrap();
     let set_id = ObjectId::from_str(&set_id).unwrap();
-    match &*action{
-        PatchSet::AddCard{front, back} => {
-            return match card::add_card_to_set(&db, &set_id, &user_id,Card{id: bson::Uuid::new(),front:front.to_string(),back:back.to_string()}).await {
+    match &*action {
+        PatchSet::AddCard { front, back } => {
+            return match card::add_card_to_set(
+                &db,
+                &set_id,
+                &user_id,
+                Card {
+                    id: bson::Uuid::new(),
+                    front: front.to_string(),
+                    back: back.to_string(),
+                },
+            )
+            .await
+            {
                 Ok(_) => HttpResponse::Ok().await.unwrap(),
                 Err(err) => {
                     error!("Failed to add card: {}", err);
@@ -63,7 +83,7 @@ pub async fn patch_set(
                 }
             };
         }
-        PatchSet::RemoveCard{id} => {
+        PatchSet::RemoveCard { id } => {
             return match card::remove_card_from_set(&db, &set_id, &user_id, &id).await {
                 Ok(_) => HttpResponse::Ok().await.unwrap(),
                 Err(err) => {
@@ -82,7 +102,6 @@ pub async fn patch_set(
                 }
             };
         }
-    
     }
 }
 
@@ -132,7 +151,8 @@ pub async fn create_set(
             HttpResponse::InternalServerError().body("Failed to create user")
         }
         Ok(a) => {
-            return match set::get_set_with_cards(&db, &a.inserted_id.as_object_id().unwrap()).await {
+            return match set::get_set_with_cards(&db, &a.inserted_id.as_object_id().unwrap()).await
+            {
                 Ok(Some(set)) => HttpResponse::Ok().json(set),
                 Ok(None) => {
                     error!("Created Set not found");
@@ -178,12 +198,8 @@ pub async fn get_set(
     };
 }
 
-
-
 #[get("/recents")]
-pub async fn get_recent_sets(
-    db: Data<MongoDatabase>,
-) -> impl Responder {
+pub async fn get_recent_sets(db: Data<MongoDatabase>) -> impl Responder {
     return match set::get_most_recent_public_sets(&db, 20).await {
         Err(err) => {
             error!("Failed to get set: {}", err);
@@ -191,7 +207,7 @@ pub async fn get_recent_sets(
         }
         Ok(sets) => {
             debug!("Set: {:?}", sets);
-            
+
             HttpResponse::Ok().json(sets)
         }
     };

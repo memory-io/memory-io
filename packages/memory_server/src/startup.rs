@@ -12,8 +12,7 @@ use actix_web::{
     cookie::Key,
     dev::{Server, Service},
     middleware::Logger,
-    web,
-    App, HttpServer,
+    web, App, HttpServer,
 };
 use mongodb::{
     bson::doc,
@@ -55,8 +54,6 @@ pub async fn run(
             //     debug!("Request Cookies: {:?}", req.request().cookies());
             //     let res = srv.call(req);
             //     async move {
-                    
-                    
             //         let mut res = res.await;
             //         res
             //     }
@@ -83,7 +80,6 @@ pub async fn initialize_db(client: &MongoDatabase) -> Result<(), mongodb::error:
                 .build(),
             None,
         )
-        
         .await?;
 
     client
@@ -96,9 +92,7 @@ pub async fn initialize_db(client: &MongoDatabase) -> Result<(), mongodb::error:
                 .build(),
             None,
         )
-        
         .await?;
-
 
     Ok(())
 }

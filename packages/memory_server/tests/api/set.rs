@@ -2,10 +2,12 @@ use std::collections::HashMap;
 
 use crate::helper::{delete_set_from_id, get_set_from_id, login_user, signup_user, spawn_app};
 use memory_server::models::{
-    card::Card, set::{ PatchSet, Set, SetWithCards}, user::{User, UserSignup}
+    card::Card,
+    set::{PatchSet, Set, SetWithCards},
+    user::{User, UserSignup},
 };
-use mongodb::{bson::doc};
-use reqwest::{Response,Client};
+use mongodb::bson::doc;
+use reqwest::{Client, Response};
 use serde_json::Value;
 use tracing::debug;
 
@@ -24,12 +26,16 @@ async fn test_set_functionality() {
         password: "APpleafdf".to_string(),
     };
 
-    let response = signup_user(&client, &app.address, &user).await.expect("Failed to signup user");
+    let response = signup_user(&client, &app.address, &user)
+        .await
+        .expect("Failed to signup user");
     assert_eq!(200, response.status().as_u16());
 
     //login in to user
 
-    let response = login_user(&client, &app.address, &user.email, &user.password).await.expect("Failed to login user");
+    let response = login_user(&client, &app.address, &user.email, &user.password)
+        .await
+        .expect("Failed to login user");
     assert_eq!(200, response.status().as_u16());
 
     //create  aset
@@ -65,79 +71,104 @@ async fn test_set_functionality() {
     //add card
 
     let response = client
-    .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
-    .json(&PatchSet::AddCard  {
-        front: "banana".to_string(),
-        back: "apple".to_string()
-    
-    }).send()
-    .await
-    .expect("Failed to execute patch set request.");
+        .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .json(&PatchSet::AddCard {
+            front: "banana".to_string(),
+            back: "apple".to_string(),
+        })
+        .send()
+        .await
+        .expect("Failed to execute patch set request.");
     assert_eq!(200, response.status().as_u16());
 
     //get set and check if card is in it
-    let response = get_set_from_id(&client, &app.address, &found.id.to_hex()).await.expect("Failed to get set");
+    let response = get_set_from_id(&client, &app.address, &found.id.to_hex())
+        .await
+        .expect("Failed to get set");
     assert_eq!(200, response.status().as_u16());
-    let set = response.json::<SetWithCards>().await.expect("Failed to desearlize created set");
+    let set = response
+        .json::<SetWithCards>()
+        .await
+        .expect("Failed to desearlize created set");
     debug!("Set: {:?}", set);
 
-    let card = set.cards.iter().find(|a| a.front == "banana" && a.back == "apple").expect("Failed to find created card");
-    
+    let card = set
+        .cards
+        .iter()
+        .find(|a| a.front == "banana" && a.back == "apple")
+        .expect("Failed to find created card");
+
     let response = client
-    .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
-    .json(&PatchSet::UpdateCard   (Card{
-        id: card.id.into(),
-        front: "apple".to_string(),
-        back: "banana".to_string()
-    })).send()
-    .await
-    .expect("Failed to execute update card request.");
+        .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .json(&PatchSet::UpdateCard(Card {
+            id: card.id.into(),
+            front: "apple".to_string(),
+            back: "banana".to_string(),
+        }))
+        .send()
+        .await
+        .expect("Failed to execute update card request.");
     assert_eq!(200, response.status().as_u16());
 
     //check if card was updated
     let response = client
-    .get(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
-    .send()
-    .await
-    .expect("Failed to execute get set request.");
+        .get(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .send()
+        .await
+        .expect("Failed to execute get set request.");
     assert_eq!(200, response.status().as_u16());
 
-    let set = response.json::<SetWithCards>().await.expect("Failed to get the created set");
+    let set = response
+        .json::<SetWithCards>()
+        .await
+        .expect("Failed to get the created set");
 
-    let card = set.cards.iter().find(|a| a.front == "apple" && a.back == "banana").expect("Failed to find updated card");
-
+    let card = set
+        .cards
+        .iter()
+        .find(|a| a.front == "apple" && a.back == "banana")
+        .expect("Failed to find updated card");
 
     //delete card
     let response = client
-    .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
-    .json(&PatchSet::RemoveCard  {
-        id: card.id.into()
-    }).send()
-    .await
-    .expect("Failed to execute delete card request.");
+        .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .json(&PatchSet::RemoveCard { id: card.id.into() })
+        .send()
+        .await
+        .expect("Failed to execute delete card request.");
     assert_eq!(200, response.status().as_u16());
 
     //check if card was deleted
     //check if card was updated
     let response = client
-    .get(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
-    .send()
-    .await
-    .expect("Failed to execute get set request.");
+        .get(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .send()
+        .await
+        .expect("Failed to execute get set request.");
     assert_eq!(200, response.status().as_u16());
 
-    let set = response.json::<SetWithCards>().await.expect("Failed to get the created set");
+    let set = response
+        .json::<SetWithCards>()
+        .await
+        .expect("Failed to get the created set");
 
-    let card = set.cards.iter().find(|a| a.front == a.front && a.back == a.back);
+    let card = set
+        .cards
+        .iter()
+        .find(|a| a.front == a.front && a.back == a.back);
     assert_eq!(card.is_none(), true);
 
     //delete set
-    let response = delete_set_from_id(&client, &app.address, &found.id.to_hex()).await.expect("Failed to delete set");
+    let response = delete_set_from_id(&client, &app.address, &found.id.to_hex())
+        .await
+        .expect("Failed to delete set");
 
     assert_eq!(200, response.status().as_u16());
 
     //check deleted
-    let response = get_set_from_id(&client, &app.address, &found.id.to_hex()).await.expect("Failed to get set");
+    let response = get_set_from_id(&client, &app.address, &found.id.to_hex())
+        .await
+        .expect("Failed to get set");
     assert_eq!(404, response.status().as_u16());
 
     app.db.db().drop(None).await.unwrap();

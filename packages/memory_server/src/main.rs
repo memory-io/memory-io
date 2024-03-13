@@ -1,14 +1,10 @@
-use std::{net::TcpListener, sync::Arc};
+use std::net::TcpListener;
 
 use memory_server::{
-    models::{user::User, MongoDatabase},
+    models::MongoDatabase,
     startup::{initialize_db, run, ServerConfig},
 };
-use mongodb::{
-    bson::doc,
-    options::{ClientOptions, IndexOptions},
-    Client, IndexModel,
-};
+use mongodb::{options::ClientOptions, Client};
 
 #[tokio::main]
 async fn main() {
@@ -22,7 +18,6 @@ async fn main() {
     let db = Client::with_options(client_options).unwrap();
     let mongo_database = MongoDatabase::new(db, "dev");
     initialize_db(&mongo_database).await.unwrap();
-
     run(mongo_database, address, ServerConfig::default())
         .await
         .unwrap()
