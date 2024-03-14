@@ -5,6 +5,7 @@ use crate::{
     routes::factory,
 };
 use actix_cors::Cors;
+use actix_governor::{Governor, GovernorConfigBuilder};
 use actix_identity::{Identity, IdentityMiddleware};
 use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
@@ -38,6 +39,13 @@ pub async fn run(
 ) -> Result<Server, std::io::Error> {
     //change for prod
     let secret_key = Key::generate();
+
+    let governor_conf = GovernorConfigBuilder::default()
+        .per_second(2)
+        .burst_size(5)
+        .finish()
+        .unwrap();
+
     Ok(HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(server.clone()))
@@ -48,16 +56,9 @@ pub async fn run(
                     .allow_any_header()
                     .supports_credentials(),
             )
+            .wrap(Governor::new(&governor_conf))
             .wrap(IdentityMiddleware::default())
             .wrap(Logger::default())
-            // .wrap_fn(|req,srv| {
-            //     debug!("Request Cookies: {:?}", req.request().cookies());
-            //     let res = srv.call(req);
-            //     async move {
-            //         let mut res = res.await;
-            //         res
-            //     }
-            // })
             .wrap(SessionMiddleware::new(
                 CookieSessionStore::default(),
                 secret_key.clone(),

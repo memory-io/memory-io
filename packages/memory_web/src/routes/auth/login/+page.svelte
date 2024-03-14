@@ -4,7 +4,7 @@
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { Button } from "$lib/components/ui/button";
-
+  export let form;
 </script>
 
 
@@ -13,9 +13,14 @@
     <Card.Header>
       <Card.Title>Login to your account.</Card.Title>
       <Card.Description>Save your study sets.</Card.Description>
+      {#if form?.error}
+        <p class="text-red-500 text-sm">{form?.error}</p>
+      {/if}
     </Card.Header>
+    
     <form method="POST" use:enhance>
       <Card.Content>
+          
           <!-- Your signup form code here -->
           <Label for="email">Email</Label>
           <Input name="email" type="email" placeholder="Email" />

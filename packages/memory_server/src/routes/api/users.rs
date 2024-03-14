@@ -2,13 +2,11 @@ use std::str::FromStr;
 
 use actix_identity::Identity;
 
-use actix_session::Session;
 use actix_web::{
     get, post,
     web::{self, Data, Form, Json, Path},
     HttpMessage, HttpRequest, HttpResponse, Responder,
 };
-use bson::oid::ObjectId;
 use mongodb::error::{Error, WriteFailure};
 
 use serde::Deserialize;
