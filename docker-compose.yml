@@ -5,11 +5,20 @@ services:
     build: ./packages/memory_server/
     ports:
       - "8000:8000"
+    environment:
+      - MONGO_URI=mongodb://database:27017
+      - DATABASE_NAME=memory
+    links:
+      - "db:database"
+    depends_on:
+      - db
   website:
     build: ./packages/memory_web/
     ports:
       - "3000:3000"
-  mongodb:
+    environment:
+      - API_URL=http://server:8000
+  db:
     image: mongodb/mongodb-community-server
     ports:
       - "27017:27017"
