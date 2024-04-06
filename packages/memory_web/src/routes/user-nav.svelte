@@ -58,7 +58,9 @@
 	<DropdownMenu.Content class="w-56" align="end">
 		
 		<DropdownMenu.Group>
-			<DropdownMenu.Item href="/auth/login">
+			<DropdownMenu.Item href="/auth/login" data-sveltekit-reload>
+
+
 				Login
 			</DropdownMenu.Item>
 			<DropdownMenu.Item href="/auth/signup">

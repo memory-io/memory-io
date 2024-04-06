@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use tracing::warn;
 
 use super::{
-    set::{self, get_set_with_cards, Set, SetWithCards},
+    set::SetWithCards,
     MongoDatabase,
 };
 

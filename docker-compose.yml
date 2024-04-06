@@ -17,7 +17,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - API_URL=http://server:8000
+      - API_URL=http://localhost:8000
+    links:
+      - "server:server"
+    depends_on:
+      - server
   db:
     image: mongodb/mongodb-community-server
     ports:

@@ -12,11 +12,12 @@
 	import Formatter from "$lib/formatter.svelte";
 	import { ChevronRight,ChevronLeft } from "lucide-svelte";
 	import { quintOut } from 'svelte/easing';
+	import { deleteSet } from "$lib/api/sets";
 
    
     export let data;
     export let form;
-    let own_set = data.set?.user_id == data.user.id;
+    let own_set = data.set?.user_id == data.user?.id;
 
     $: {
         if (form?.error) {
@@ -31,7 +32,8 @@
     }
     let card_index = 0;
     let front = true;
-    $:cards_len = data.set?.cards.length ?? 0;
+    console.log(data.set?.cards)
+    $:cards_len = data.set?.cards?.length ?? 0 ;
 
     $: {
         if (data.set != undefined && cards_len <= card_index){
@@ -53,7 +55,7 @@
         <Card.Description>{data.set?.visibility}</Card.Description>
     </Card.Header>
     <Card.Content>
-        {#if data.set.cards[card_index] != undefined }
+        {#if data.set.cards != null && data.set.cards[card_index] != undefined }
         
         <div id={data.set.cards[card_index].id} class=" h-[300px] bg-secondary rounded-md flex flex-row">
             
@@ -87,59 +89,58 @@
         {/if}
 
     </Card.Content>
-    {#if own_set}
-    <form method="POST" use:enhance={() => {
-        return async ({ update }) => {
-            update({ reset: false });
-        };
-    }} >
-    <input name="id" value={data.set.id} hidden>
+    {#if own_set && data.set != undefined}
+
     <Card.Footer class="flex justify-between gap-3">
         <span>
             <Button href={`${data.set.id}/learn`} >Learn</Button>
         </span>
         <span>
             <Button type="submit">Edit</Button>
-            <Button formaction="?/delete" type="submit" variant="destructive">Delete</Button>
+            <Button on:click={async () => {
+                let out = await deleteSet(data.set?.id ??"nol");
+                if (!out.error){
+                    window.location.href = "/sets";
+                }else{
+                    toast.error(out.error);
+                }
+            }} variant="destructive">Delete</Button>
         </span>
-   
     </Card.Footer>
-    </form>
+
     {/if}
 
 </Card.Root>
 {#if data.set.cards != undefined}
+{#if data.set.cards.length == 0 }
+<p>It's empty</p>
+{/if}
 {#each data.set.cards as card}
 <Card.Root >
-    <form id={card.id} method="POST" use:enhance={() => {
-        return async ({ update }) => {
-            update({ reset: false });
-        };
-    }}>
-    <input name="id" value={card.id} hidden>
-    <SetCard default_editable={false} card={card}/>
-    
-    
-
-    </form>
-
+    <SetCard default_editable={false} set_id={data.set.id} card={card}/>
 </Card.Root>
 
 {/each}
 
-{#if own_set}
-    <Card.Root >
-        <form id="new-card"  method="POST" use:enhance>
-            <SetCard default_editable={true} card={null}/>
-        </form>
-    </Card.Root>
-{/if}
+
 
 {/if}
+
+
+{/if}
+{#if own_set &&  data.set != undefined}
+    <Card.Root >
+        <SetCard set_id={data.set.id} default_editable={true} card={{
+            id:"",
+            front:"",
+            back:""
+        }}/>
+    </Card.Root>
 {/if}
 {#if data.set == undefined}
 <p>No sets found</p>
 {/if}
+
 
 
 </section>

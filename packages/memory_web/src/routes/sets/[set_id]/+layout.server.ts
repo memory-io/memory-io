@@ -6,8 +6,9 @@ export const load: LayoutServerLoad = async ({params ,fetch}) => {
     const set_id = params.set_id;
 
     //request the url at localhost:8000/api/auth/signup
-    const response = await fetch(`/api/sets/${set_id}`, { 
+    const response = await fetch(`/api/sets/${set_id}?includeCards=true`, { 
         method: 'GET',
+        
     });
     if (response.status == 401){
         redirect(301,"/auth/login");

@@ -5,7 +5,7 @@ use memory_server::{
     startup::{initialize_db, run, ServerConfig},
 };
 use mongodb::{options::ClientOptions, Client};
-use tracing::debug;
+use tracing::{debug, info};
 
 #[tokio::main]
 async fn main() {
@@ -17,8 +17,10 @@ async fn main() {
     .await
     .unwrap();
 
-    debug!("Connecting to database {client_options:?}");
-    let address = TcpListener::bind("127.0.0.1:8000").unwrap();
+    info!("Connecting to database {client_options:?}");
+    let address = TcpListener::bind("0.0.0.0:8000").unwrap();
+
+    info!("Server starting on {:?}", address.local_addr().unwrap());
 
     let db = Client::with_options(client_options).unwrap();
     let mongo_database = MongoDatabase::new(
@@ -26,6 +28,8 @@ async fn main() {
         &std::env::var("DATABASE_NAME").unwrap_or("dev".to_string()),
     );
     initialize_db(&mongo_database).await.unwrap();
+
+    info!("Connected to database");
 
     run(mongo_database, address, ServerConfig::default())
         .await

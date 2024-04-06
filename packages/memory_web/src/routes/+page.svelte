@@ -13,13 +13,16 @@
     </Card.Header>
     <Card.Content class="flex flex-row gap-3 flex-wrap">
         {#each data.recent_sets as set}
-        <Card.Root class="w-64">
-            <Card.Header>
-                <Card.Title>{set.title}</Card.Title>
-                <Card.Description>{set.user_id}</Card.Description>
-            </Card.Header>
-        </Card.Root>
+        <a href={`/sets/${set.id}`}>
+            <Card.Root class="w-64" >
+                <Card.Header >
+                    <Card.Title >{set.title}</Card.Title>
+                    <Card.Description>{set.user_id}</Card.Description>
+                </Card.Header>
+            </Card.Root>
+        </a>
         {/each}
+        
     </Card.Content>
 </Card.Root>
 

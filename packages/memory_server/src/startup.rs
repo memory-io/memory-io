@@ -20,7 +20,8 @@ use mongodb::{
     options::{ClientOptions, IndexOptions},
     Client, IndexModel,
 };
-use tracing::debug;
+use tracing::{debug, info};
+
 
 #[derive(Clone, Copy)]
 pub struct ServerConfig {
@@ -41,10 +42,14 @@ pub async fn run(
     let secret_key = Key::generate();
 
     let governor_conf = GovernorConfigBuilder::default()
-        .per_second(2)
-        .burst_size(5)
+        .per_second(1)
+        .burst_size(20)
         .finish()
         .unwrap();
+
+
+
+    info!("Starting server...");
 
     Ok(HttpServer::new(move || {
         App::new()
@@ -63,6 +68,7 @@ pub async fn run(
                 CookieSessionStore::default(),
                 secret_key.clone(),
             ))
+       
             .app_data(web::Data::new(db.clone()))
             .configure(factory)
     })

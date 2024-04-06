@@ -71,7 +71,11 @@ async fn test_set_functionality() {
     //add card
 
     let response = client
-        .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .patch(&format!(
+            "{}/api/sets/{}?includeCards=true",
+            &app.address,
+            found.id.to_hex()
+        ))
         .json(&PatchSet::AddCard {
             front: "banana".to_string(),
             back: "apple".to_string(),
@@ -99,7 +103,7 @@ async fn test_set_functionality() {
         .expect("Failed to find created card");
 
     let response = client
-        .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .patch(&format!("{}/api/sets/{}?includeCards=true", &app.address, found.id.to_hex()))
         .json(&PatchSet::UpdateCard(Card {
             id: card.id.into(),
             front: "apple".to_string(),
@@ -112,7 +116,7 @@ async fn test_set_functionality() {
 
     //check if card was updated
     let response = client
-        .get(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .get(&format!("{}/api/sets/{}?includeCards=true", &app.address, found.id.to_hex()))
         .send()
         .await
         .expect("Failed to execute get set request.");
@@ -131,7 +135,7 @@ async fn test_set_functionality() {
 
     //delete card
     let response = client
-        .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .patch(&format!("{}/api/sets/{}?includeCards=true", &app.address, found.id.to_hex()))
         .json(&PatchSet::RemoveCard { id: card.id.into() })
         .send()
         .await
@@ -141,7 +145,7 @@ async fn test_set_functionality() {
     //check if card was deleted
     //check if card was updated
     let response = client
-        .get(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
+        .get(&format!("{}/api/sets/{}?includeCards=true", &app.address, found.id.to_hex()))
         .send()
         .await
         .expect("Failed to execute get set request.");

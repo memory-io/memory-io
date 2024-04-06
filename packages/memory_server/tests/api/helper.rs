@@ -58,7 +58,7 @@ pub async fn get_set_from_id(
     id: &str,
 ) -> Result<Response, reqwest::Error> {
     let response = client
-        .get(&format!("{}/api/sets/{}", address, id))
+        .get(&format!("{}/api/sets/{}?includeCards=true", address, id))
         .send()
         .await;
 

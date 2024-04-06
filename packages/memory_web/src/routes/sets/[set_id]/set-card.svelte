@@ -6,7 +6,11 @@
 	import type { Card } from "$lib/types";
 	import { MoreVertical } from "lucide-svelte";
 	import Formatter from "../../../lib/formatter.svelte";
-    export let card:Card | null;
+	import { addCard, deleteCard, updateCard } from "$lib/api/sets";
+	import { invalidate, invalidateAll } from "$app/navigation";
+	import { toast } from "svelte-sonner";
+    export let card:Card ;
+    export let set_id:string ;
     export let default_editable: boolean;
 
     let editable = default_editable;
@@ -20,70 +24,82 @@
         
     <div class="card-side" id="front">
         {#if editable}
-        <Textarea disabled={!editable} class="h-full" placeholder="Front of card"  value={card?.front} name="front" />
+            <Textarea disabled={!editable} class="h-full" placeholder="Front of card" bind:value={card.front} name="front" />
         {/if}
-        {#if !editable && card != null}
-        <span class="pr-2 overflow-auto">
-            <Formatter data={card?.front}/>
-        </span>
+        {#if !editable && card.id != ""}
+            <span class="pr-2 overflow-auto">
+                <Formatter data={card?.front}/>
+            </span>
         {/if}
     </div>
     <div class="card-side">
         {#if editable}
-        <Textarea disabled={!editable} class="h-full" placeholder="Back of card"  value={card?.back} name="back" />
+            <Textarea disabled={!editable} class="h-full" placeholder="Back of card"  bind:value={card.back} name="back" />
         {/if}
-        {#if !editable && card != null}
-        <span class="pl-4 text-wrap ">
-        <Formatter data={card?.back}/>
-        </span>
+        {#if !editable && card.id != ""}
+            <span class="pl-4 text-wrap ">
+                <Formatter data={card?.back}/>
+            </span>
         {/if}
     </div>
-    {#if card != null}
+    {#if card.id != ""}
     <div class="m-w-8">
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
             <MoreVertical />
-
-            
         </DropdownMenu.Trigger>
         <DropdownMenu.Content class="w-56">
             <DropdownMenu.Label>Card Actions</DropdownMenu.Label>
             <DropdownMenu.Separator />
-        
             <DropdownMenu.Group>
-                <DropdownMenu.CheckboxItem bind:checked={editable}>
-                    Editable
-                </DropdownMenu.CheckboxItem>
-                <DropdownMenu.CheckboxItem on:click={()=>{
-                    let e = document.getElementById(card?.id ?? "new-card");
-                    if (!(e instanceof HTMLFormElement)) 
-                        throw new Error(`Expected e to be an HTMLScriptElement, was ${e && e.constructor && e.constructor.name || e}`);
-                    e.requestSubmit(deleteButton)
+                {#if editable}
+                    <DropdownMenu.CheckboxItem on:click={async ()=>{
+                        let out = await updateCard(set_id,card);
+                        if (!out.error){
+                            console.log("invalidated")
+                            invalidateAll();
+                        }else{
+                            toast.error(out.error);
+                        }
+                        
+                    }} bind:checked={editable}>
+                        Save
+                    </DropdownMenu.CheckboxItem>
+                {/if}
+                {#if !editable}
+                    <DropdownMenu.CheckboxItem bind:checked={editable}>
+                        Editable
+                    </DropdownMenu.CheckboxItem>
+                {/if}
+                <DropdownMenu.CheckboxItem on:click={async ()=>{
+                    let out = await deleteCard(set_id,card.id);
+                    if (!out.error){
+                        console.log('deleted')
+                        invalidateAll();
+                    }else{
+                        toast.error(out.error);
+                    }
                 }}>
-                    <input bind:this={deleteButton} type="submit" form={card.id}  formaction="?/delete_card" hidden>
-
                     Delete
                 </DropdownMenu.CheckboxItem>
-               
-       
             </DropdownMenu.Group>
-            
         </DropdownMenu.Content>
-        </DropdownMenu.Root>
+    </DropdownMenu.Root>
     </div>
     {/if}
-    
-    
-  
 </div>
 {#if editable}
-    {#if card != null}
-        <Button form={card.id}  type="submit" variant="outline" formaction="?/update_card">Save</Button>
+    {#if card.id == ""}
+        <Button on:click={async () => {
+            let out = await addCard(set_id,card.front,card.back);
+            if (!out.error){
+                invalidateAll();
+            }else{
+                toast.error(out.error);
+            }
+            
+        }} type="submit" variant="outline" >Add Card</Button>
     {/if}
-    {#if card == null}
-        <Button form="new-card" type="submit" variant="outline" formaction="?/add_card">Add Card</Button>
-    {/if}
-  
 {/if}
 </div>
 
@@ -108,10 +124,7 @@
         width: 30%;
         min-width: 30%;
     }
-    .card-side .card-content{
-        width: 100%;
-        height: 100%;
-    }
+
 
     .card-side{
         padding-left: 5px;

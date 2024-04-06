@@ -8,8 +8,12 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api/': {
-				target: process.env.API_URL,
+				target: 'http://localhost:8000',
 			}
 		}
 	}
 });
+
+
+
+

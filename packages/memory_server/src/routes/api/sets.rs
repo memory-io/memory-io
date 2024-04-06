@@ -2,6 +2,7 @@ use std::str::FromStr;
 
 use actix_identity::Identity;
 
+use actix_web::web::Query;
 use actix_web::{
     delete, get, patch, post,
     web::{self, Data, Json},
@@ -29,6 +30,18 @@ pub fn factory(cfg: &mut web::ServiceConfig) {
             .service(delete_set)
             .service(patch_set),
     );
+}
+
+#[derive(Deserialize, Debug, Default)]
+struct GetSetsOptions {
+    #[serde(rename = "includeUser")]
+    #[serde(default)]
+    include_users: bool,
+    #[serde(default)]
+    #[serde(rename = "includeCards")]
+    include_cards: bool,
+
+    limit: Option<usize>,
 }
 
 #[derive(Deserialize)]
@@ -106,9 +119,22 @@ pub async fn patch_set(
 }
 
 #[get("")]
-pub async fn get_sets(id: Identity, db: Data<MongoDatabase>) -> impl Responder {
+pub async fn get_sets(
+    id: Identity,
+    db: Data<MongoDatabase>,
+    options: Query<GetSetsOptions>,
+) -> impl Responder {
     let user_id = ObjectId::from_str(&id.id().unwrap()).unwrap();
-    return match set::get_sets_from_user(&db, &user_id, 10).await {
+
+    return match set::get_sets_from_user(
+        &db,
+        &user_id,
+        options.limit.unwrap_or(10) as i64,
+        options.include_users,
+        options.include_cards,
+    )
+    .await
+    {
         Ok(sets) => HttpResponse::Ok().json(sets),
         Err(err) => {
             error!("Error getting sets {err:?}");
@@ -151,7 +177,8 @@ pub async fn create_set(
             HttpResponse::InternalServerError().body("Failed to create user")
         }
         Ok(a) => {
-            return match set::get_set_with_cards(&db, &a.inserted_id.as_object_id().unwrap()).await
+            return match set::get_set(&db, &a.inserted_id.as_object_id().unwrap(), false, false)
+                .await
             {
                 Ok(Some(set)) => HttpResponse::Ok().json(set),
                 Ok(None) => {
@@ -172,8 +199,17 @@ pub async fn get_set(
     id: Option<Identity>,
     set_id: web::Path<String>,
     db: Data<MongoDatabase>,
+    options: Query<GetSetsOptions>,
 ) -> impl Responder {
-    return match set::get_set_with_cards(&db, &ObjectId::from_str(&set_id).unwrap()).await {
+    debug!("Getting set options: {:?}", options);
+    return match set::get_set(
+        &db,
+        &ObjectId::from_str(&set_id).unwrap(),
+        options.include_users,
+        options.include_cards,
+    )
+    .await
+    {
         Err(err) => {
             error!("Failed to get set: {}", err);
             HttpResponse::InternalServerError().body("Failed to get set")
