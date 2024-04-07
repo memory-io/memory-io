@@ -18,7 +18,6 @@ interface StudySet{
 	title: string,
 	user_id: string,
 	visibility: string,
-	cards: string[]
 
 }
 interface Card{

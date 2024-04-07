@@ -15,6 +15,9 @@
 	import type { Selected } from "bits-ui";
 	import { slide } from "svelte/transition";
     import { toast } from "svelte-sonner";
+	import { createSet, deleteSet } from "$lib/api/sets";
+	import { error, redirect } from "@sveltejs/kit";
+	import { invalidate, invalidateAll } from "$app/navigation";
 
 
     let selected: Selected<string> = {
@@ -22,18 +25,30 @@
         label:"Public"
     };
     export let data;
-    export let form;
     let dialogOpen = false;
-    if (form?.error){
-        toast.success("Error creating Set", {
-            description: form?.error,
-            action: {
-                label: "Undo",
-                onClick: () => console.log("Undo")
+
+    async function formCreateSet(e: SubmitEvent & {
+    currentTarget: EventTarget & HTMLFormElement;
+}){
+        const formData = new FormData(e.currentTarget);
+        const data:{[id: string]:string} = {};
+        for (let field of formData) {
+            const [key, value] = field;
+            data[key] = value.toString();
+        }
+        let out = await createSet(data["title"],data["visibility"]);
+        if (out.error){
+            if (out.error == 401){
+                window.location.href = "/auth/login";
+            }else {
+                toast.error(out.error.toString());
             }
-            }
-        )
+        }else if (out.set){
+            dialogOpen = false;
+            window.location.href = `/sets/${out.set.id}`;
+        }
     }
+    
 
     
 </script>
@@ -52,11 +67,7 @@
             Save your study set.
         </Dialog.Description>
         </Dialog.Header>
-        <form method="POST" action="?/create" use:enhance={() => {
-            return async ({ update }) => {
-                update({ reset: false });
-            };
-            }}>
+        <form on:submit|preventDefault={formCreateSet}>
             <Label for="title">Title</Label>
             <Input name="title" type="text" placeholder="Title" />
             <br>
@@ -75,7 +86,7 @@
             </Select.Root>
             <Dialog.Footer>
                 <Button variant="destructive" on:click={() => {dialogOpen =false}}>Cancel</Button>
-                <Button type="submit" variant="default" on:click={() => {dialogOpen =false}}>Create</Button>
+                <Button type="submit" variant="default" >Create</Button>
             </Dialog.Footer>
 
         </form>
@@ -86,7 +97,6 @@
 {#if data.sets != undefined}
 {#each data.sets as set}
 <Card.Root >
-    <form method="post" use:enhance>
 
     <Card.Header>
         <a href={`/sets/${set.id}`}>
@@ -99,10 +109,20 @@
     </Card.Content>
     <Card.Footer class="flex justify-between">
         
-        <Button type="submit" formaction={`/sets/${set.id}?/delete`} variant="outline">Delete</Button>
+        <Button type="submit" on:click={async ()=>{
+            let out = await deleteSet(set.id);
+            if (out.error){
+                toast.error(out.error);
+            }else{
+                invalidate((url) => {
+                    console.log(url.pathname);
+                    return url.pathname === "/api/sets"
+                });
+            }
+
+        }} variant="outline">Delete</Button>
         
     </Card.Footer>
-    </form>
 
 
 </Card.Root>

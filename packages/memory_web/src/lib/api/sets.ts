@@ -1,4 +1,4 @@
-import type { Card } from "$lib/types";
+import type { Card, StudySet } from "$lib/types";
 import { redirect } from "@sveltejs/kit";
 
 
@@ -73,6 +73,33 @@ async function updateCard(set_id: string,card: Card) {
     }
 }
 
+async function createSet(title: string,visibility: string) {
+    console.log(title,visibility);
+    const response = await fetch('/api/sets/create', { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+
+        },
+        body: JSON.stringify({ "title":title,"visibility": visibility })
+    });
+    if (response.status == 401){
+        return {
+            error:401
+        }
+    }
+    if (response.status !== 200) {
+        return {
+            error:await response.text()
+        }
+        
+    }
+    return {
+        set:await response.json() as StudySet
+    }
+    
+}
+
 
 async function addCard(set_id: string,front: string,back: string) {
     const response = await fetch(`/api/sets/${set_id}`, { 
@@ -96,4 +123,4 @@ async function addCard(set_id: string,front: string,back: string) {
 }
 
 
-export {deleteCard,deleteSet,updateCard,addCard};
+export {deleteCard,deleteSet,updateCard,addCard,createSet};

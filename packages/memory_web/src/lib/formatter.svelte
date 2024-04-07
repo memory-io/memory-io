@@ -26,9 +26,3 @@
 {/await}
 
 
-
-<style>
-
-</style>
-
-
