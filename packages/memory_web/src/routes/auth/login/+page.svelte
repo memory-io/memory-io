@@ -4,7 +4,29 @@
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { Button } from "$lib/components/ui/button";
-  export let form;
+	import { toast } from "svelte-sonner";
+
+
+  let email = "";
+  let password = "";
+
+  async function login(){
+    const res = await fetch("/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (res.ok) {
+      window.location.href = "/";
+    } else {
+      toast.error(await res.text());
+    }
+  
+
+  }
 </script>
 
 
@@ -13,24 +35,22 @@
     <Card.Header>
       <Card.Title>Login to your account.</Card.Title>
       <Card.Description>Save your study sets.</Card.Description>
-      {#if form?.error}
-        <p class="text-red-500 text-sm">{form?.error}</p>
-      {/if}
+   
     </Card.Header>
     
-    <form method="POST" use:enhance>
+    <form on:submit|preventDefault>
       <Card.Content>
           
           <!-- Your signup form code here -->
           <Label for="email">Email</Label>
-          <Input name="email" type="email" placeholder="Email" />
+          <Input name="email" bind:value={email} type="email" placeholder="Email" />
           <br>
           <Label for="password">Password</Label>
-          <Input name="password" type="password" placeholder="Password" />
+          <Input name="password" bind:value={password} type="password" placeholder="Password" />
       </Card.Content>
       <Card.Footer class="flex justify-between">
         <Button variant="outline">Cancel</Button>
-        <Button type="submit">Login</Button>
+        <Button on:click={() => login()} type="submit">Login</Button>
       </Card.Footer>
     </form>
   </Card.Root>

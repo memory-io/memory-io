@@ -3,6 +3,7 @@
 	import * as Avatar from "$lib/components/ui/avatar";
 	import { Button } from "$lib/components/ui/button";
 	import type { User } from "$lib/types";
+	import { invalidate } from "$app/navigation";
 	export let user: User | null;
 
 </script>
@@ -58,7 +59,9 @@
 	<DropdownMenu.Content class="w-56" align="end">
 		
 		<DropdownMenu.Group>
-			<DropdownMenu.Item href="/auth/login" data-sveltekit-reload>
+			<DropdownMenu.Item href="/auth/login" on:click={()=>{
+				invalidate("/api/users/me");
+			}} data-sveltekit-reload>
 
 
 				Login

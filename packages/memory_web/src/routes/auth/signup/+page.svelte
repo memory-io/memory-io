@@ -7,6 +7,8 @@
 	import { user } from "$lib/store";
 
   let username: string = "";
+  let email: string = "";
+  let password: string = "";
   let username_error: string = "";
   let valid_username = false;
   $: {
@@ -30,6 +32,22 @@
     }
   };
 
+  async function signup(){
+    const res = await fetch("/api/users/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, username, password }),
+    });
+
+    if (res.ok) {
+      window.location.href = "/";
+    } else {
+      console.log(await res.text());
+    }
+  }
+
   async function check_username(username: string){
     console.log(username)
     const response = await fetch(`/api/users/check_username/${username}`)
@@ -51,11 +69,11 @@
       <Card.Title>Create an account</Card.Title>
       <Card.Description>Save your study sets.</Card.Description>
     </Card.Header>
-    <form method="POST" use:enhance>
+    <form on:submit|preventDefault >
       <Card.Content>
           <!-- Your signup form code here -->
           <Label for="email">Email</Label>
-          <Input name="email" type="email" placeholder="Email" />
+          <Input bind:value={email} name="email" type="email" placeholder="Email" />
           <br>
           <Label for="username">Username <span class="text-rose-500">{username_error}</span></Label>
           
@@ -63,11 +81,11 @@
 
           <br>
           <Label for="password">Password</Label>
-          <Input name="password" type="password" placeholder="Password" />
+          <Input bind:value={password} name="password" type="password" placeholder="Password" />
       </Card.Content>
       <Card.Footer class="flex justify-between">
         <Button variant="outline">Cancel</Button>
-        <Button type="submit">Signup</Button>
+        <Button on:click={() => signup()} type="submit">Signup</Button>
       </Card.Footer>
     </form>
   </Card.Root>

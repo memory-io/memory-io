@@ -4,6 +4,12 @@
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { Button } from "$lib/components/ui/button";
+	import { invalidate } from "$app/navigation";
+
+  invalidate((url) => url.pathname.includes("users"));
+  setTimeout(() => {
+    window.location.href = "/";
+  }, 2000);
 
 </script>
 
