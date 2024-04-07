@@ -1,7 +1,6 @@
 
 import type { StudySet } from "$lib/types";
 import { fail, redirect } from "@sveltejs/kit";
-export const ssr = true
 
 /** @type {import('./$types').PageLoad} */
 export async function load({fetch}) {
