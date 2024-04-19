@@ -1,6 +1,6 @@
 use mongodb::{Client, Database};
-
 pub mod card;
+pub mod folder;
 pub mod set;
 pub mod user;
 #[derive(Clone)]

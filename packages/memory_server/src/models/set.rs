@@ -7,8 +7,8 @@ use mongodb::{
     options::FindOptions,
     results::DeleteResult,
 };
-use tracing::debug;
 use serde::{Deserialize, Serialize};
+use tracing::debug;
 
 use super::{card::Card, MongoDatabase};
 #[derive(Deserialize, Serialize, Debug)]
@@ -42,6 +42,7 @@ pub struct SetWithCards {
     #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
     pub id: ObjectId,
     pub visibility: SetVisibility,
+    pub folder_id: Option<ObjectId>,
     #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
     pub user_id: ObjectId,
     pub title: String,
@@ -115,7 +116,6 @@ pub async fn get_set(
     };
     if !include_cards {
         debug!("Including Cards");
-
 
         query.push(doc! {
             "$project": {
@@ -215,7 +215,6 @@ pub async fn get_sets_from_user(
         .take(count as usize)
         .collect()
         .await;
-
 
     Ok(result)
 }

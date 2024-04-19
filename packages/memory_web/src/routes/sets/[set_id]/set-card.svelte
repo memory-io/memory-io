@@ -24,7 +24,7 @@
         
     <div class="card-side" id="front">
         {#if editable}
-            <Textarea disabled={!editable} class="h-full" placeholder="Front of card" bind:value={card.front} name="front" />
+            <Textarea disabled={!editable} class="h-full" placeholder="Front of card" bind:value={card.front}  />
         {/if}
         {#if !editable && card.id != ""}
             <span class="pr-2 overflow-auto">
@@ -34,7 +34,7 @@
     </div>
     <div class="card-side">
         {#if editable}
-            <Textarea disabled={!editable} class="h-full" placeholder="Back of card"  bind:value={card.back} name="back" />
+            <Textarea disabled={!editable} class="h-full" placeholder="Back of card"  bind:value={card.back} />
         {/if}
         {#if !editable && card.id != ""}
             <span class="pl-4 text-wrap ">

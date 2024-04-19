@@ -3,7 +3,9 @@
 	import Search from './search.svelte';
 	import UserNav from './user-nav.svelte';
 	import MainNav from './main-nav.svelte';
+
 	import { Toaster } from "$lib/components/ui/sonner";
+	import { Slash } from 'lucide-svelte';
 	export let data;
 
 
@@ -26,6 +28,7 @@
 		</div>
 	</div>
 	<div class="flex-1 space-y-4 p-1 pt-6 sm:p-8">
+	
 		<slot/>
 		
 	</div>

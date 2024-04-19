@@ -77,7 +77,7 @@
 
         <Card.Footer class="flex justify-between gap-3">
             <span>
-                <Button href={`${data.set.id}/learn`} >Learn</Button>
+                <Button href={`${data.set.id}/quiz`} >Quiz</Button>
             </span>
             <span>
                 <Button type="submit">Edit</Button>

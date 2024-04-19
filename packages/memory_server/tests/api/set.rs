@@ -72,7 +72,7 @@ async fn test_set_functionality() {
 
     let response = client
         .patch(&format!(
-            "{}/api/sets/{}?includeCards=true",
+            "{}/api/sets/{}",
             &app.address,
             found.id.to_hex()
         ))
@@ -103,7 +103,7 @@ async fn test_set_functionality() {
         .expect("Failed to find created card");
 
     let response = client
-        .patch(&format!("{}/api/sets/{}?includeCards=true", &app.address, found.id.to_hex()))
+        .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
         .json(&PatchSet::UpdateCard(Card {
             id: card.id.into(),
             front: "apple".to_string(),
