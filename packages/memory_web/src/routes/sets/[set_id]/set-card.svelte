@@ -9,12 +9,13 @@
 	import { addCard, deleteCard, updateCard } from "$lib/api/sets";
 	import { invalidate, invalidateAll } from "$app/navigation";
 	import { toast } from "svelte-sonner";
+	import CardEditor from "$lib/CardEditor.svelte";
     export let card:Card ;
     export let set_id:string ;
     export let default_editable: boolean;
+    export let owned: boolean;
 
     let editable = default_editable;
-    let deleteButton: HTMLElement | null | undefined;
 
     
 </script>
@@ -23,8 +24,9 @@
 <div class="card relative">
         
     <div class="card-side" id="front">
-        {#if editable}
-            <Textarea disabled={!editable} class="h-full" placeholder="Front of card" bind:value={card.front}  />
+        {#if editable && owned}
+        <CardEditor disabled={!editable}   bind:value={card.front} />
+
         {/if}
         {#if !editable && card.id != ""}
             <span class="pr-2 overflow-auto">
@@ -33,8 +35,8 @@
         {/if}
     </div>
     <div class="card-side">
-        {#if editable}
-            <Textarea disabled={!editable} class="h-full" placeholder="Back of card"  bind:value={card.back} />
+        {#if editable && owned}
+            <CardEditor disabled={!editable}   bind:value={card.back} />
         {/if}
         {#if !editable && card.id != ""}
             <span class="pl-4 text-wrap ">
@@ -42,7 +44,7 @@
             </span>
         {/if}
     </div>
-    {#if card.id != ""}
+    {#if card.id != "" && owned}
     <div class="m-w-8">
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
@@ -66,7 +68,7 @@
                         Save
                     </DropdownMenu.CheckboxItem>
                 {/if}
-                {#if !editable}
+                {#if !editable }
                     <DropdownMenu.CheckboxItem bind:checked={editable}>
                         Editable
                     </DropdownMenu.CheckboxItem>

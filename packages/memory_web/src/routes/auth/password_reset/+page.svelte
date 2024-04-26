@@ -8,19 +8,18 @@
 
 
   let email = "";
-  let password = "";
 
-  async function login(){
-    const res = await fetch("/api/users/login", {
+  async function reset(){
+    const res = await fetch("/api/users/password_reset", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email }),
     });
 
     if (res.ok) {
-      window.location.href = "/";
+        toast.success("Check your email for a password reset link.");
     } else {
       toast.error(await res.text());
     }
@@ -33,25 +32,20 @@
 <div class="container">
   <Card.Root class="w-[350px]">
     <Card.Header>
-      <Card.Title>Login to your account.</Card.Title>
-      <Card.Description>Save your study sets.</Card.Description>
+      <Card.Title>Password Reset</Card.Title>
+      <Card.Description>If you have an account we will send you an email to reset your password.</Card.Description>
    
     </Card.Header>
     
     <form on:submit|preventDefault>
-      <Card.Content>
-          
-          <!-- Your signup form code here -->
-          <Label for="email">Email</Label>
-          <Input name="email" bind:value={email} type="email" placeholder="Email" />
-          <br>
-          <Label for="password">Password</Label>
-          <Input name="password" bind:value={password} type="password" placeholder="Password" />
-      </Card.Content>
-      <Card.Footer class="flex justify-between">
-        <Button variant="outline" href="/auth/password_reset">Reset Password</Button>
-        <Button on:click={() => login()} type="submit">Login</Button>
-      </Card.Footer>
+        <Card.Content>
+            <!-- Your signup form code here -->
+            <Label for="email">Email for account</Label>
+            <Input name="email" bind:value={email} type="email" placeholder="Email" />
+        </Card.Content>
+        <Card.Footer class="flex justify-between">
+            <Button on:click={() => reset()} type="submit">Reset</Button>
+        </Card.Footer>
     </form>
   </Card.Root>
   

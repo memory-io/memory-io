@@ -1,5 +1,6 @@
-use std::str::FromStr;
+use std::{str::FromStr, sync::Arc};
 
+use actix_governor::GovernorConfigBuilder;
 use actix_identity::Identity;
 
 use actix_web::{
@@ -7,14 +8,17 @@ use actix_web::{
     web::{self, Data, Form, Json, Path},
     HttpMessage, HttpRequest, HttpResponse, Responder,
 };
-use mongodb::error::{Error, WriteFailure};
 
-use serde::Deserialize;
-use tracing::{debug, info, trace, warn};
+use mongodb::error::WriteFailure;
+use serde::{Deserialize, Serialize};
+use tracing::{debug, error, info, trace, warn};
 
-use crate::models::{
-    user::{self, UserSignup},
-    MongoDatabase,
+use crate::{
+    models::{
+        user::{self, UserSignup},
+        MongoDatabase,
+    },
+    startup::EmailClient,
 };
 
 pub fn factory(cfg: &mut web::ServiceConfig) {
@@ -23,7 +27,10 @@ pub fn factory(cfg: &mut web::ServiceConfig) {
             .service(login)
             .service(signup)
             .service(get_user)
-            .service(check_username),
+            .service(check_username)
+            .service(password_reset)
+            .service(change_password)
+            .service(validate_password_reset),
     );
 }
 
@@ -50,7 +57,6 @@ pub async fn signup(
             HttpResponse::InternalServerError().body("Failed to create user")
         }
         Ok(a) => {
-            //session.insert("user_id", a.inserted_id.as_object_id().unwrap().to_hex()).unwrap();
             trace!("User Signed Up");
             Identity::login(
                 &request.extensions(),
@@ -70,6 +76,57 @@ pub async fn get_user(id: Identity, db: Data<MongoDatabase>) -> impl Responder {
         Err(err) => {
             warn!("Failed to get user: {}", err);
             HttpResponse::InternalServerError().body("Failed to get user")
+        }
+    };
+}
+
+#[derive(Deserialize, Debug)]
+struct ResetRequest {
+    email: String,
+}
+#[post("password_reset")]
+pub async fn password_reset(
+    email: Json<ResetRequest>,
+    db: Data<MongoDatabase>,
+    client: Data<EmailClient>,
+) -> impl Responder {
+    return match user::password_reset(&db, &client, &email.email).await {
+        Ok(_) => HttpResponse::Ok().await.unwrap(),
+        Err(err) => {
+            warn!("Failed to send reset {err}");
+            HttpResponse::InternalServerError().await.unwrap()
+        }
+    };
+}
+#[get("password_reset/{token}")]
+pub async fn validate_password_reset(
+    token: Path<String>,
+    db: Data<MongoDatabase>,
+) -> impl Responder {
+    return match user::validate_reset(&db, &token).await {
+        Ok(_) => HttpResponse::Ok().await.unwrap(),
+        Err(err) => {
+            warn!("Failed to validate reset {err}");
+            HttpResponse::InternalServerError().await.unwrap()
+        }
+    };
+}
+#[derive(Deserialize, Debug)]
+struct PasswordReset {
+    token: String,
+    password: String,
+}
+
+#[post("change_password")]
+pub async fn change_password(
+    reset: Json<PasswordReset>,
+    db: Data<MongoDatabase>,
+) -> impl Responder {
+    return match user::change_password(&db, &reset.token, &reset.password).await {
+        Ok(()) => HttpResponse::Ok().await.unwrap(),
+        Err(err) => {
+            warn!("Failed to change password {err}");
+            HttpResponse::InternalServerError().body(err.to_string())
         }
     };
 }

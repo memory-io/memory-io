@@ -1,11 +1,19 @@
-use std::str::FromStr;
+use std::{f32::consts::E, str::FromStr};
 
 use actix_identity::Identity;
+use actix_web::web;
+use anyhow::bail;
+use bson::Document;
+use chrono::{Date, Utc};
+use mail_send::mail_builder::MessageBuilder;
 use mongodb::{
     bson::{doc, oid::ObjectId},
     error::Error,
 };
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
+
+use crate::startup::EmailClient;
 
 use super::MongoDatabase;
 #[derive(Deserialize, Serialize, Debug)]
@@ -102,4 +110,92 @@ pub async fn authenticate_user(
         }
     }
     return Ok(None);
+}
+#[derive(Deserialize, Serialize, Debug)]
+pub struct PasswordReset {
+    #[serde(alias = "_id")]
+    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
+    pub id: ObjectId,
+    pub creation_date: chrono::DateTime<chrono::Utc>,
+    pub user_id: ObjectId,
+    pub token: String,
+}
+
+pub(crate) async fn validate_reset(db: &MongoDatabase, token: &str) -> Result<(), anyhow::Error> {
+    let Some(reset) = db
+        .db()
+        .collection::<PasswordReset>("password_resets")
+        .find_one(doc! {"token":token}, None)
+        .await?
+    else {
+        bail!("Invalid Token");
+    };
+    if reset.creation_date < Utc::now() - chrono::Duration::seconds(10 * 60) {
+        bail!("Expired Token");
+    }
+    return Ok(());
+}
+
+pub(crate) async fn change_password(
+    db: &MongoDatabase,
+    token: &str,
+    new_password: &str,
+) -> Result<(), anyhow::Error> {
+    let Some(reset) = db
+        .db()
+        .collection::<PasswordReset>("password_resets")
+        .find_one(doc! {"token":token}, None)
+        .await?
+    else {
+        anyhow::bail!("Invalid Token");
+    };
+    if reset.creation_date < Utc::now() - chrono::Duration::seconds(10 * 60) {
+        anyhow::bail!("Token Expired");
+    }
+    db.db()
+        .collection::<User>("users")
+        .update_one(
+            doc! {"_id":reset.user_id,},
+            doc! {"$set":{"password":bcrypt::hash(new_password,12).unwrap()}},
+            None,
+        )
+        .await?;
+
+    Ok(())
+}
+
+pub(crate) async fn password_reset(
+    db: &actix_web::web::Data<MongoDatabase>,
+    client: &EmailClient,
+    email: &str,
+) -> Result<(), anyhow::Error> {
+    let user = db
+        .db()
+        .collection::<User>("users")
+        .find_one(doc! {"email":email}, None)
+        .await?;
+    if let Some(user) = user {
+        let token = Uuid::new_v4().to_string();
+        db.db()
+            .collection("password_resets")
+            .insert_one(
+                doc! {"user_id":user.id,"token":&token,"creation_date":Utc::now().to_rfc3339()},
+                None,
+            )
+            .await?;
+        let message = MessageBuilder::new()
+            .from(("Memory IO", "connerlreplogle@gmail.com"))
+            .to(vec![("Password Reset", user.email.as_str())])
+            .subject("Password Reset")
+            .html_body(format!(
+                "Click <a href='http://localhost:5173/auth/password_reset/{}'>here</a> to reset your password",
+                token
+            ))
+            .text_body("Hello world!");
+
+        client.lock().await.send(message).await?;
+
+        return Ok(());
+    }
+    return Err(anyhow::Error::msg("User not found"));
 }

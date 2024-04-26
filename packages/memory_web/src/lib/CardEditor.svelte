@@ -1,23 +1,17 @@
 <script lang="ts">
+	import { Sigma } from "lucide-svelte";
 	import { Button } from "./components/ui/button";
 	import Textarea from "./components/ui/textarea/textarea.svelte";
+    import * as Card from "$lib/components/ui/card";
+	import type { FormEventHandler } from "svelte/elements";
 
     export let value:string;
     export let disabled:boolean;
 
-    function input(e:Event){
-        value = (e.target as HTMLTextAreaElement).value;
-    }
+ 
+ 
+    
 </script>
 
+<textarea disabled={disabled} class="h-full" bind:value={value}  />
 
-<div class="flex flex-row">
-    <Button variant="outline" size="icon">
-        <!-- Equation Logo -->
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-        
-    </Button>
-
-</div>
-<Textarea disabled={disabled} class="h-full" placeholder="Back of card"  on:input={input} bind:value={value} />

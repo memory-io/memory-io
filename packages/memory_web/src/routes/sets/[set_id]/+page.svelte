@@ -32,6 +32,7 @@
 </script>
 
 <section class="flex flex-col max-w-screen-md h-full gap-5 justify-items-center ">
+
 {#if data.set != undefined}
     <Card.Root>
         <Card.Header>
@@ -95,26 +96,27 @@
         {/if}
 
     </Card.Root>
-    {#if data.set.cards != undefined}
-        {#if data.set.cards.length == 0 }
-            <p>It's empty</p>
-        {/if}
-    {   #each data.set.cards as card}
-            <Card.Root >
-                <SetCard default_editable={false} set_id={data.set.id} card={card}/>
-            </Card.Root>
-        {/each}
-    {/if}
-{/if}
-{#if own_set &&  data.set != undefined}
+    {#if own_set &&  data.set != undefined}
     <Card.Root >
-        <SetCard set_id={data.set.id} default_editable={true} card={{
+        <SetCard set_id={data.set.id} default_editable={true} owned={own_set} card={{
             id:"",
             front:"",
             back:""
         }}/>
     </Card.Root>
 {/if}
+    {#if data.set.cards != undefined}
+        {#if data.set.cards.length == 0 }
+            <p>It's empty</p>
+        {/if}
+    {   #each data.set.cards as card}
+            <Card.Root >
+                <SetCard owned={own_set} default_editable={false} set_id={data.set.id} card={card}/>
+            </Card.Root>
+        {/each}
+    {/if}
+{/if}
+
 {#if data.set == undefined}
 <p>No sets found</p>
 {/if}
