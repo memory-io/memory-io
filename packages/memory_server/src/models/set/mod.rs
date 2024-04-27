@@ -1,74 +1,13 @@
-use crate::models::user::User;
-use bson::Document;
+pub mod model;
+
+use self::model::{CreateSet, OptionSet, Set};
+use super::MongoDatabase;
 use futures_util::{future, StreamExt, TryStreamExt};
-use mongodb::options::AggregateOptions;
 use mongodb::{
     bson::{doc, oid::ObjectId},
     options::FindOptions,
-    results::DeleteResult,
 };
-use serde::{Deserialize, Serialize};
 use tracing::debug;
-
-use super::{card::Card, MongoDatabase};
-#[derive(Deserialize, Serialize, Debug)]
-pub struct Set {
-    #[serde(alias = "_id")]
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub id: ObjectId,
-    pub visibility: SetVisibility,
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub user_id: ObjectId,
-    pub title: String,
-    pub cards: Vec<Card>,
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-pub struct OptionSet {
-    #[serde(alias = "_id")]
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub id: ObjectId,
-    pub visibility: SetVisibility,
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub user_id: ObjectId,
-    pub user: Option<User>,
-    pub title: String,
-    pub cards: Option<Vec<Card>>,
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-pub struct SetWithCards {
-    #[serde(alias = "_id")]
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub id: ObjectId,
-    pub visibility: SetVisibility,
-    pub folder_id: Option<ObjectId>,
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub user_id: ObjectId,
-    pub title: String,
-    pub cards: Vec<Card>,
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-pub enum SetVisibility {
-    Public,
-    Private,
-}
-
-#[derive(Deserialize, Debug, Serialize)]
-pub struct CreateSet {
-    pub user_id: ObjectId,
-    pub title: String,
-    pub visibility: SetVisibility,
-    pub cards: Vec<Card>,
-}
-
-#[derive(Deserialize, Debug, Serialize)]
-pub enum PatchSet {
-    AddCard { front: String, back: String },
-    UpdateCard(Card),
-    RemoveCard { id: bson::Uuid },
-}
 
 pub async fn create_set(
     db: &MongoDatabase,
@@ -83,11 +22,6 @@ pub async fn get_set(
     include_users: bool,
     include_cards: bool,
 ) -> Result<Option<OptionSet>, mongodb::error::Error> {
-    // let set = db
-    //     .db()
-    //     .collection::<Set>("sets")
-    //     .find_one(doc! {"_id":id}, None)
-    //     .await?;
     let mut query = if include_users {
         debug!("Including users");
         vec![
@@ -183,10 +117,10 @@ pub async fn get_sets_from_user(
             },
             doc! {
                 "$lookup": {
-                  "from": "users",
-                  "localField": "user_id",
-                  "foreignField": "_id",
-                  "as": "user"
+                    "from": "users",
+                    "localField": "user_id",
+                    "foreignField": "_id",
+                    "as": "user"
                 }
             },
         ]

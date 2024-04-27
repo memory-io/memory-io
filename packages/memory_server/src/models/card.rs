@@ -1,13 +1,7 @@
-use futures_util::{StreamExt, TryStreamExt};
-use mongodb::{
-    bson::{doc, oid::ObjectId},
-    options::FindOptions,
-    results::DeleteResult,
-};
+use mongodb::bson::{doc, oid::ObjectId};
 use serde::{Deserialize, Serialize};
-use tracing::{debug, trace, warn};
 
-use super::{set::SetWithCards, MongoDatabase};
+use super::{set::model::SetWithCards, MongoDatabase};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Card {

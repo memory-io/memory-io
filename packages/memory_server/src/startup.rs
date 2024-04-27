@@ -2,7 +2,7 @@ use std::{net::TcpListener, sync::Arc, time::Duration};
 
 use crate::{
     models::{
-        user::{PasswordReset, User},
+        user::{model::PasswordReset, model::User},
         MongoDatabase,
     },
     routes::factory,

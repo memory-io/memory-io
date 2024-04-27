@@ -15,7 +15,7 @@ use tracing::{debug, error, info, trace, warn};
 
 use crate::{
     models::{
-        user::{self, UserSignup},
+        user::{self, model::UserSignup},
         MongoDatabase,
     },
     startup::EmailClient,
@@ -135,10 +135,7 @@ pub async fn change_password(
 pub async fn check_username(db: Data<MongoDatabase>, username: Path<String>) -> impl Responder {
     return match user::check_username(&db, &username).await {
         Ok(_) => HttpResponse::Ok().await.unwrap(),
-        Err(a) => match a.get_custom::<String>() {
-            Some(err) => HttpResponse::Conflict().json(err),
-            None => HttpResponse::InternalServerError().await.unwrap(),
-        },
+        Err(a) => HttpResponse::Conflict().json(a.to_string()),
     };
 }
 

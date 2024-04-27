@@ -14,9 +14,10 @@ use mongodb::{bson::oid::ObjectId, error::WriteFailure};
 use serde::Deserialize;
 use tracing::{debug, error};
 
+use crate::models::set;
 use crate::models::{
     card::{self, Card},
-    set::{self, CreateSet, PatchSet, SetVisibility},
+    set::model::{CreateSet, PatchSet, SetVisibility},
     MongoDatabase,
 };
 

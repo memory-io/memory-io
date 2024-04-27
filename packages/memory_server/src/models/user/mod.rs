@@ -1,67 +1,34 @@
-use std::{f32::consts::E, str::FromStr};
+pub mod model;
+use std::str::FromStr;
 
-use actix_identity::Identity;
-use actix_web::web;
 use anyhow::bail;
-use bson::Document;
-use chrono::{Date, Utc};
+use chrono::Utc;
 use mail_send::mail_builder::MessageBuilder;
 use mongodb::{
     bson::{doc, oid::ObjectId},
     error::Error,
 };
-use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use zxcvbn::zxcvbn;
 
 use crate::startup::EmailClient;
 
+use self::model::{PasswordReset, User, UserSendable, UserSignup};
+
 use super::MongoDatabase;
-#[derive(Deserialize, Serialize, Debug)]
-pub struct User {
-    #[serde(alias = "_id")]
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub id: ObjectId,
-    pub username: String,
-    pub email: String,
-    pub password: String,
-}
 
-impl User {
-    pub fn validate(&self) -> Result<(), &str> {
-        // if self.username.len() < 3 || self.username.len() > 20 || self.username.contains(" ") {
-        //     return Err("Username must be between 3 and 20 characters");
-        // }
-        if self.password.len() < 3 || self.password.len() > 20 {
-            return Err("Password must be between 3 and 20 characters");
-        }
-
-        return Ok(());
+pub async fn check_password(password: &str) -> Result<(), anyhow::Error> {
+    if password.len() < 3 || password.len() > 20 {
+        bail!("Password must be between 3 and 20 characters".to_string(),);
     }
+    let estimate = zxcvbn(password, &[]).unwrap();
+
+    return Ok(());
 }
 
-#[derive(Deserialize, Debug, Serialize)]
-pub struct UserSignup {
-    pub username: String,
-    pub email: String,
-    pub password: String,
-}
-#[derive(Deserialize, Serialize, Debug)]
-pub struct UserSendable {
-    #[serde(alias = "_id")]
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub id: ObjectId,
-    pub username: String,
-    pub email: String,
-}
-
-pub async fn check_username(
-    db: &MongoDatabase,
-    username: &str,
-) -> Result<(), mongodb::error::Error> {
+pub async fn check_username(db: &MongoDatabase, username: &str) -> Result<(), anyhow::Error> {
     if username.len() < 3 || username.len() > 20 || username.contains(" ") {
-        return Err(Error::custom(
-            "Username must be between 3 and 20 characters".to_string(),
-        ));
+        bail!("Username must be between 3 and 20 characters");
     }
     let user = db
         .db()
@@ -69,7 +36,7 @@ pub async fn check_username(
         .find_one(doc! {"username":username}, None)
         .await?;
     if user.is_some() {
-        return Err(Error::custom("Be More Original".to_string()));
+        bail!("Be More Original");
     }
     return Ok(());
 }
@@ -79,26 +46,27 @@ pub async fn get_user(
     user_id: String,
 ) -> Result<Option<UserSendable>, mongodb::error::Error> {
     let user_id = ObjectId::from_str(&user_id).unwrap();
-    return db
+    return Ok(db
         .db()
         .collection("users")
         .find_one(doc! {"_id":user_id}, None)
-        .await;
+        .await?);
 }
 
 pub async fn create_user(
     db: &MongoDatabase,
     mut user: UserSignup,
 ) -> Result<mongodb::results::InsertOneResult, mongodb::error::Error> {
+    //TODO Validate this password strength and username
     user.password = bcrypt::hash(user.password, 12).unwrap();
-    return db.db().collection("users").insert_one(user, None).await;
+    return Ok(db.db().collection("users").insert_one(user, None).await?);
 }
 
 pub async fn authenticate_user(
     db: &MongoDatabase,
     email: &str,
     password: &str,
-) -> Result<Option<ObjectId>, mongodb::error::Error> {
+) -> Result<Option<ObjectId>, anyhow::Error> {
     let a = db
         .db()
         .collection::<User>("users")
@@ -110,12 +78,6 @@ pub async fn authenticate_user(
         }
     }
     return Ok(None);
-}
-#[derive(Deserialize, Serialize, Debug)]
-pub struct PasswordReset {
-    pub creation_date: bson::DateTime,
-    pub user_id: ObjectId,
-    pub token: String,
 }
 
 pub(crate) async fn validate_reset(db: &MongoDatabase, token: &str) -> Result<(), anyhow::Error> {
@@ -149,6 +111,7 @@ pub(crate) async fn change_password(
     if reset.creation_date.to_chrono() < Utc::now() - chrono::Duration::seconds(10 * 60) {
         anyhow::bail!("Token Expired");
     }
+
     db.db()
         .collection::<User>("users")
         .update_one(
@@ -201,5 +164,5 @@ pub(crate) async fn password_reset(
 
         return Ok(());
     }
-    return Err(anyhow::Error::msg("User not found"));
+    bail!("User not found");
 }
