@@ -10,9 +10,11 @@
     import { toast } from "svelte-sonner";
 	import { user } from "$lib/store";
 	import Formatter from "$lib/formatter.svelte";
-	import { ChevronRight,ChevronLeft } from "lucide-svelte";
+	import { ChevronRight,ChevronLeft, DrillIcon } from "lucide-svelte";
 	import { quintOut } from 'svelte/easing';
 	import { deleteSet } from "$lib/api/sets";
+	import type { TouchEventHandler } from "svelte/elements";
+	import { swipe, tap } from "svelte-gestures";
 
     export let data;
     let own_set = data.set?.user_id == data.user?.id;
@@ -25,6 +27,26 @@
         if (data.set != undefined && cards_len <= card_index){
             card_index = cards_len-1;
         }
+    }
+    
+    function onCardSwipe(event:CustomEvent<{
+    direction: "top" | "right" | "bottom" | "left";
+    target: EventTarget;
+    }>) {
+        if (event.detail.direction == "left"){
+            if (card_index < cards_len-1){
+                card_index+=1;front=true;
+            }
+        }
+        if (event.detail.direction == "right"){
+            if (card_index > 0){
+                card_index-=1;front=true;
+            }
+        }
+    }
+    function onCardTap(){
+        front = !front;
+
     }
 
 
@@ -44,14 +66,14 @@
             
             <div id={data.set.cards[card_index].id} class=" h-[300px] bg-secondary rounded-md flex flex-row">
                 
-                <button  class:grayed={card_index == 0} on:click={() =>{
+                <button   class:grayed={card_index == 0} on:click={() =>{
                     if (card_index > 0){
                         card_index-=1;front=true;
                     }
-                }} class="transition-opacity w-16 h-full flex flex-col justify-center items-center border-r border-secondary-foreground border-opacity-40">
+                }} class=" hidden sm:flex transition-opacity w-16 h-full  flex-col justify-center items-center border-r border-secondary-foreground border-opacity-40">
                     <ChevronLeft />
                 </button>
-                <button  on:click={() => {front=!front}} class="relative p-10 flex justify-center items-center w-full" >
+                <button use:tap={{ timeframe: 300 }} on:tap={onCardTap}  use:swipe={{ timeframe: 300, minSwipeDistance: 20, touchAction: 'pan-y' }} on:swipe={onCardSwipe}  class="relative p-10 flex justify-center items-center w-full" >
                     
                     <div class ="absolute left-2 top-2 text-secondary-foreground text-sm opacity-50">
                         {`Card ${card_index+1} of ${cards_len}`}
@@ -66,7 +88,7 @@
                         card_index+=1;front=true;
                     }
                 }
-                } class={" transition-opacity w-16 h-full flex flex-col justify-center items-center border-l border-secondary-foreground border-opacity-40"}>
+                } class={"hidden sm:flex transition-opacity w-16 h-full flex-col justify-center items-center border-l border-secondary-foreground border-opacity-40"}>
                     <ChevronRight />
                 </button>
             

@@ -50,7 +50,9 @@
 		"mode-watcher": "^0.2.1",
 		"pino": "^8.19.0",
 		"pino-pretty": "^10.3.1",
+		"svelte-gestures": "^4.0.0",
 		"svelte-katex": "^0.1.2",
+		"svelte-radix": "^1.1.0",
 		"svelte-sonner": "^0.3.18",
 		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.2.0"

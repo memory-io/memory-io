@@ -51,6 +51,7 @@ async function deleteSet(set_id: string) {
 }
 
 async function updateCard(set_id: string,card: Card) {
+    console.log(card)
     const response = await fetch(`/api/sets/${set_id}`, { 
         method: 'PATCH',
         headers: {

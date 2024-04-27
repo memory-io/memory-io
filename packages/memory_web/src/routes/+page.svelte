@@ -9,7 +9,7 @@
 <Card.Root>
     <Card.Header>
         <Card.Title>Recently Added</Card.Title>
-        <Card.Description>These our the newest sets added to site</Card.Description>
+        <Card.Description>These our the most recent sets added.</Card.Description>
     </Card.Header>
     <Card.Content class="flex flex-row gap-3 flex-wrap">
         {#each data.recent_sets as set}
@@ -29,7 +29,7 @@
 <Card.Root>
     <Card.Header>
         <Card.Title>Friends Recent Sets</Card.Title>
-        <Card.Description>These our the newest sets added to site</Card.Description>
+        <Card.Description>These our the most recent sets added by your friends</Card.Description>
     </Card.Header>
     <Card.Content class="flex flex-row gap-3 flex-wrap">
         {#each data.recent_sets as set}

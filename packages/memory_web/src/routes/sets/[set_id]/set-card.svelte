@@ -15,6 +15,12 @@
     export let default_editable: boolean;
     export let owned: boolean;
 
+    const original_card = {
+        front: card.front,
+        back: card.back,
+        id: card.id
+    }
+
     let editable = default_editable;
 
     
@@ -72,6 +78,7 @@
                     <DropdownMenu.CheckboxItem bind:checked={editable}>
                         Editable
                     </DropdownMenu.CheckboxItem>
+                   
                 {/if}
                 <DropdownMenu.CheckboxItem on:click={async ()=>{
                     let out = await deleteCard(set_id,card.id);

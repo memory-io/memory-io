@@ -1,31 +1,31 @@
 <script>
-	import { enhance } from "$app/forms";
-  import * as Card from "$lib/components/ui/card";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
-  import { Button } from "$lib/components/ui/button";
+    import * as Card from "$lib/components/ui/card";
+    import { Input } from "$lib/components/ui/input";
+    import { Label } from "$lib/components/ui/label";
+    import { Button } from "$lib/components/ui/button";
 	import { toast } from "svelte-sonner";
+    import Reload from "svelte-radix/Reload.svelte";
 
 
-  let email = "";
+    let email = "";
+    let loading = false;
+    async function reset(){
+        loading = true;
+        const res = await fetch("/api/users/password_reset", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+        });
+        loading = false;
 
-  async function reset(){
-    const res = await fetch("/api/users/password_reset", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    if (res.ok) {
-        toast.success("Check your email for a password reset link.");
-    } else {
-      toast.error(await res.text());
+        if (res.ok) {
+            toast.success("Check your email for a password reset link.");
+        } else {
+            toast.error(await res.text());
+        }
     }
-  
-
-  }
 </script>
 
 
@@ -44,7 +44,15 @@
             <Input name="email" bind:value={email} type="email" placeholder="Email" />
         </Card.Content>
         <Card.Footer class="flex justify-between">
-            <Button on:click={() => reset()} type="submit">Reset</Button>
+            {#if loading}
+                <Button disabled>
+                    <Reload class="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                </Button>
+            {:else}
+                <Button on:click={() => reset()} >Reset</Button>
+            {/if}
+           
         </Card.Footer>
     </form>
   </Card.Root>

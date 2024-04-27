@@ -31,10 +31,6 @@
 					<DropdownMenu.Shortcut>⇧⌘P</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 				<DropdownMenu.Item>
-					Billing
-					<DropdownMenu.Shortcut>⌘B</DropdownMenu.Shortcut>
-				</DropdownMenu.Item>
-				<DropdownMenu.Item>
 					Settings
 					<DropdownMenu.Shortcut>⌘S</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>

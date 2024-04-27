@@ -5,12 +5,9 @@ use mongodb::{
     results::DeleteResult,
 };
 use serde::{Deserialize, Serialize};
-use tracing::warn;
+use tracing::{debug, trace, warn};
 
-use super::{
-    set::SetWithCards,
-    MongoDatabase,
-};
+use super::{set::SetWithCards, MongoDatabase};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Card {
@@ -41,7 +38,7 @@ pub async fn update_card_in_set(
     set_id: &ObjectId,
     user_id: &ObjectId,
     card: &Card,
-) -> Result<bool, mongodb::error::Error> {
+) -> Result<bool, anyhow::Error> {
     let result = db
         .db()
         .collection::<SetWithCards>("sets")
@@ -51,7 +48,8 @@ pub async fn update_card_in_set(
             None,
         )
         .await?;
-    return Ok(result.modified_count == 1);
+
+    return Ok(result.matched_count == 1);
 }
 
 pub async fn remove_card_from_set(

@@ -14,10 +14,10 @@
 <div class="flex-col flex">
 	<div class="border-b">
 		<div class="flex h-16 items-center px-4">
-			<h1 class="ml-10 ">Memory</h1>
+			<h1 class="md:ml-10 ">Memory</h1>
 			<MainNav  class="mx-6 ml-20 w-max min-w-max " />
 			<span class="w-full"></span>
-			<div class="w-full flex-row flex items-center justify-end">
+			<div class="w-full flex-row flex items-center justify-end mr-4 md:mr">
 				<span class=" min-w-[200px] max-w-[300px] w-full sm:block hidden">
 				<Search  />
 				</span>

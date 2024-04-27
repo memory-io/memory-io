@@ -113,10 +113,7 @@ pub async fn authenticate_user(
 }
 #[derive(Deserialize, Serialize, Debug)]
 pub struct PasswordReset {
-    #[serde(alias = "_id")]
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
-    pub id: ObjectId,
-    pub creation_date: chrono::DateTime<chrono::Utc>,
+    pub creation_date: bson::DateTime,
     pub user_id: ObjectId,
     pub token: String,
 }
@@ -130,7 +127,7 @@ pub(crate) async fn validate_reset(db: &MongoDatabase, token: &str) -> Result<()
     else {
         bail!("Invalid Token");
     };
-    if reset.creation_date < Utc::now() - chrono::Duration::seconds(10 * 60) {
+    if reset.creation_date.to_chrono() < Utc::now() - chrono::Duration::seconds(10 * 60) {
         bail!("Expired Token");
     }
     return Ok(());
@@ -149,7 +146,7 @@ pub(crate) async fn change_password(
     else {
         anyhow::bail!("Invalid Token");
     };
-    if reset.creation_date < Utc::now() - chrono::Duration::seconds(10 * 60) {
+    if reset.creation_date.to_chrono() < Utc::now() - chrono::Duration::seconds(10 * 60) {
         anyhow::bail!("Token Expired");
     }
     db.db()
@@ -159,6 +156,11 @@ pub(crate) async fn change_password(
             doc! {"$set":{"password":bcrypt::hash(new_password,12).unwrap()}},
             None,
         )
+        .await?;
+
+    db.db()
+        .collection::<PasswordReset>("password_resets")
+        .delete_one(doc! {"token":token}, None)
         .await?;
 
     Ok(())
@@ -176,12 +178,14 @@ pub(crate) async fn password_reset(
         .await?;
     if let Some(user) = user {
         let token = Uuid::new_v4().to_string();
+        let reset = PasswordReset {
+            creation_date: bson::DateTime::now(),
+            user_id: user.id.clone(),
+            token: token.clone(),
+        };
         db.db()
             .collection("password_resets")
-            .insert_one(
-                doc! {"user_id":user.id,"token":&token,"creation_date":Utc::now().to_rfc3339()},
-                None,
-            )
+            .insert_one(bson::to_bson(&reset).unwrap(), None)
             .await?;
         let message = MessageBuilder::new()
             .from(("Memory IO", "connerlreplogle@gmail.com"))
