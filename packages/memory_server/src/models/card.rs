@@ -43,7 +43,7 @@ pub async fn update_card_in_set(
         )
         .await?;
 
-    return Ok(result.matched_count == 1);
+    Ok(result.matched_count == 1)
 }
 
 pub async fn remove_card_from_set(

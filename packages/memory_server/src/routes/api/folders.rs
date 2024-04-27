@@ -1,3 +1,3 @@
 use actix_web::web;
 
-pub fn factory(cfg: &mut web::ServiceConfig) {}
+pub fn factory(_cfg: &mut web::ServiceConfig) {}

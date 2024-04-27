@@ -8,37 +8,33 @@ use crate::{
     routes::factory,
 };
 use actix_cors::Cors;
-use actix_governor::{Governor, GovernorConfigBuilder};
-use actix_identity::{Identity, IdentityMiddleware};
+
+use actix_identity::{IdentityMiddleware};
 use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
 use actix_web::{
     cookie::Key,
-    dev::{Server, Service},
+    dev::{Server},
     middleware::Logger,
     web, App, HttpServer,
 };
 use mail_send::{SmtpClient, SmtpClientBuilder};
 use mongodb::{
     bson::doc,
-    options::{ClientOptions, IndexOptions},
-    Client, IndexModel,
+    options::{IndexOptions}, IndexModel,
 };
 use tokio::{net::TcpStream, sync::Mutex};
 use tokio_rustls::client::TlsStream;
-use tracing::{debug, info};
+use tracing::{info};
 
 pub type EmailClient = Arc<Mutex<SmtpClient<TlsStream<TcpStream>>>>;
 
 #[derive(Clone, Copy)]
+#[derive(Default)]
 pub struct ServerConfig {
     pub test_mode: bool,
 }
-impl Default for ServerConfig {
-    fn default() -> Self {
-        ServerConfig { test_mode: false }
-    }
-}
+
 
 pub async fn run(
     db: MongoDatabase,
@@ -61,7 +57,7 @@ pub async fn run(
 
     Ok(HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(server.clone()))
+            .app_data(web::Data::new(server))
             .app_data(web::Data::new(client.clone()))
             .wrap(
                 Cors::default()

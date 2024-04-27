@@ -1,5 +1,5 @@
 use crate::helper::{get_user, login_user, signup_user, spawn_app};
-use memory_server::models::user::{User, UserSendable, UserSignup};
+use memory_server::models::user::model::{User, UserSendable, UserSignup};
 use mongodb::bson::doc;
 
 #[tokio::test]

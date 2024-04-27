@@ -11,7 +11,7 @@ pub struct MongoDatabase {
 
 impl MongoDatabase {
     pub fn new(client: Client, database: &str) -> MongoDatabase {
-        let db = client.database(&database);
+        let db = client.database(database);
         MongoDatabase {
             client,
             database: db,

@@ -58,13 +58,13 @@ pub async fn delete_set(
     db: Data<MongoDatabase>,
 ) -> impl Responder {
     let id = ObjectId::from_str(&id.id().unwrap()).unwrap();
-    return match set::delete_set(&db, &ObjectId::from_str(&set_id).unwrap(), &id).await {
+    match set::delete_set(&db, &ObjectId::from_str(&set_id).unwrap(), &id).await {
         Err(err) => {
             error!("Failed to get set: {}", err);
             HttpResponse::InternalServerError().body("Failed to get set")
         }
         Ok(_) => HttpResponse::Ok().await.unwrap(),
-    };
+    }
 }
 
 #[patch("/{id}")]
@@ -78,7 +78,7 @@ pub async fn patch_set(
     let set_id = ObjectId::from_str(&set_id).unwrap();
     match &*action {
         PatchSet::AddCard { front, back } => {
-            return match card::add_card_to_set(
+            match card::add_card_to_set(
                 &db,
                 &set_id,
                 &user_id,
@@ -95,26 +95,26 @@ pub async fn patch_set(
                     error!("Failed to add card: {}", err);
                     HttpResponse::InternalServerError().body("Failed to add card")
                 }
-            };
+            }
         }
         PatchSet::RemoveCard { id } => {
-            return match card::remove_card_from_set(&db, &set_id, &user_id, &id).await {
+            match card::remove_card_from_set(&db, &set_id, &user_id, id).await {
                 Ok(_) => HttpResponse::Ok().await.unwrap(),
                 Err(err) => {
                     error!("Failed to remove card: {}", err);
                     HttpResponse::InternalServerError().body("Failed to remove card")
                 }
-            };
+            }
         }
         PatchSet::UpdateCard(card) => {
-            return match card::update_card_in_set(&db, &set_id, &user_id, card).await {
+            match card::update_card_in_set(&db, &set_id, &user_id, card).await {
                 Ok(true) => HttpResponse::Ok().await.unwrap(),
                 Ok(false) => HttpResponse::NotFound().body("Card not found"),
                 Err(err) => {
                     error!("Failed to update card: {}", err);
                     HttpResponse::InternalServerError().body("Failed to update card")
                 }
-            };
+            }
         }
     }
 }
@@ -127,7 +127,7 @@ pub async fn get_sets(
 ) -> impl Responder {
     let user_id = ObjectId::from_str(&id.id().unwrap()).unwrap();
 
-    return match set::get_sets_from_user(
+    match set::get_sets_from_user(
         &db,
         &user_id,
         options.limit.unwrap_or(10) as i64,
@@ -141,7 +141,7 @@ pub async fn get_sets(
             error!("Error getting sets {err:?}");
             HttpResponse::InternalServerError().await.unwrap()
         }
-    };
+    }
 }
 
 #[post("/create")]
@@ -152,7 +152,7 @@ pub async fn create_set(
 ) -> impl Responder {
     let user_id = ObjectId::from_str(id.id().unwrap().as_str()).unwrap();
 
-    return match set::create_set(
+    match set::create_set(
         &db,
         CreateSet {
             user_id,
@@ -178,7 +178,7 @@ pub async fn create_set(
             HttpResponse::InternalServerError().body("Failed to create user")
         }
         Ok(a) => {
-            return match set::get_set(&db, &a.inserted_id.as_object_id().unwrap(), false, false)
+            match set::get_set(&db, &a.inserted_id.as_object_id().unwrap(), false, false)
                 .await
             {
                 Ok(Some(set)) => HttpResponse::Ok().json(set),
@@ -190,9 +190,9 @@ pub async fn create_set(
                     error!("Failed to create set: {}", err);
                     HttpResponse::InternalServerError().body("Failed to create set")
                 }
-            };
+            }
         }
-    };
+    }
 }
 
 #[get("/{id}")]
@@ -203,7 +203,7 @@ pub async fn get_set(
     options: Query<GetSetsOptions>,
 ) -> impl Responder {
     debug!("Getting set options: {:?}", options);
-    return match set::get_set(
+    match set::get_set(
         &db,
         &ObjectId::from_str(&set_id).unwrap(),
         options.include_users,
@@ -232,12 +232,12 @@ pub async fn get_set(
             HttpResponse::Ok().json(a)
         }
         Ok(None) => HttpResponse::NotFound().body("Set not found"),
-    };
+    }
 }
 
 #[get("/recents")]
 pub async fn get_recent_sets(db: Data<MongoDatabase>) -> impl Responder {
-    return match set::get_most_recent_public_sets(&db, 20).await {
+    match set::get_most_recent_public_sets(&db, 20).await {
         Err(err) => {
             error!("Failed to get set: {}", err);
             HttpResponse::InternalServerError().body("Failed to get set")
@@ -247,5 +247,5 @@ pub async fn get_recent_sets(db: Data<MongoDatabase>) -> impl Responder {
 
             HttpResponse::Ok().json(sets)
         }
-    };
+    }
 }

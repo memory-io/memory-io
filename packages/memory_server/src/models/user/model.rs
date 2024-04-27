@@ -2,7 +2,7 @@ use bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
-pub(crate) struct User {
+pub struct User {
     #[serde(alias = "_id")]
     #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
     pub id: ObjectId,
@@ -20,7 +20,7 @@ impl User {
             return Err("Password must be between 3 and 20 characters");
         }
 
-        return Ok(());
+        Ok(())
     }
 }
 

@@ -13,7 +13,7 @@ pub async fn create_set(
     db: &MongoDatabase,
     set: CreateSet,
 ) -> Result<mongodb::results::InsertOneResult, mongodb::error::Error> {
-    return db.db().collection("sets").insert_one(set, None).await;
+    db.db().collection("sets").insert_one(set, None).await
 }
 
 pub async fn get_set(
@@ -145,7 +145,7 @@ pub async fn get_sets_from_user(
         .collection::<OptionSet>("sets")
         .aggregate(query, None)
         .await?
-        .filter_map(|a| future::ready(a.ok().map(|a| bson::from_document(a).ok()).flatten()))
+        .filter_map(|a| future::ready(a.ok().and_then(|a| bson::from_document(a).ok())))
         .take(count as usize)
         .collect()
         .await;

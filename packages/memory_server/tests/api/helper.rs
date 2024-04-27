@@ -2,7 +2,7 @@ use std::{collections::HashMap, net::TcpListener};
 
 use memory_server::{
     models::{
-        user::{User, UserSignup},
+        user::model::{User, UserSignup},
         MongoDatabase,
     },
     startup::{initialize_db, run, ServerConfig},

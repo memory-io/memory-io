@@ -5,7 +5,7 @@ use memory_server::{
     startup::{initialize_db, run, ServerConfig},
 };
 use mongodb::{options::ClientOptions, Client};
-use tracing::{debug, info};
+use tracing::{info};
 
 #[tokio::main]
 async fn main() {
