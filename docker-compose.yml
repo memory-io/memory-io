@@ -23,7 +23,16 @@ services:
       - "server:server"
     depends_on:
       - server
+    volumes:
+      - server-data:/app/data
   db:
     image: mongodb/mongodb-community-server
     ports:
       - "27017:27017"
+    volumes:
+      - mongodbdata:/data/db
+volumes:
+  mongodbdata: {}
+  server-data: {}
+
+    

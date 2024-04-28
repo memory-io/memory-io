@@ -35,7 +35,7 @@ async fn main() {
     info!("Connected to database");
 
     fn open_or_generate_secret_key() -> Key {
-        let secret_key_path = "./private.pem";
+        let secret_key_path = "./data/private.pem";
 
         if let Ok(mut file) = File::open(&secret_key_path) {
             let mut secret_key = Vec::new();
