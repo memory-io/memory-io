@@ -25,9 +25,10 @@ jobs:
               password: ${{secrets.GITHUB_TOKEN}}
 
           - name: 'Build Inventory Image'
+            working-directory: packages/
             run: |
-              docker build packages/memory_server/ --tag ghcr.io/memory-io/memory_server:latest
-              docker build packages/memory_web/ --tag ghcr.io/memory-io/memory_web:latest
+              docker build ./memory_server/Dockerfile --tag ghcr.io/memory-io/memory_server:latest
+              docker build ./memory_web/Dockerfile --tag ghcr.io/memory-io/memory_web:latest
               docker push ghcr.io/memory-io/memory_server:latest
               docker push ghcr.io/memory-io/memory_web:latest
 
