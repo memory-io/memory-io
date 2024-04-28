@@ -24,11 +24,17 @@ jobs:
               registry: ghcr.io
               username: ${{github.actor}}
               password: ${{secrets.GITHUB_TOKEN}}
-          - name: Build and push
+          - name: Build and push server
             uses: docker/build-push-action@v3
             with:
               context: ./packages/memory_server
               push: true
               tags: ghcr.io/memory-io/memory_server:latest
+          - name: Build and push web
+            uses: docker/build-push-action@v3
+            with:
+              context: ./packages/memory_web
+              push: true
+              tags: ghcr.io/memory-io/memory_web:latest
          
 
