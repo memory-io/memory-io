@@ -45,7 +45,7 @@ async fn main() {
         } else {
             info!("Generating secret key and storing to file");
             let secret_key: Key = Key::generate();
-
+            std::fs::create_dir_all("./data").unwrap();
             let mut file = File::create(&secret_key_path).unwrap();
             file.write_all(secret_key.master()).unwrap();
             secret_key

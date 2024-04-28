@@ -16,7 +16,7 @@ RUN cargo build --release --bin memory_server
 # We do not need the Rust toolchain to run the binary!
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
-CMD mkdir data
+CMD mkdir /usr/local/bin/data
 COPY --from=builder /app/target/release/memory_server /usr/local/bin
 EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/memory_server"]
