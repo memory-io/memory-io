@@ -5,7 +5,6 @@
 	import MainNav from './main-nav.svelte';
 
 	import { Toaster } from "$lib/components/ui/sonner";
-	import { Slash } from 'lucide-svelte';
 	export let data;
 
 
