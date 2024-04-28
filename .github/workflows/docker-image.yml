@@ -27,8 +27,8 @@ jobs:
           - name: 'Build Inventory Image'
             
             run: |
-              docker build ./packages/memory_server/Dockerfile --tag ghcr.io/memory-io/memory_server:latest
-              docker build ./packages/memory_web/Dockerfile --tag ghcr.io/memory-io/memory_web:latest
+              docker build ./packages/memory_server/ --file Dockerfile --tag ghcr.io/memory-io/memory_server:latest
+              docker build ./packages/memory_web/ --file Dockerfile --tag ghcr.io/memory-io/memory_web:latest
               docker push ghcr.io/memory-io/memory_server:latest
               docker push ghcr.io/memory-io/memory_web:latest
 
