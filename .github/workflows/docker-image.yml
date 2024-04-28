@@ -9,6 +9,7 @@ on:
 
 jobs:
       push-store-image:
+        permissions: write-all
         runs-on: ubuntu-latest
         defaults:
           run:
