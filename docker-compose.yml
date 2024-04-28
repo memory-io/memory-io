@@ -2,7 +2,7 @@ version: "3.0"
 
 services:
   server:
-    build: ./packages/memory_server/
+    image: ghcr.io/memory-io/memory_server:latest
     ports:
       - "8000:8000"
     environment:
@@ -13,7 +13,7 @@ services:
     depends_on:
       - db
   website:
-    build: ./packages/memory_web/
+    image: ghcr.io/memory-io/memory_web:latest
     ports:
       - "3000:3000"
     environment:
