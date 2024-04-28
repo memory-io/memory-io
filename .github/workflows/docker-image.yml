@@ -1,7 +1,5 @@
 name: Deploy Images to GHCR
 
-env:
-  DOTNET_VERSION: '6.0.x'
 
 on:
   push:
@@ -18,7 +16,7 @@ jobs:
         steps:
           - name: 'Checkout GitHub Action'
             uses: actions/checkout@main
-
+            
           - name: 'Login to GitHub Container Registry'
             uses: docker/login-action@v1
             with:
@@ -28,8 +26,8 @@ jobs:
 
           - name: 'Build Inventory Image'
             run: |
-              docker build ./packages/memory_server/ --tag ghcr.io/memory-io/memory_server:latest
-              docker build ./packages/memory_web/ --tag ghcr.io/memory-io/memory_web:latest
+              docker build packages/memory_server/ --tag ghcr.io/memory-io/memory_server:latest
+              docker build packages/memory_web/ --tag ghcr.io/memory-io/memory_web:latest
               docker push ghcr.io/memory-io/memory_server:latest
               docker push ghcr.io/memory-io/memory_web:latest
 
