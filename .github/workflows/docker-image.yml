@@ -13,6 +13,7 @@ jobs:
         defaults:
           run:
             working-directory: './'
+          
         steps:
           - name: 'Checkout GitHub Action'
             uses: actions/checkout@main
@@ -23,12 +24,11 @@ jobs:
               registry: ghcr.io
               username: ${{github.actor}}
               password: ${{secrets.GITHUB_TOKEN}}
-
-          - name: 'Build Inventory Image'
-            
-            run: |
-              docker build ./packages/memory_server/ --file Dockerfile --tag ghcr.io/memory-io/memory_server:latest
-              docker build ./packages/memory_web/ --file Dockerfile --tag ghcr.io/memory-io/memory_web:latest
-              docker push ghcr.io/memory-io/memory_server:latest
-              docker push ghcr.io/memory-io/memory_web:latest
+          - name: Build and push
+            uses: docker/build-push-action@v3
+            with:
+              context: ./packages/memory_server
+              push: true
+              tags: ghcr.io/memory-io/memory_server:latest
+         
 
