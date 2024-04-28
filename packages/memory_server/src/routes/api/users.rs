@@ -1,5 +1,4 @@
-
-
+use std::time::Duration;
 
 use actix_identity::Identity;
 
@@ -10,7 +9,8 @@ use actix_web::{
 };
 
 use mongodb::error::WriteFailure;
-use serde::{Deserialize};
+use serde::Deserialize;
+use tokio::time::sleep;
 use tracing::{debug, info, trace, warn};
 
 use crate::{
@@ -30,7 +30,8 @@ pub fn factory(cfg: &mut web::ServiceConfig) {
             .service(check_username)
             .service(password_reset)
             .service(change_password)
-            .service(validate_password_reset),
+            .service(validate_password_reset)
+            .service(logout),
     );
 }
 
@@ -43,18 +44,8 @@ pub async fn signup(
     info!("User {user:?}");
     return match user::create_user(&db, user.0).await {
         Err(err) => {
-            match &*err.kind {
-                mongodb::error::ErrorKind::Write(err) => {
-                    if let WriteFailure::WriteError(write_err) = err {
-                        if write_err.code == 11000 {
-                            return HttpResponse::Conflict().body("User already exists");
-                        }
-                    }
-                }
-                _ => {}
-            }
             warn!("Failed to create user: {}", err);
-            HttpResponse::InternalServerError().body("Failed to create user")
+            HttpResponse::InternalServerError().body(err.to_string())
         }
         Ok(a) => {
             trace!("User Signed Up");
@@ -94,10 +85,12 @@ pub async fn password_reset(
         Ok(_) => HttpResponse::Ok().await.unwrap(),
         Err(err) => {
             warn!("Failed to send reset {err}");
-            HttpResponse::InternalServerError().await.unwrap()
+            sleep(Duration::from_millis(500)).await;
+            HttpResponse::Ok().await.unwrap()
         }
     }
 }
+
 #[get("password_reset/{token}")]
 pub async fn validate_password_reset(
     token: Path<String>,
@@ -163,4 +156,10 @@ pub async fn login(
         }
         Ok(None) => HttpResponse::Unauthorized().body("Failed to authenticate user"),
     };
+}
+#[post("/logout")]
+pub async fn logout(id: Identity) -> impl Responder {
+    id.logout();
+
+    return HttpResponse::Ok();
 }

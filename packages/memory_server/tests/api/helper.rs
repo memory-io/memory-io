@@ -1,5 +1,6 @@
 use std::{collections::HashMap, net::TcpListener};
 
+use actix_web::cookie::Key;
 use memory_server::{
     models::{
         user::model::{User, UserSignup},
@@ -7,7 +8,7 @@ use memory_server::{
     },
     startup::{initialize_db, run, ServerConfig},
 };
-use mongodb::{bson::doc, options::ClientOptions, Client};
+use mongodb::{ options::ClientOptions, Client};
 use reqwest::Response;
 
 pub struct TestApp {
@@ -41,6 +42,7 @@ pub async fn spawn_app() -> TestApp {
         mongo_database.clone(),
         listener,
         ServerConfig { test_mode: true },
+        Key::generate(),
     )
     .await
     .expect("Failed to bind address");

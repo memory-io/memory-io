@@ -1,6 +1,7 @@
 use bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
-
+use validator::Validate;
+use zxcvbn::zxcvbn;
 #[derive(Deserialize, Serialize, Debug)]
 pub struct User {
     #[serde(alias = "_id")]
@@ -24,10 +25,13 @@ impl User {
     }
 }
 
-#[derive(Deserialize, Debug, Serialize)]
+#[derive(Deserialize, Validate, Debug, Serialize)]
 pub struct UserSignup {
+    #[validate(length(min = 3, max = 20))]
     pub username: String,
+    #[validate(email)]
     pub email: String,
+    #[validate(length(min = 3, max = 32))]
     pub password: String,
 }
 

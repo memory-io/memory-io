@@ -5,6 +5,7 @@
   import { Label } from "$lib/components/ui/label";
   import { Button } from "$lib/components/ui/button";
 	import { user } from "$lib/store";
+	import { toast } from "svelte-sonner";
 
   let username: string = "";
   let email: string = "";
@@ -42,9 +43,12 @@
     });
 
     if (res.ok) {
-      window.location.href = "/";
+      toast.success("Succesfully signed up redirecting shortly.");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
     } else {
-      console.log(await res.text());
+      toast.error (await res.text());
     }
   }
 

@@ -3,7 +3,7 @@
 	import * as Avatar from "$lib/components/ui/avatar";
 	import { Button } from "$lib/components/ui/button";
 	import type { User } from "$lib/types";
-	import { invalidate } from "$app/navigation";
+	import { goto, invalidate, invalidateAll } from "$app/navigation";
 	export let user: User | null;
 
 </script>
@@ -30,14 +30,20 @@
 					Profile
 					<DropdownMenu.Shortcut>⇧⌘P</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
-				<DropdownMenu.Item>
+				<DropdownMenu.Item href="/settings">
 					Settings
 					<DropdownMenu.Shortcut>⌘S</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 				<DropdownMenu.Item>New Team</DropdownMenu.Item>
 			</DropdownMenu.Group>
 			<DropdownMenu.Separator />
-			<DropdownMenu.Item href="/auth/logout">
+			<DropdownMenu.Item  on:click={async ()=>{
+				
+				await fetch("/api/users/logout", { method: "POST" });
+				await invalidate("/api/users/me");
+				goto("/");
+			}} data-sveltekit-reload
+			>
 				Log out
 				<DropdownMenu.Shortcut>⇧⌘Q</DropdownMenu.Shortcut>
 			</DropdownMenu.Item>

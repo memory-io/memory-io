@@ -9,40 +9,30 @@ use crate::{
 };
 use actix_cors::Cors;
 
-use actix_identity::{IdentityMiddleware};
+use actix_identity::IdentityMiddleware;
 use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
-use actix_web::{
-    cookie::Key,
-    dev::{Server},
-    middleware::Logger,
-    web, App, HttpServer,
-};
+use actix_web::{cookie::Key, dev::Server, middleware::Logger, web, App, HttpServer};
 use mail_send::{SmtpClient, SmtpClientBuilder};
-use mongodb::{
-    bson::doc,
-    options::{IndexOptions}, IndexModel,
-};
+use mongodb::{bson::doc, options::IndexOptions, IndexModel};
 use tokio::{net::TcpStream, sync::Mutex};
 use tokio_rustls::client::TlsStream;
-use tracing::{info};
+use tracing::info;
 
 pub type EmailClient = Arc<Mutex<SmtpClient<TlsStream<TcpStream>>>>;
 
-#[derive(Clone, Copy)]
-#[derive(Default)]
+#[derive(Clone, Copy, Default)]
 pub struct ServerConfig {
     pub test_mode: bool,
 }
-
 
 pub async fn run(
     db: MongoDatabase,
     listener: TcpListener,
     server: ServerConfig,
+    secret_key: Key,
 ) -> Result<Server, std::io::Error> {
     //change for prod
-    let secret_key = Key::generate();
 
     info!("Setting up email...");
     let email = SmtpClientBuilder::new("smtp.gmail.com", 587)

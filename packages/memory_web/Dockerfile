@@ -14,5 +14,4 @@ COPY package.json .
 COPY my-server.js .
 EXPOSE 3000
 ENV NODE_ENV=production
-ENV ORIGIN=http://localhost:3000
 CMD [ "node", "my-server.js" ]

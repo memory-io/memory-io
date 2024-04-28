@@ -30,3 +30,4 @@ uuid = { version = "0.8.2", features = ["v4"] }
 tokio-rustls = { version = "0.25" }
 chrono = {version="0.4.38",features = ["serde"]}
 zxcvbn = "2"
+validator = {version ="0.18.1",features = ["derive"]}
