@@ -40,7 +40,7 @@
 			<DropdownMenu.Item  on:click={async ()=>{
 				
 				await fetch("/api/users/logout", { method: "POST" });
-				await invalidate("/api/users/me");
+				await invalidateAll();
 				goto("/");
 			}} data-sveltekit-reload
 			>
