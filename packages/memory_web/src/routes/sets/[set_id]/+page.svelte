@@ -66,7 +66,7 @@
             
             <div id={data.set.cards[card_index].id} class=" h-[300px] bg-secondary rounded-md flex flex-row">
                 
-                <button   class:grayed={card_index == 0} on:click={() =>{
+                <button class:grayed={card_index == 0} on:click={() =>{
                     if (card_index > 0){
                         card_index-=1;front=true;
                     }
@@ -96,13 +96,15 @@
             {/if}
 
         </Card.Content>
-        {#if own_set && data.set != undefined}
+        {#if  data.set != undefined}
 
         <Card.Footer class="flex justify-between gap-3">
             <span>
                 <Button href={`${data.set.id}/quiz`} >Quiz</Button>
             </span>
+            {#if own_set}
             <span>
+
                 <Button type="submit">Edit</Button>
                 <Button on:click={async () => {
                     let out = await deleteSet(data.set?.id ??"nol");
@@ -113,6 +115,7 @@
                     }
                 }} variant="destructive">Delete</Button>
             </span>
+             {/if}
         </Card.Footer>
 
         {/if}

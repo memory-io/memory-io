@@ -28,8 +28,8 @@
     let dialogOpen = false;
 
     async function formCreateSet(e: SubmitEvent & {
-    currentTarget: EventTarget & HTMLFormElement;
-}){
+        currentTarget: EventTarget & HTMLFormElement;
+    }){
         const formData = new FormData(e.currentTarget);
         const data:{[id: string]:string} = {};
         for (let field of formData) {
