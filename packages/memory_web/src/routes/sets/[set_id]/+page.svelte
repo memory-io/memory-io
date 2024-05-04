@@ -115,7 +115,7 @@
                     }
                 }} variant="destructive">Delete</Button>
             </span>
-             {/if}
+            {/if}
         </Card.Footer>
 
         {/if}
