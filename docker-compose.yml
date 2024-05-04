@@ -5,7 +5,7 @@ services:
     image: ghcr.io/memory-io/memory_server:latest
     build: ./packages/memory_server
     ports:
-      - "8000:6969"
+      - "6969:8000"
     environment:
       - MONGO_URI=mongodb://database:27017
       - DATABASE_NAME=memory
