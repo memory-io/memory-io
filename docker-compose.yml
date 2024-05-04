@@ -5,7 +5,7 @@ services:
     image: ghcr.io/memory-io/memory_server:latest
     build: ./packages/memory_server
     ports:
-      - "8000:8000"
+      - "8000:6969"
     environment:
       - MONGO_URI=mongodb://database:27017
       - DATABASE_NAME=memory
@@ -19,7 +19,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - API_URL=http://localhost:8000
+      - API_URL=http://localhost:6969
       - ORIGIN=https://memory.replogle.dev
     links:
       - "server:server"
