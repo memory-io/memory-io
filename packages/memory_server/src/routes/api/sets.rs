@@ -67,6 +67,8 @@ pub async fn delete_set(
     }
 }
 
+
+
 #[patch("/{id}")]
 pub async fn patch_set(
     db: Data<MongoDatabase>,
@@ -249,3 +251,5 @@ pub async fn get_recent_sets(db: Data<MongoDatabase>) -> impl Responder {
         }
     }
 }
+
+

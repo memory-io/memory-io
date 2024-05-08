@@ -31,7 +31,7 @@ pub async fn run(
     listener: TcpListener,
     server: ServerConfig,
     secret_key: Key,
-) -> Result<Server, std::io::Error> {
+) -> Result<Server, anyhow::Error> {
     //change for prod
 
     info!("Setting up email...");
@@ -41,14 +41,15 @@ pub async fn run(
         .connect()
         .await
         .unwrap();
-    let client: EmailClient = Arc::new(Mutex::new(email));
+    let email_client: EmailClient = Arc::new(Mutex::new(email));
+
 
     info!("Starting server...");
 
     Ok(HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(server))
-            .app_data(web::Data::new(client.clone()))
+            .app_data(web::Data::new(email_client.clone()))
             .wrap(
                 Cors::default()
                     .allow_any_origin()

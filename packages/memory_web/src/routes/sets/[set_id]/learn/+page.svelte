@@ -3,7 +3,7 @@
     import * as Card from "$lib/components/ui/card";
 	import Formatter from "$lib/formatter.svelte";
 	import { GenerateQuiz } from "$lib/generator/quiz.js";
-    function shuffle(array: any[]) {
+    function learn(array: any[]) {
         let currentIndex = array.length;
 
         // While there remain elements to shuffle...
@@ -12,7 +12,6 @@
             // Pick a remaining element...
             let randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex--;
-
             // And swap it with the current element.
             [array[currentIndex], array[randomIndex]] = [
             array[randomIndex], array[currentIndex]];
@@ -33,8 +32,7 @@
     
     let currentOptions;
     $:  {
-        currentOptions = shuffle(quiz[currentQuestion].options);
-        
+      
     };
 
 
@@ -47,7 +45,8 @@
 
     <Card.Root>
         <Card.Header>
-            <Card.Title>{data.set.title} Quiz</Card.Title>
+            <Card.Title>{data.set.title} Learn</Card.Title>
+  
         </Card.Header>
         <Card.Content>
             <div class="flex flex-col gap-3">

@@ -37,6 +37,7 @@
             <Label for="file">Paste comma seperated data here.</Label>
             <textarea name="paste" class="w-full h-full"></textarea>
         </Tabs.Content>
+        
         <Tabs.Content value="file">
             <Label for="file">Import a CSV File.</Label>
             <Input name="file" type="file" placeholder="File" />

@@ -18,6 +18,7 @@
 	import { invalidate, invalidateAll } from "$app/navigation";
 	import NewSet from "./new-set.svelte";
 	import ImportSet from "./import-set.svelte";
+	import GenerateSet from "./generate-set.svelte";
 
 
 
@@ -30,6 +31,7 @@
     <div class="flex flex-row gap-5 justify-start">
         <NewSet/>
         <ImportSet/>
+        <GenerateSet/>
     </div>
 
     

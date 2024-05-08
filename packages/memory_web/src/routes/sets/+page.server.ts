@@ -1,6 +1,6 @@
 
-import type { StudySet } from "$lib/types";
-import {  redirect } from "@sveltejs/kit";
+import type {StudySet } from "$lib/types";
+import {   redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageLoad} */
 export async function load({fetch}) {
