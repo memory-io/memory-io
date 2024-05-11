@@ -20,7 +20,7 @@ services:
       - "3000:3000"
     environment:
       - API_URL=http://localhost:6969
-      - ORIGIN=https://memory.replogle.dev
+      - ORIGIN=https://m3m0ry.io
     links:
       - "server:server"
     depends_on:
