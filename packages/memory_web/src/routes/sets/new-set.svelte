@@ -23,7 +23,7 @@
             const [key, value] = field;
             data[key] = value.toString();
         }
-        let out = await createSet(data["title"],data["visibility"]);
+        let out = await createSet(data["title"],data["description"],data["visibility"]);
         if (out.error){
             if (out.error == 401){
                 window.location.href = "/auth/login";
@@ -40,7 +40,7 @@
 </script>
 
 <div class="w-min">
-    <Button on:click={() => (dialogOpen = true)}>Create Set</Button>
+    <Button variant="link"  on:click={() => (dialogOpen = true)}>Create Set</Button>
 </div>
 
 <Dialog.Root bind:open={dialogOpen}>
@@ -55,6 +55,9 @@
         <form on:submit|preventDefault={formCreateSet}>
             <Label for="title">Title</Label>
             <Input name="title" type="text" placeholder="Title" />
+            <br>
+            <Label for="description">Description</Label>
+            <Input name="description" type="text" placeholder="Description (Optional)" />
             <br>
             <Label >Visibility</Label>
             <input name="visibility" value={selected.value} hidden>

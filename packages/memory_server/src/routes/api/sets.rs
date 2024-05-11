@@ -14,6 +14,7 @@ use mongodb::{bson::oid::ObjectId, error::WriteFailure};
 use serde::Deserialize;
 use tracing::{debug, error};
 
+use crate::models::card::CardNoID;
 use crate::models::set;
 use crate::models::{
     card::{self, Card},
@@ -48,7 +49,10 @@ struct GetSetsOptions {
 #[derive(Deserialize)]
 pub struct CreateSetRequest {
     pub title: String,
+    pub description: Option<String>,
     pub visibility: SetVisibility,
+    #[serde(default)]
+    pub cards: Vec<CardNoID>,
 }
 
 #[delete("/{id}")]
@@ -66,8 +70,6 @@ pub async fn delete_set(
         Ok(_) => HttpResponse::Ok().await.unwrap(),
     }
 }
-
-
 
 #[patch("/{id}")]
 pub async fn patch_set(
@@ -159,8 +161,18 @@ pub async fn create_set(
         CreateSet {
             user_id,
             title: set.0.title,
+            description: set.0.description,
             visibility: set.0.visibility,
-            cards: Vec::new(),
+            cards: set
+                .0
+                .cards
+                .into_iter()
+                .map(|a| Card {
+                    id: bson::Uuid::new(),
+                    front: a.front,
+                    back: a.back,
+                })
+                .collect(),
         },
     )
     .await
@@ -180,9 +192,7 @@ pub async fn create_set(
             HttpResponse::InternalServerError().body("Failed to create user")
         }
         Ok(a) => {
-            match set::get_set(&db, &a.inserted_id.as_object_id().unwrap(), false, false)
-                .await
-            {
+            match set::get_set(&db, &a.inserted_id.as_object_id().unwrap(), false, false).await {
                 Ok(Some(set)) => HttpResponse::Ok().json(set),
                 Ok(None) => {
                     error!("Created Set not found");
@@ -251,5 +261,3 @@ pub async fn get_recent_sets(db: Data<MongoDatabase>) -> impl Responder {
         }
     }
 }
-
-

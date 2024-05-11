@@ -14,15 +14,15 @@
 	import { slide } from "svelte/transition";
     import { toast } from "svelte-sonner";
 	import { createSet, deleteSet } from "$lib/api/sets";
-	import { error, redirect } from "@sveltejs/kit";
 	import { invalidate, invalidateAll } from "$app/navigation";
 	import NewSet from "./new-set.svelte";
 	import ImportSet from "./import-set.svelte";
-	import GenerateSet from "./generate-set.svelte";
+    import * as Tooltip from "$lib/components/ui/tooltip";
 
 
 
     export let data;
+   
    
     
 </script>
@@ -31,7 +31,20 @@
     <div class="flex flex-row gap-5 justify-start">
         <NewSet/>
         <ImportSet/>
-        <GenerateSet/>
+        {#if data.user.paid_user}
+        <Button variant="link" href="/sets/generation">Generate Set</Button>
+        {:else}
+        <Tooltip.Root>
+        <Tooltip.Trigger>        
+            <Button disabled variant="link"  >Generate Set</Button>
+        </Tooltip.Trigger>
+        <Tooltip.Content>
+            <p> Upgrade to <a href="/upgrade">premium</a></p>
+        </Tooltip.Content>
+        </Tooltip.Root>
+
+
+        {/if}
     </div>
 
     

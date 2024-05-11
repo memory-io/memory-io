@@ -9,6 +9,12 @@ pub struct Card {
     pub front: String,
     pub back: String,
 }
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct CardNoID {
+    pub front: String,
+    pub back: String,
+}
+
 
 pub async fn add_card_to_set(
     db: &MongoDatabase,

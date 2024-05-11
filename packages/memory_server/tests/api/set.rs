@@ -21,6 +21,7 @@ async fn test_set_functionality() {
         username: "ursula_le_guin".to_string(),
         email: "ursula_le_guin@gmail.com".to_string(),
         password: "APpleafdf".to_string(),
+        paid_user: true,
     };
 
     let response = signup_user(&client, &app.address, &user)

@@ -10,6 +10,7 @@ pub struct User {
     pub username: String,
     pub email: String,
     pub password: String,
+    pub paid_user: bool,
 }
 
 impl User {
@@ -33,6 +34,8 @@ pub struct UserSignup {
     pub email: String,
     #[validate(length(min = 3, max = 32))]
     pub password: String,
+    #[serde(default,skip_deserializing)]
+    pub paid_user: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -42,6 +45,7 @@ pub struct UserSendable {
     pub id: ObjectId,
     pub username: String,
     pub email: String,
+    pub paid_user: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug)]

@@ -38,6 +38,7 @@ pub struct SetWithCards {
     #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
     pub user_id: ObjectId,
     pub title: String,
+    pub description: Option<String>,
     pub cards: Vec<Card>,
 }
 
@@ -51,6 +52,7 @@ pub enum SetVisibility {
 pub struct CreateSet {
     pub user_id: ObjectId,
     pub title: String,
+    pub description: Option<String>,
     pub visibility: SetVisibility,
     pub cards: Vec<Card>,
 }

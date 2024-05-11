@@ -9,7 +9,8 @@ interface StudySetWithCards{
 interface User{
 	id: string,
 	email: string,
-	username: string
+	username: string,
+	paid_user: boolean
 
 }
 

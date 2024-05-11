@@ -14,7 +14,7 @@
 </script>
 
 <div class="w-min">
-    <Button on:click={() => (dialogOpen = true)}>Import Set</Button>
+    <Button variant="link" on:click={() => (dialogOpen = true)}>Import Set</Button>
 </div>
 
 <Dialog.Root bind:open={dialogOpen}>

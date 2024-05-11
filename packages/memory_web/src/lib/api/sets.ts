@@ -74,7 +74,7 @@ async function updateCard(set_id: string,card: Card) {
     }
 }
 
-async function createSet(title: string,visibility: string) {
+async function createSet(title: string,description:string,visibility: string) {
     console.log(title,visibility);
     const response = await fetch('/api/sets/create', { 
         method: 'POST',
@@ -82,7 +82,7 @@ async function createSet(title: string,visibility: string) {
             'Content-Type': 'application/json',
 
         },
-        body: JSON.stringify({ "title":title,"visibility": visibility })
+        body: JSON.stringify({ "title":title,"description":description,"visibility": visibility })
     });
     if (response.status == 401){
         return {

@@ -15,6 +15,7 @@ async fn signup_login_user() -> anyhow::Result<()> {
         username: "ursula_le_guin".to_string(),
         email: "ursula_le_guin@gmail.com".to_string(),
         password: "APpleafdf".to_string(),
+        paid_user: true,
     };
     let response = signup_user(&client, &app.address, &user).await?;
     assert_eq!(response.status(), 200);
@@ -30,6 +31,7 @@ async fn signup_login_user() -> anyhow::Result<()> {
 
     let recieved_user: UserSendable = response.json().await?;
     assert_eq!(recieved_user.email, user.email);
+    assert_eq!(recieved_user.paid_user, false);
 
     app.db.db().drop(None).await.unwrap();
     Ok(())
