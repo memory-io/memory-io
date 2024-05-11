@@ -7,7 +7,7 @@ services:
     ports:
       - "6969:8000"
     environment:
-      - MONGO_URI=mongodb://database:27017
+      - MONGO_URI=mongodb+srv://connerlreplogle:poH4LtWfmRQQsXf9@cluster0.mf9snea.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       - DATABASE_NAME=memory
     links:
       - "db:database"
@@ -27,14 +27,7 @@ services:
       - server
     volumes:
       - server-data:/app/data
-  db:
-    image: mongodb/mongodb-community-server
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodbdata:/data/db
 volumes:
-  mongodbdata: {}
   server-data: {}
 
     
