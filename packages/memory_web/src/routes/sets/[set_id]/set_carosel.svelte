@@ -42,6 +42,11 @@
     
 </script>
 
+{#if cards_len == 0}
+    <div class="flex justify-center items-center h-[300px] bg-secondary rounded-md">
+        <span class="text-secondary-foreground">Nothing to see here.</span>
+    </div>
+{:else}
 
 <div id={`${card_index}`} class=" h-[300px] bg-secondary rounded-md flex flex-row">
                 
@@ -72,3 +77,4 @@
     </button>
 
 </div>
+{/if}
