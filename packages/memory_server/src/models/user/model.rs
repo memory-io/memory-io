@@ -1,11 +1,9 @@
 use bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
-use zxcvbn::zxcvbn;
 #[derive(Deserialize, Serialize, Debug)]
 pub struct User {
     #[serde(alias = "_id")]
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
     pub id: ObjectId,
     pub username: String,
     pub email: String,
@@ -34,14 +32,13 @@ pub struct UserSignup {
     pub email: String,
     #[validate(length(min = 3, max = 32))]
     pub password: String,
-    #[serde(default,skip_deserializing)]
+    #[serde(default, skip_deserializing)]
     pub paid_user: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct UserSendable {
     #[serde(alias = "_id")]
-    #[serde(serialize_with = "bson::serde_helpers::serialize_object_id_as_hex_string")]
     pub id: ObjectId,
     pub username: String,
     pub email: String,

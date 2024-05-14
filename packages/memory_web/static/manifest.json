@@ -10,13 +10,7 @@
     "scope": "/",
     "theme_color": "#3367D6",
     "shortcuts": [
-        {
-            "name": "My Study Sets",
-            "short_name": "My Sets",
-            "description": "View the sets you have made",
-            "url": "/sets",
-            "icons": []
-        }
+      
    
     ],
     "description": "A flashcard app that helps you remember things"

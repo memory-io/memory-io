@@ -1,8 +1,5 @@
-interface User{
-	id: string,
-    username:string,
-	email:string,
-}
+import type { User } from "$lib/types";
+
 
 export async function getUser(user_cookie:string): Promise<User> {
     return fetch('http://localhost:8000/users/get_user', { 

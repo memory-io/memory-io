@@ -15,8 +15,9 @@ export const load: LayoutServerLoad = async ({params ,fetch}) => {
     }
     if (response.status !== 200) {
         console.log(response)
+        console.log(set_id)
         return {
-            error:"error loading sets"
+            error:"error loading set"
         };
         
     }

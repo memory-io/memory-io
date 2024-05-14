@@ -3,6 +3,7 @@
     import * as Card from "$lib/components/ui/card";
 	import Formatter from "$lib/formatter.svelte";
 	import { GenerateQuiz } from "$lib/generator/quiz.js";
+	import QuizSettings from "./quiz-settings.svelte";
     function shuffle(array: any[]) {
         let currentIndex = array.length;
 
@@ -47,17 +48,17 @@
 
     <Card.Root>
         <Card.Header>
-            <Card.Title>{data.set.title} Quiz</Card.Title>
+            <Card.Title class="flex justify-between">
+                {data.set.title} Quiz                     
+                <QuizSettings />
+            </Card.Title>
         </Card.Header>
         <Card.Content>
             <div class="flex flex-col gap-3">
-                <div class="flex flex-row gap-3">
-                    <span>Correct: {correct}</span>
-                    <span>Wrong: {wrong}</span>
-                </div>
                 <span>Question {currentQuestion + 1} of {quiz.length}</span>
+                <span class="">
+                </span>
             </div>
-            
         </Card.Content>
     </Card.Root>
 
@@ -74,7 +75,7 @@
                 <!-- Answer Choices -->
                 <div class="grid grid-cols-2 gap-2 ">
                     {#each quiz[currentQuestion].options as choice}
-                        <Button class={answered != null ?  choice == quiz[currentQuestion].answer? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600" : ""} on:click={()=>{
+                        <Button class={"h-24 text-primary bg-primary-foreground hover:bg-secondary "+(answered != null ?  choice == quiz[currentQuestion].answer? "bg-green-800  hover:bg-green-700" : "bg-red-800 hover:bg-red-700" : "")} on:click={()=>{
                             if (answered != null){
                                 return;
                             }

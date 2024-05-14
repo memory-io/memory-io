@@ -3,7 +3,7 @@
     import { Button } from "$lib/components/ui/button";
 	import Textarea from "$lib/components/ui/textarea/textarea.svelte";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import type { Card } from "$lib/types";
+	import type { Card, ObjectId } from "$lib/types";
 	import { MoreVertical } from "lucide-svelte";
 	import Formatter from "../../../lib/formatter.svelte";
 	import { addCard, deleteCard, updateCard } from "$lib/api/sets";
@@ -11,7 +11,7 @@
 	import { toast } from "svelte-sonner";
 	import CardEditor from "$lib/CardEditor.svelte";
     export let card:Card ;
-    export let set_id:string ;
+    export let set_id:ObjectId ;
     export let default_editable: boolean;
     export let owned: boolean;
 

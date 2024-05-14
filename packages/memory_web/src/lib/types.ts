@@ -1,13 +1,21 @@
-
+interface ObjectId{
+	$oid: string
+}
+interface User{
+	id: ObjectId,
+    username:string,
+	email:string,
+}
 interface StudySetWithCards{
-	id: string
+	id: ObjectId
 	title: string,
-	user_id: string,
+	description: string,
+	user_id: ObjectId,
 	visibility: string,
 	cards: Card[]
 }
 interface User{
-	id: string,
+	id: ObjectId,
 	email: string,
 	username: string,
 	paid_user: boolean
@@ -15,9 +23,10 @@ interface User{
 }
 
 interface StudySet{
-	id: string
+	id: ObjectId
 	title: string,
-	user_id: string,
+	description: string,
+	user_id: ObjectId,
 	visibility: string,
 
 }
@@ -26,4 +35,4 @@ interface Card{
 	front: string,
 	back: string
 }
-export type {StudySet,Card,StudySetWithCards,User}
+export type {StudySet,Card,StudySetWithCards,User,ObjectId}

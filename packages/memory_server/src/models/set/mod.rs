@@ -1,6 +1,6 @@
 pub mod model;
 
-use self::model::{CreateSet, OptionSet, Set};
+use self::model::{CreateSet, OptionSet, Set, UpdateSet};
 use super::MongoDatabase;
 use futures_util::{future, StreamExt, TryStreamExt};
 use mongodb::{
@@ -14,6 +14,18 @@ pub async fn create_set(
     set: CreateSet,
 ) -> Result<mongodb::results::InsertOneResult, mongodb::error::Error> {
     db.db().collection("sets").insert_one(set, None).await
+}
+pub async fn update_set(
+    db: &MongoDatabase,
+    set_id: &ObjectId,
+    set: &UpdateSet,
+) -> Result<bool, mongodb::error::Error> {
+    let result = db
+        .db()
+        .collection::<Set>("sets")
+        .update_one(doc! {"_id":set_id}, doc! {"$set":bson::to_bson(set)?}, None)
+        .await?;
+    Ok(result.matched_count == 1)
 }
 
 pub async fn get_set(

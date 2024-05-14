@@ -22,6 +22,7 @@
 
 
     export let data;
+
    
    
     
@@ -56,7 +57,7 @@
     <Card.Root >
 
         <Card.Header>
-            <a href={`/sets/${set.id}`}>
+            <a href={`/sets/${set.id.$oid}`}>
             <Card.Title>{set.title}</Card.Title>
             </a>
             <Card.Description>{set.visibility}</Card.Description>

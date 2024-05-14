@@ -2,24 +2,24 @@
 
 
 <script lang="ts">
-    import { enhance } from "$app/forms";
+    import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+
     import * as Card from "$lib/components/ui/card";
     import { Button } from "$lib/components/ui/button";
-    import { flip } from 'svelte/animate';
 	import SetCard from "./set-card.svelte";
     import { toast } from "svelte-sonner";
-	import { user } from "$lib/store";
-	import Formatter from "$lib/formatter.svelte";
-	import { ChevronRight,ChevronLeft, DrillIcon } from "lucide-svelte";
-	import { quintOut } from 'svelte/easing';
 	import { deleteSet } from "$lib/api/sets";
-	import type { TouchEventHandler } from "svelte/elements";
-	import { swipe, tap } from "svelte-gestures";
 	import SetCarosel from "./set_carosel.svelte";
+	import { MoreVertical } from "lucide-svelte";
+	import { invalidate } from "$app/navigation";
+	import SetActions from "./set-actions.svelte";
 
     export let data;
-    let own_set = data.set?.user_id == data.user?.id;
-    
+    if (data.set == undefined ){
+        throw new Error("No set found");
+    }
+
+    let own_set = data.set.user_id.$oid == data.user?.id.$oid ;
 
 
 
@@ -29,9 +29,16 @@
 
 {#if data.set != undefined}
     <Card.Root>
-        <Card.Header>
+        <Card.Header class="flex-row justify-between">
+            <div>
             <Card.Title>{data.set?.title}</Card.Title>
-            <Card.Description>{data.set?.visibility}</Card.Description>
+            <Card.Description>{data.set?.description}</Card.Description>
+            </div>
+            <div>
+                <SetActions set={data.set} own_set={own_set}/>
+            </div>
+            
+        
         </Card.Header>
         <Card.Content>
             {#if data.set.cards != null }
@@ -43,24 +50,15 @@
         {#if  data.set != undefined}
 
         <Card.Footer class="flex justify-between gap-3">
+            {#if data.set.cards.length != 0}
             <span>
-                <Button href={`${data.set.id}/quiz`} >Quiz</Button>
-                <Button href={`${data.set.id}/learn`} >Learn</Button>
+                <Button variant="outline" href={`${data.set.id}/quiz`} >Quiz</Button>
+                <Button variant="outline" href={`${data.set.id}/memorize`} >Memorize</Button>
             </span>
-            {#if own_set}
-            <span>
-
-                <Button type="submit">Edit</Button>
-                <Button on:click={async () => {
-                    let out = await deleteSet(data.set?.id ??"nol");
-                    if (!out.error){
-                        window.location.href = "/sets";
-                    }else{
-                        toast.error(out.error);
-                    }
-                }} variant="destructive">Delete</Button>
-            </span>
+            {:else}
+            <span></span>
             {/if}
+           
         </Card.Footer>
 
         {/if}

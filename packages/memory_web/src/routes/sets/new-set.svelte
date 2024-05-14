@@ -32,7 +32,7 @@
             }
         }else if (out.set){
             dialogOpen = false;
-            window.location.href = `/sets/${out.set.id}`;
+            window.location.href = `/sets/${out.set.id.$oid}`;
         }
     }
 

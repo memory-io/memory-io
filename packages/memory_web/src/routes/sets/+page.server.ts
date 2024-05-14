@@ -21,7 +21,7 @@ export async function load({fetch}) {
         };
         
     }
-    const data: StudySet[] = await response.json();
+    const data: StudySet[] = (await response.json());
 	return {
 		sets: data
 	};

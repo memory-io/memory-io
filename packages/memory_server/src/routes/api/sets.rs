@@ -101,6 +101,14 @@ pub async fn patch_set(
                 }
             }
         }
+        PatchSet::UpdateSet(set) => match set::update_set(&db, &set_id, &set).await {
+            Ok(true) => HttpResponse::Ok().await.unwrap(),
+            Ok(false) => HttpResponse::NotFound().body("Set not found"),
+            Err(err) => {
+                error!("Failed to update set: {}", err);
+                HttpResponse::InternalServerError().body("Failed to update set")
+            }
+        },
         PatchSet::RemoveCard { id } => {
             match card::remove_card_from_set(&db, &set_id, &user_id, id).await {
                 Ok(_) => HttpResponse::Ok().await.unwrap(),
@@ -215,14 +223,11 @@ pub async fn get_set(
     options: Query<GetSetsOptions>,
 ) -> impl Responder {
     debug!("Getting set options: {:?}", options);
-    match set::get_set(
-        &db,
-        &ObjectId::from_str(&set_id).unwrap(),
-        options.include_users,
-        options.include_cards,
-    )
-    .await
-    {
+
+    let Ok(set_id) = ObjectId::from_str(&set_id) else {
+        return HttpResponse::BadRequest().body("Invalid Set ID");
+    };
+    match set::get_set(&db, &set_id, options.include_users, options.include_cards).await {
         Err(err) => {
             error!("Failed to get set: {}", err);
             HttpResponse::InternalServerError().body("Failed to get set")
