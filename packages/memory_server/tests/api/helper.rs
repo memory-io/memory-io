@@ -1,15 +1,18 @@
-use std::{collections::HashMap, net::TcpListener};
+use std::{collections::HashMap, net::TcpListener, sync::Arc};
 
 use actix_web::cookie::Key;
+use mail_send::SmtpClientBuilder;
 use memory_server::{
     models::{
         user::model::{User, UserSignup},
         MongoDatabase,
     },
-    startup::{initialize_db, run, ServerConfig},
+    startup::{initialize_db, run, EmailClient, ServerConfig},
 };
 use mongodb::{ options::ClientOptions, Client};
 use reqwest::Response;
+use tokio::sync::Mutex;
+use tracing::info;
 
 pub struct TestApp {
     pub address: String,
@@ -37,12 +40,27 @@ pub async fn spawn_app() -> TestApp {
     let db = Client::with_options(options).unwrap();
     let mongo_database = MongoDatabase::new(db, &database_name);
     initialize_db(&mongo_database).await.unwrap();
+    info!("Setting up email...");
+    let email = SmtpClientBuilder::new("smtp.sendgrid.net", 587)
+        .implicit_tls(false)
+        .credentials((
+            "apikey",
+            std::env::var("SEND_GRID_API_KEY")
+                .unwrap_or("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".to_string())
+                .as_str(),
+        ))
+        .connect()
+        .await
+        .unwrap();
+    let email_client: EmailClient = Arc::new(Mutex::new(email));
 
     let server = run(
         mongo_database.clone(),
         listener,
         ServerConfig { test_mode: true },
         Key::generate(),
+        email_client
+
     )
     .await
     .expect("Failed to bind address");

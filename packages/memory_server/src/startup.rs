@@ -31,18 +31,11 @@ pub async fn run(
     listener: TcpListener,
     server: ServerConfig,
     secret_key: Key,
+    email_client: EmailClient,
 ) -> Result<Server, anyhow::Error> {
     //change for prod
-
-    info!("Setting up email...");
-    let email = SmtpClientBuilder::new("smtp.gmail.com", 587)
-        .implicit_tls(false)
-        .credentials(("connerlreplogle@gmail.com", "ijij czfs cpbs saay"))
-        .connect()
-        .await
-        .unwrap();
-    let email_client: EmailClient = Arc::new(Mutex::new(email));
-
+    
+    
 
     info!("Starting server...");
 

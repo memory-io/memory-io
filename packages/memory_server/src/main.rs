@@ -1,14 +1,18 @@
-use std::{io::Read, net::TcpListener};
+use std::{io::Read, net::TcpListener, sync::Arc};
 
 use actix_web::cookie::Key;
+use mail_send::SmtpClientBuilder;
 use memory_server::{
     models::MongoDatabase,
-    startup::{initialize_db, run, ServerConfig},
+    startup::{initialize_db, run, EmailClient, ServerConfig},
 };
 use mongodb::{options::ClientOptions, Client};
 use std::fs::File;
 use std::io::Write;
+use tokio::sync::Mutex;
 use tracing::info;
+
+
 
 #[tokio::main]
 async fn main() {
@@ -54,7 +58,21 @@ async fn main() {
 
     let secret_key = open_or_generate_secret_key();
 
-    run(mongo_database, address, ServerConfig::default(), secret_key)
+    info!("Setting up email...");
+    let email = SmtpClientBuilder::new("smtp.sendgrid.net", 587)
+        .implicit_tls(false)
+        .credentials((
+            "apikey",
+            std::env::var("SEND_GRID_API_KEY")
+                .unwrap_or("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".to_string())
+                .as_str(),
+        ))
+        .connect()
+        .await
+        .unwrap();
+    let email_client: EmailClient = Arc::new(Mutex::new(email));
+
+    run(mongo_database, address, ServerConfig::default(), secret_key, email_client)
         .await
         .unwrap()
         .await
