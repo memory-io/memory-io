@@ -6,7 +6,8 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import { Button } from "$lib/components/ui/button";
-	import QuizletLoader from "$lib/load/quizlet/quizlet_loader.svelte";
+	import QuizletLoader from "$lib/ucomponents/load/quizlet/quizlet_loader.svelte";
+	import PasteLoader from "$lib/ucomponents/load/paste/paste_loader.svelte";
 
     let dialogOpen = false;
     
@@ -27,15 +28,14 @@
                 Import a study set from somewhere else.
             </Dialog.Description>
         </Dialog.Header>
-    <Tabs.Root value="paste" class="w-[400px] h-[400px]">
+    <Tabs.Root value="paste" class="w-[400px] h-min max-h-[80%]" >
         <Tabs.List class="w-full">
             <Tabs.Trigger value="paste" class="w-full">Paste</Tabs.Trigger>
             <Tabs.Trigger value="file" class="w-full">File</Tabs.Trigger>
             <Tabs.Trigger value="quizlet" class="w-full">Quizlet</Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content value="paste">
-            <Label for="file">Paste comma seperated data here.</Label>
-            <textarea name="paste" class="w-full h-full"></textarea>
+           <PasteLoader/>
         </Tabs.Content>
         
         <Tabs.Content value="file">

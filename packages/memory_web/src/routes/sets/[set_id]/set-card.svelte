@@ -5,11 +5,12 @@
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import type { Card, ObjectId } from "$lib/types";
 	import { MoreVertical } from "lucide-svelte";
-	import Formatter from "../../../lib/formatter.svelte";
+
 	import { addCard, deleteCard, updateCard } from "$lib/api/sets";
 	import { invalidate, invalidateAll } from "$app/navigation";
 	import { toast } from "svelte-sonner";
-	import CardEditor from "$lib/CardEditor.svelte";
+	import CardEditor from "$lib/ucomponents/CardEditor.svelte";
+	import Formatter from "$lib/ucomponents/formatter.svelte";
     export let card:Card ;
     export let set_id:ObjectId ;
     export let default_editable: boolean;

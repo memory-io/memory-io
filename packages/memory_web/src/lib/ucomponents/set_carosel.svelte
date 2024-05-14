@@ -1,6 +1,6 @@
 
 <script lang="ts">
-	import Formatter from "$lib/formatter.svelte";
+	import Formatter from "$lib/ucomponents/formatter.svelte";
 	import type { Card } from "$lib/types";
 	import { ChevronLeft, ChevronRight } from "lucide-svelte";
 	import { swipe, tap } from "svelte-gestures";

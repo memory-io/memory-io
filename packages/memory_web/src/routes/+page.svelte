@@ -17,7 +17,7 @@
             <Card.Root class="w-64" >
                 <Card.Header >
                     <Card.Title >{set.title}</Card.Title>
-                    <Card.Description>{set.user_id}</Card.Description>
+                    <Card.Description>{set.description}</Card.Description>
                 </Card.Header>
             </Card.Root>
         </a>
@@ -36,7 +36,7 @@
         <Card.Root class="w-64">
             <Card.Header>
                 <Card.Title>{set.title}</Card.Title>
-                <Card.Description>{set.user_id}</Card.Description>
+                <Card.Description>{set.description}</Card.Description>
             </Card.Header>
         </Card.Root>
         {/each}

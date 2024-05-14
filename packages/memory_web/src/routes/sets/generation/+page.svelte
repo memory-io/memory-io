@@ -7,7 +7,7 @@ import { Label } from "$lib/components/ui/label";
 import { Button } from "$lib/components/ui/button";
 import { enhance } from "$app/forms";
 import type { Card } from "$lib/types";
-import SetCarosel from "../[set_id]/set_carosel.svelte";
+import SetCarosel from "../../../lib/ucomponents/set_carosel.svelte";
 import { Reload } from "svelte-radix";
 import { goto } from "$app/navigation";
 

@@ -1,7 +1,7 @@
 <script lang="ts">
     import Button from "$lib/components/ui/button/button.svelte";
     import * as Card from "$lib/components/ui/card";
-	import Formatter from "$lib/formatter.svelte";
+	import Formatter from "$lib/ucomponents/formatter.svelte";
 	import { GenerateQuiz } from "$lib/generator/quiz.js";
 	import QuizSettings from "./quiz-settings.svelte";
     function shuffle(array: any[]) {

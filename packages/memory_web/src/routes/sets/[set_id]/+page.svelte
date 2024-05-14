@@ -9,7 +9,7 @@
 	import SetCard from "./set-card.svelte";
     import { toast } from "svelte-sonner";
 	import { deleteSet } from "$lib/api/sets";
-	import SetCarosel from "./set_carosel.svelte";
+	import SetCarosel from "../../../lib/ucomponents/set_carosel.svelte";
 	import { MoreVertical } from "lucide-svelte";
 	import { invalidate } from "$app/navigation";
 	import SetActions from "./set-actions.svelte";
@@ -52,8 +52,8 @@
         <Card.Footer class="flex justify-between gap-3">
             {#if data.set.cards.length != 0}
             <span>
-                <Button variant="outline" href={`${data.set.id}/quiz`} >Quiz</Button>
-                <Button variant="outline" href={`${data.set.id}/memorize`} >Memorize</Button>
+                <Button variant="outline" href={`${data.set.id.$oid}/quiz`} >Quiz</Button>
+                <Button variant="outline" href={`${data.set.id.$oid}/memorize`} >Memorize</Button>
             </span>
             {:else}
             <span></span>
