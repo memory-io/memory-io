@@ -176,8 +176,8 @@ pub(crate) async fn password_reset(
             .to(vec![("Password Reset", user.email.as_str())])
             .subject("Password Reset")
             .html_body(format!(
-                "Click <a href='http://{}/auth/password_reset/{}'>here</a> to reset your password",
-                option_env!("DOMAIN").unwrap_or("localhost:5173"),
+                "Click <a href='{}/auth/password_reset/{}'>here</a> to reset your password",
+                option_env!("DOMAIN").unwrap_or("http://localhost:5173"),
                 token
             ))
             .text_body("Hello world!");

@@ -9,6 +9,7 @@ services:
     environment:
       - MONGO_URI=mongodb+srv://connerlreplogle:poH4LtWfmRQQsXf9@cluster0.mf9snea.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       - DATABASE_NAME=memory
+      - DOMAIN=https://m3m0ry.io
 
   website:
     image: ghcr.io/memory-io/memory_web:latest
