@@ -52,14 +52,14 @@
     <Card.Root>
         <Card.Header class="flex-row justify-between">
             {#if edit_set}
-            <div class="w-full">
+            <div class="w-full flex flex-col gap-2">
                 <Card.Title>
-                <input class="bg-inherit w-full" bind:value={title} on:focusout={
+                <input class="bg-inherit w-full border-b-4 focus:border-white  outline-none" bind:value={title} on:focusout={
                     updateSetValue
                 } />
                 </Card.Title>
                 <Card.Description>
-                <input class="bg-inherit w-full " bind:value={description} on:focusout={
+                <input class="bg-inherit w-full border-b-2 focus:border-white outline-none" bind:value={description} on:focusout={
                     updateSetValue
                 } />
                 </Card.Description>
