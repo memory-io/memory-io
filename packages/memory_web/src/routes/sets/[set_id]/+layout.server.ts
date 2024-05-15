@@ -22,8 +22,9 @@ export const load: LayoutServerLoad = async ({params ,fetch}) => {
         
     }
 
-    const data: StudySetWithCards = await response.json();
+    const set: StudySetWithCards = await response.json();
+  
 	return {
-		set: data
+		set: set
 	};
 }

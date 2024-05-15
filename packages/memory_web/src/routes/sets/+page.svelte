@@ -14,7 +14,7 @@
 	import { slide } from "svelte/transition";
     import { toast } from "svelte-sonner";
 	import { createSet, deleteSet } from "$lib/api/sets";
-	import { invalidate, invalidateAll } from "$app/navigation";
+	import { invalidate } from "$app/navigation";
 	import NewSet from "./new-set.svelte";
 	import ImportSet from "./import-set.svelte";
     import * as Tooltip from "$lib/components/ui/tooltip";

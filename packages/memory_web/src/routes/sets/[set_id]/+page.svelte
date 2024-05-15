@@ -37,7 +37,7 @@
             description: description
         });
         if (!out.error){
-            invalidateAll()
+            invalidate(`/api/sets/${data.set.id.$oid}`);
             toast.success("Updated");
         }else{
             toast.error(out.error);
@@ -69,8 +69,8 @@
             
             {:else}
             <div>
-                <Card.Title>{data.set?.title}</Card.Title>
-                <Card.Description>{data.set?.description}</Card.Description>
+                <Card.Title>{title}</Card.Title>
+                <Card.Description>{description}</Card.Description>
             </div>
 
             {/if}

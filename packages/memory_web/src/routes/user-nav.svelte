@@ -3,7 +3,7 @@
 	import * as Avatar from "$lib/components/ui/avatar";
 	import { Button } from "$lib/components/ui/button";
 	import type { User } from "$lib/types";
-	import { goto, invalidate, invalidateAll } from "$app/navigation";
+	import { goto, invalidate } from "$app/navigation";
 	export let user: User | null;
 
 </script>
@@ -40,7 +40,7 @@
 			<DropdownMenu.Item  on:click={async ()=>{
 				
 				await fetch("/api/users/logout", { method: "POST" });
-				await invalidateAll();
+				await invalidate("/api/users/me");
 				goto("/");
 			}} data-sveltekit-reload
 			>
