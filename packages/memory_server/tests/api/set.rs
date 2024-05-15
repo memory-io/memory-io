@@ -63,7 +63,7 @@ async fn test_set_functionality() {
     let sets: Vec<Set> = response.json().await.expect("Failed to deseralize sets");
     debug!("Sets: {:?}", sets);
     let found = sets.iter().find(|a| a.title == "rust");
-    assert_eq!(found.is_some(), true);
+    assert!(found.is_some());
     let found = found.unwrap();
 
     //add card
@@ -99,7 +99,7 @@ async fn test_set_functionality() {
     let response = client
         .patch(&format!("{}/api/sets/{}", &app.address, found.id.to_hex()))
         .json(&PatchSet::UpdateCard(Card {
-            id: card.id.into(),
+            id: card.id,
             front: "apple".to_string(),
             back: "banana".to_string(),
         }))
@@ -138,7 +138,7 @@ async fn test_set_functionality() {
             &app.address,
             found.id.to_hex()
         ))
-        .json(&PatchSet::RemoveCard { id: card.id.into() })
+        .json(&PatchSet::RemoveCard { id: card.id })
         .send()
         .await
         .expect("Failed to execute delete card request.");
@@ -166,7 +166,7 @@ async fn test_set_functionality() {
         .cards
         .iter()
         .find(|a| a.front == a.front && a.back == a.back);
-    assert_eq!(card.is_none(), true);
+    assert!(card.is_none());
 
     //delete set
     let response = delete_set_from_id(&client, &app.address, &found.id.to_hex())

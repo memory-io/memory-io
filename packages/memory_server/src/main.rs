@@ -1,18 +1,18 @@
-use std::{io::Read, net::TcpListener, sync::Arc};
+use std::{io::Read, net::TcpListener};
 
 use actix_web::cookie::Key;
 use lettre::{transport::smtp::authentication::Credentials, SmtpTransport};
 use memory_server::{
     models::MongoDatabase,
-    startup::{initialize_db, run, EmailClient, ServerConfig},
+    startup::{initialize_db, run, ServerConfig},
 };
 use mongodb::{options::ClientOptions, Client};
 use std::fs::File;
 use std::io::Write;
-use tokio::sync::Mutex;
+
 use tracing::info;
-use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
-use tracing_subscriber::{layer::SubscriberExt, Registry};
+
+
 
 #[tokio::main]
 async fn main() {
@@ -47,7 +47,7 @@ async fn main() {
     fn open_or_generate_secret_key() -> Key {
         let secret_key_path = "./data/private.pem";
 
-        if let Ok(mut file) = File::open(&secret_key_path) {
+        if let Ok(mut file) = File::open(secret_key_path) {
             let mut secret_key = Vec::new();
             file.read_to_end(&mut secret_key).unwrap();
             info!("Loaded secret key from file");
@@ -56,7 +56,7 @@ async fn main() {
             info!("Generating secret key and storing to file");
             let secret_key: Key = Key::generate();
             std::fs::create_dir_all("./data").unwrap();
-            let mut file = File::create(&secret_key_path).unwrap();
+            let mut file = File::create(secret_key_path).unwrap();
             file.write_all(secret_key.master()).unwrap();
             secret_key
         }

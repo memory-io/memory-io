@@ -1,6 +1,6 @@
 use crate::helper::{get_user, login_user, signup_user, spawn_app};
-use memory_server::models::user::model::{User, UserSendable, UserSignup};
-use mongodb::bson::doc;
+use memory_server::models::user::model::{UserSendable, UserSignup};
+
 
 #[tokio::test]
 async fn signup_login_user() -> anyhow::Result<()> {
@@ -31,7 +31,7 @@ async fn signup_login_user() -> anyhow::Result<()> {
 
     let recieved_user: UserSendable = response.json().await?;
     assert_eq!(recieved_user.email, user.email);
-    assert_eq!(recieved_user.paid_user, false);
+    assert!(!recieved_user.paid_user);
 
     app.db.db().drop(None).await.unwrap();
     Ok(())

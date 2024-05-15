@@ -4,7 +4,7 @@ use std::str::FromStr;
 use anyhow::bail;
 use chrono::Utc;
 use lettre::{
-    message::{header::ContentType, MessageBuilder},
+    message::{header::ContentType},
     Message, Transport,
 };
 use mongodb::{
@@ -121,7 +121,7 @@ pub(crate) async fn change_password(
     token: &str,
     new_password: &str,
 ) -> Result<(), anyhow::Error> {
-    if zxcvbn(&new_password, &[])?.score() < 3 {
+    if zxcvbn(new_password, &[])?.score() < 3 {
         bail!("Password is too weak");
     }
     let Some(reset) = db

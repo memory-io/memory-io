@@ -1,4 +1,4 @@
-use std::{net::TcpListener, sync::Arc, time::Duration};
+use std::{net::TcpListener, time::Duration};
 
 use crate::{
     models::{
@@ -14,10 +14,10 @@ use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
 use actix_web::{cookie::Key, dev::Server, middleware::Logger, web, App, HttpServer};
 use lettre::SmtpTransport;
-use mail_send::{SmtpClient, SmtpClientBuilder};
+
 use mongodb::{bson::doc, options::IndexOptions, IndexModel};
-use tokio::{net::TcpStream, sync::Mutex};
-use tokio_rustls::client::TlsStream;
+
+
 use tracing::info;
 
 pub type EmailClient = SmtpTransport;

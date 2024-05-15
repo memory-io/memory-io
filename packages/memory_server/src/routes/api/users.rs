@@ -8,7 +8,7 @@ use actix_web::{
     HttpMessage, HttpRequest, HttpResponse, Responder,
 };
 
-use mongodb::error::WriteFailure;
+
 use serde::Deserialize;
 use tokio::time::sleep;
 use tracing::{debug, info, trace, warn};
@@ -161,5 +161,5 @@ pub async fn login(
 pub async fn logout(id: Identity) -> impl Responder {
     id.logout();
 
-    return HttpResponse::Ok();
+    HttpResponse::Ok()
 }

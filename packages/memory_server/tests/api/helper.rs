@@ -1,18 +1,18 @@
-use std::{collections::HashMap, net::TcpListener, sync::Arc};
+use std::{collections::HashMap, net::TcpListener};
 
 use actix_web::cookie::Key;
 use lettre::{transport::smtp::authentication::Credentials, SmtpTransport};
-use mail_send::SmtpClientBuilder;
+
 use memory_server::{
     models::{
-        user::model::{User, UserSignup},
+        user::model::{UserSignup},
         MongoDatabase,
     },
-    startup::{initialize_db, run, EmailClient, ServerConfig},
+    startup::{initialize_db, run, ServerConfig},
 };
 use mongodb::{options::ClientOptions, Client};
 use reqwest::Response;
-use tokio::sync::Mutex;
+
 use tracing::info;
 
 pub struct TestApp {
@@ -77,12 +77,12 @@ pub async fn get_set_from_id(
     address: &String,
     id: &str,
 ) -> Result<Response, reqwest::Error> {
-    let response = client
+    
+
+    client
         .get(&format!("{}/api/sets/{}?includeCards=true", address, id))
         .send()
-        .await;
-
-    response
+        .await
 }
 
 pub async fn delete_set_from_id(
@@ -90,12 +90,12 @@ pub async fn delete_set_from_id(
     address: &String,
     id: &str,
 ) -> Result<Response, reqwest::Error> {
-    let response = client
+    
+
+    client
         .delete(&format!("{}/api/sets/{}", address, id))
         .send()
-        .await;
-
-    response
+        .await
 }
 
 pub async fn signup_user(
@@ -103,13 +103,13 @@ pub async fn signup_user(
     address: &str,
     user: &UserSignup,
 ) -> Result<Response, reqwest::Error> {
-    let response = client
+    
+
+    client
         .post(&format!("{}/api/users/signup", address))
         .json(&user)
         .send()
-        .await;
-
-    response
+        .await
 }
 
 pub async fn login_user(
@@ -122,20 +122,20 @@ pub async fn login_user(
     map.insert("email", email);
     map.insert("password", password);
 
-    let response = client
+    
+
+    client
         .post(&format!("{}/api/users/login", address))
         .json(&map)
         .send()
-        .await;
-
-    response
+        .await
 }
 
 pub async fn get_user(client: &reqwest::Client, address: &str) -> Result<Response, reqwest::Error> {
-    let response = client
+    
+
+    client
         .get(&format!("{}/api/users/me", address))
         .send()
-        .await;
-
-    response
+        .await
 }
