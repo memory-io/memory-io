@@ -101,7 +101,7 @@ pub async fn patch_set(
                 }
             }
         }
-        PatchSet::UpdateSet(set) => match set::update_set(&db, &set_id, set).await {
+        PatchSet::UpdateSet(set) => match set::update_set(&db, &set_id, &user_id, set).await {
             Ok(true) => HttpResponse::Ok().await.unwrap(),
             Ok(false) => HttpResponse::NotFound().body("Set not found"),
             Err(err) => {

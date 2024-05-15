@@ -18,12 +18,17 @@ pub async fn create_set(
 pub async fn update_set(
     db: &MongoDatabase,
     set_id: &ObjectId,
+    user_id: &ObjectId,
     set: &UpdateSet,
 ) -> Result<bool, mongodb::error::Error> {
     let result = db
         .db()
         .collection::<Set>("sets")
-        .update_one(doc! {"_id":set_id}, doc! {"$set":bson::to_bson(set)?}, None)
+        .update_one(
+            doc! {"_id":set_id,"user_id":user_id},
+            doc! {"$set":bson::to_bson(set)?},
+            None,
+        )
         .await?;
     Ok(result.matched_count == 1)
 }

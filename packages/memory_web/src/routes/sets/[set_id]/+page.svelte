@@ -8,20 +8,41 @@
     import { Button } from "$lib/components/ui/button";
 	import SetCard from "./set-card.svelte";
     import { toast } from "svelte-sonner";
-	import { deleteSet } from "$lib/api/sets";
+	import { deleteSet, updateSet } from "$lib/api/sets";
 	import SetCarosel from "../../../lib/ucomponents/set_carosel.svelte";
 	import { MoreVertical } from "lucide-svelte";
-	import { invalidate } from "$app/navigation";
+	import { invalidate, invalidateAll } from "$app/navigation";
 	import SetActions from "./set-actions.svelte";
+	import { Input } from "$lib/components/ui/input";
 
     export let data;
     if (data.set == undefined ){
         throw new Error("No set found");
     }
 
+    let title = data.set.title;
+    let description = data.set.description;
+    let edit_set = false;
+
     let own_set = data.set.user_id.$oid == data.user?.id.$oid ;
 
-
+    async function updateSetValue(){
+        if (data.set == undefined ){
+            throw new Error("No set found");
+        }
+        
+        let out = await updateSet({
+            ...data.set,
+            title: title,
+            description: description
+        });
+        if (!out.error){
+            toast.success("Updated");
+            
+        }else{
+            toast.error(out.error);
+        }
+    }
 
 </script>
 
@@ -30,12 +51,31 @@
 {#if data.set != undefined}
     <Card.Root>
         <Card.Header class="flex-row justify-between">
-            <div>
-            <Card.Title>{data.set?.title}</Card.Title>
-            <Card.Description>{data.set?.description}</Card.Description>
+            {#if edit_set}
+            <div class="w-full">
+                <Card.Title>
+                <input class="bg-inherit w-full" bind:value={title} on:focusout={
+                    updateSetValue
+                } />
+                </Card.Title>
+                <Card.Description>
+                <input class="bg-inherit w-full " bind:value={description} on:focusout={
+                    updateSetValue
+                } />
+                </Card.Description>
+                
             </div>
+            
+            
+            {:else}
             <div>
-                <SetActions set={data.set} own_set={own_set}/>
+                <Card.Title>{data.set?.title}</Card.Title>
+                <Card.Description>{data.set?.description}</Card.Description>
+            </div>
+
+            {/if}
+            <div>
+                <SetActions set={data.set} own_set={own_set} bind:edit_set={edit_set} />
             </div>
             
         

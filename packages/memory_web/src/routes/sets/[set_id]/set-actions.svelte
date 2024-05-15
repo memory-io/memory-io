@@ -4,8 +4,10 @@
     import { toast } from "svelte-sonner";
     import { deleteSet, updateSet } from "$lib/api/sets";
     import { invalidate } from "$app/navigation";
-    export let set;
-    export let own_set;
+	import type { StudySet } from "$lib/types";
+    export let set: StudySet;
+    export let own_set: boolean;
+    export let edit_set: boolean;
     
     let is_public = set.visibility == "Public"
 </script>
@@ -53,6 +55,9 @@
                 }
             }} bind:checked={is_public}>
                 Public
+            </DropdownMenu.CheckboxItem>
+            <DropdownMenu.CheckboxItem bind:checked={edit_set}>
+                Edit
             </DropdownMenu.CheckboxItem>
         </DropdownMenu.Group>
         {/if}
