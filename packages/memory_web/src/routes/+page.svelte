@@ -13,7 +13,7 @@
     </Card.Header>
     <Card.Content class="flex flex-row gap-3 flex-wrap">
         {#each data.recent_sets as set}
-        <a href={`/sets/${set.id}`}>
+        <a href={`/sets/${set.id.$oid}`}>
             <Card.Root class="w-64" >
                 <Card.Header >
                     <Card.Title >{set.title}</Card.Title>
