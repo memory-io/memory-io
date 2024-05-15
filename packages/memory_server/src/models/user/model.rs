@@ -9,6 +9,7 @@ pub struct User {
     pub email: String,
     pub password: String,
     pub paid_user: bool,
+    pub verified: bool,
 }
 
 impl User {
@@ -43,11 +44,20 @@ pub struct UserSendable {
     pub username: String,
     pub email: String,
     pub paid_user: bool,
+    pub verified: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct PasswordReset {
     pub creation_date: bson::DateTime,
+    pub user_id: ObjectId,
+    pub token: String,
+}
+#[derive(Deserialize, Serialize, Debug)]
+
+pub struct VerficationRequest {
+    pub creation_date: bson::DateTime,
+
     pub user_id: ObjectId,
     pub token: String,
 }
