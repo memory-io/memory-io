@@ -1,17 +1,16 @@
-use std::{collections::HashMap, net::TcpListener};
+use std::{net::TcpListener};
 
 use actix_web::cookie::Key;
 use lettre::{transport::smtp::authentication::Credentials, SmtpTransport};
 
 use memory_server::{
     models::{
-        user::model::{UserSignup},
         MongoDatabase,
     },
     startup::{initialize_db, run, ServerConfig},
 };
 use mongodb::{options::ClientOptions, Client};
-use reqwest::Response;
+
 
 use tracing::info;
 

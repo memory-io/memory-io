@@ -1,24 +1,23 @@
-use std::str::FromStr;
+
 
 use anyhow::bail;
-use bson::de;
-use chrono::Utc;
-use lettre::{message::header::ContentType, Message, Transport};
+
+
+
 use mongodb::{
     bson::{doc, oid::ObjectId},
     error::WriteFailure,
 };
-use tracing::{debug, error, instrument, trace};
-use uuid::Uuid;
+use tracing::{debug, error, trace};
+
 use validator::Validate;
 use zxcvbn::zxcvbn;
 
 use crate::{
     models::{
-        user::model::{User, UserSignup, VerficationRequest},
+        user::model::{User, UserSignup},
         MongoDatabase,
     },
-    startup::EmailClient,
 };
 
 pub async fn check_username(db: &MongoDatabase, username: &str) -> Result<(), anyhow::Error> {

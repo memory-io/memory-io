@@ -1,26 +1,24 @@
 mod auth;
 mod password_reset;
 mod verify;
-use std::time::Duration;
+
 
 use actix_identity::Identity;
 
 use actix_web::{
-    get, post,
-    web::{self, Data, Json, Path},
-    HttpMessage, HttpRequest, HttpResponse, Responder,
+    get,
+    web::{self, Data}, HttpResponse, Responder,
 };
 
-use serde::Deserialize;
-use tokio::time::sleep;
-use tracing::{debug, info, instrument, trace, warn};
+
+
+use tracing::{instrument, warn};
 
 use crate::{
     models::{
-        user::{self, model::UserSignup},
+        user::{self},
         MongoDatabase,
     },
-    startup::EmailClient,
 };
 use auth::*;
 use password_reset::*;

@@ -13,7 +13,7 @@ use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 use std::fs::File;
 use std::io::Write;
 
-use tracing::{info, subscriber};
+use tracing::{info};
 
 
 

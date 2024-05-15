@@ -5,21 +5,20 @@ use actix_identity::Identity;
 
 use actix_web::web::Query;
 use actix_web::{
-    delete, get, patch, post,
-    web::{self, Data, Json},
+    get,
+    web::{self, Data},
     HttpResponse, Responder,
 };
 
-use mongodb::{bson::oid::ObjectId, error::WriteFailure};
+use mongodb::{bson::oid::ObjectId};
 
 use serde::Deserialize;
 use tracing::{debug, error, instrument};
 
-use crate::models::card::CardNoID;
+
 use crate::models::set;
 use crate::models::{
-    card::{self, Card},
-    set::model::{CreateSet, PatchSet, SetVisibility},
+    set::model::{SetVisibility},
     MongoDatabase,
 };
 use modify::*;

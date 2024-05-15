@@ -3,22 +3,21 @@ use std::{str::FromStr, time::Duration};
 use actix_identity::Identity;
 
 use actix_web::{
-    get, post,
-    web::{self, Data, Json, Path},
-    HttpMessage, HttpRequest, HttpResponse, Responder,
+    post,
+    web::{Data}, HttpResponse, Responder,
 };
 use bson::oid::ObjectId;
 
 use crate::{
     models::{
-        user::{self, model::UserSignup},
+        user::{self},
         MongoDatabase,
     },
     startup::EmailClient,
 };
-use serde::Deserialize;
+
 use tokio::time::sleep;
-use tracing::{debug, info, instrument, trace, warn};
+use tracing::{debug, instrument, warn};
 use user::logic::verify;
 
 #[instrument(skip(id,db,client),fields(user_id = id.id().unwrap()))]

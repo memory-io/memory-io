@@ -1,16 +1,15 @@
-use std::str::FromStr;
+
 
 use anyhow::bail;
-use bson::de;
+
 use chrono::Utc;
 use lettre::{message::header::ContentType, Message, Transport};
 use mongodb::{
-    bson::{doc, oid::ObjectId},
-    error::WriteFailure,
+    bson::{doc},
 };
-use tracing::{debug, error, instrument, trace};
+use tracing::{debug, trace};
 use uuid::Uuid;
-use validator::Validate;
+
 use zxcvbn::zxcvbn;
 
 use crate::{

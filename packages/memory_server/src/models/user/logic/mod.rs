@@ -3,20 +3,19 @@ pub mod password_reset;
 pub mod verify;
 use std::str::FromStr;
 
-use anyhow::bail;
-use bson::de;
-use chrono::Utc;
-use lettre::{message::header::ContentType, Message, Transport};
+
+
+
+
 use mongodb::{
     bson::{doc, oid::ObjectId},
-    error::WriteFailure,
 };
-use tracing::{debug, error, instrument, trace};
-use uuid::Uuid;
-use validator::Validate;
-use zxcvbn::zxcvbn;
+use tracing::{debug};
 
-use crate::{models::MongoDatabase, startup::EmailClient};
+
+
+
+use crate::{models::MongoDatabase};
 
 use super::model::UserSendable;
 
@@ -32,5 +31,5 @@ pub async fn get_user(
         .find_one(doc! {"_id":user_id}, None)
         .await;
     debug!("Recieved user");
-    return user;
+    user
 }

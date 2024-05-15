@@ -12,7 +12,7 @@ use actix_cors::Cors;
 use actix_identity::IdentityMiddleware;
 use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
-use actix_web::{cookie::Key, dev::Server, middleware::Logger, web, App, HttpServer};
+use actix_web::{cookie::Key, dev::Server, web, App, HttpServer};
 use lettre::SmtpTransport;
 
 use mongodb::{bson::doc, options::IndexOptions, IndexModel};

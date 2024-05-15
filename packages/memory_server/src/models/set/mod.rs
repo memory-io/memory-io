@@ -2,7 +2,7 @@ pub mod model;
 
 use self::model::{CreateSet, OptionSet, Set, UpdateSet};
 use super::MongoDatabase;
-use bson::de;
+
 use futures_util::{future, StreamExt, TryStreamExt};
 use mongodb::{
     bson::{doc, oid::ObjectId},
@@ -17,7 +17,7 @@ pub async fn create_set(
     debug!("Creating Set");
     let a = db.db().collection("sets").insert_one(set, None).await?;
     debug!("Created Set");
-    return Ok(a);
+    Ok(a)
 }
 pub async fn update_set(
     db: &MongoDatabase,

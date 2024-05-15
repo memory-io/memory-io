@@ -5,7 +5,7 @@ use crate::helper::spawn_app;
 #[tokio::test]
 async fn signup_login_user() -> anyhow::Result<()> {
     let app = spawn_app().await;
-    let client = reqwest::Client::builder()
+    let _client = reqwest::Client::builder()
         .cookie_store(true)
         .build()
         .unwrap();

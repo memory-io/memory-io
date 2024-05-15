@@ -2,9 +2,9 @@ use std::str::FromStr;
 
 use actix_identity::Identity;
 
-use actix_web::web::Query;
+
 use actix_web::{
-    delete, get, patch, post,
+    delete, patch, post,
     web::{self, Data, Json},
     HttpResponse, Responder,
 };
@@ -12,7 +12,7 @@ use actix_web::{
 use mongodb::{bson::oid::ObjectId, error::WriteFailure};
 
 use serde::Deserialize;
-use tracing::{debug, error, instrument};
+use tracing::{error, instrument};
 
 use crate::models::card::CardNoID;
 use crate::models::set;

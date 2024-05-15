@@ -1,23 +1,22 @@
-use std::{str::FromStr, time::Duration};
+
 
 use actix_identity::Identity;
 
 use actix_web::{
     get, post,
-    web::{self, Data, Json, Path},
+    web::{Data, Json, Path},
     HttpMessage, HttpRequest, HttpResponse, Responder,
 };
-use bson::oid::ObjectId;
+
 
 use crate::{
     models::{
         user::{self, model::UserSignup},
         MongoDatabase,
     },
-    startup::EmailClient,
 };
 use serde::Deserialize;
-use tokio::time::sleep;
+
 use tracing::{debug, info, instrument, trace, warn};
 use user::logic::auth;
 
