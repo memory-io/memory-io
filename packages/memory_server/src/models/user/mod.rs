@@ -3,7 +3,10 @@ use std::str::FromStr;
 
 use anyhow::bail;
 use chrono::Utc;
-use mail_send::{mail_auth::hickory_resolver::proto::rr::rdata::A, mail_builder::MessageBuilder};
+use lettre::{
+    message::{header::ContentType, MessageBuilder},
+    Message, Transport,
+};
 use mongodb::{
     bson::{doc, oid::ObjectId},
     error::WriteFailure,
@@ -171,19 +174,22 @@ pub(crate) async fn password_reset(
             .collection("password_resets")
             .insert_one(bson::to_bson(&reset).unwrap(), None)
             .await?;
-        let message = MessageBuilder::new()
-            .from(("Memory IO", "admin@m3m0ry.io"))
-            .to(vec![("Password Reset", user.email.as_str())])
-            .subject("Password Reset")
-            .html_body(format!(
+     
+        let email = Message::builder()
+            .from("Memory IO <admin@m3m0ry.io>".parse().unwrap())
+            .reply_to("Memory IO <admin@m3m0ry.io>".parse().unwrap())
+            .to(format!("{} <{}>", user.username, user.email)
+                .parse()
+                .unwrap())
+            .subject("Happy new year")
+            .header(ContentType::TEXT_HTML)
+            .body(format!(
                 "Click <a href='{}/auth/password_reset/{}'>here</a> to reset your password",
                 option_env!("DOMAIN").unwrap_or("http://localhost:5173"),
                 token
             ))
-            .text_body("Hello world!");
-
-        client.lock().await.send(message).await?;
-
+            .unwrap();
+        client.send(&email)?;
         return Ok(());
     }
     bail!("User not found");

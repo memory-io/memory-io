@@ -13,13 +13,14 @@ use actix_identity::IdentityMiddleware;
 use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
 use actix_web::{cookie::Key, dev::Server, middleware::Logger, web, App, HttpServer};
+use lettre::SmtpTransport;
 use mail_send::{SmtpClient, SmtpClientBuilder};
 use mongodb::{bson::doc, options::IndexOptions, IndexModel};
 use tokio::{net::TcpStream, sync::Mutex};
 use tokio_rustls::client::TlsStream;
 use tracing::info;
 
-pub type EmailClient = Arc<Mutex<SmtpClient<TlsStream<TcpStream>>>>;
+pub type EmailClient = SmtpTransport;
 
 #[derive(Clone, Copy, Default)]
 pub struct ServerConfig {
@@ -34,8 +35,6 @@ pub async fn run(
     email_client: EmailClient,
 ) -> Result<Server, anyhow::Error> {
     //change for prod
-    
-    
 
     info!("Starting server...");
 
