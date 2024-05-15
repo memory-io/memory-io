@@ -2,18 +2,22 @@ pub mod model;
 
 use self::model::{CreateSet, OptionSet, Set, UpdateSet};
 use super::MongoDatabase;
+use bson::de;
 use futures_util::{future, StreamExt, TryStreamExt};
 use mongodb::{
     bson::{doc, oid::ObjectId},
     options::FindOptions,
 };
-use tracing::debug;
+use tracing::{debug, trace};
 
 pub async fn create_set(
     db: &MongoDatabase,
     set: CreateSet,
 ) -> Result<mongodb::results::InsertOneResult, mongodb::error::Error> {
-    db.db().collection("sets").insert_one(set, None).await
+    debug!("Creating Set");
+    let a = db.db().collection("sets").insert_one(set, None).await?;
+    debug!("Created Set");
+    return Ok(a);
 }
 pub async fn update_set(
     db: &MongoDatabase,
@@ -21,6 +25,7 @@ pub async fn update_set(
     user_id: &ObjectId,
     set: &UpdateSet,
 ) -> Result<bool, mongodb::error::Error> {
+    debug!("Updating Set");
     let result = db
         .db()
         .collection::<Set>("sets")
@@ -30,6 +35,7 @@ pub async fn update_set(
             None,
         )
         .await?;
+    debug!("Updated Set");
     Ok(result.matched_count == 1)
 }
 
@@ -74,6 +80,7 @@ pub async fn get_set(
             }
         });
     }
+    trace!("Running Query");
 
     let Some(result) = db
         .db()
@@ -83,9 +90,14 @@ pub async fn get_set(
         .next()
         .await
     else {
+        debug!("No Result");
         return Ok(None);
     };
+    debug!("Recieved Results");
+
     let a = bson::from_document::<OptionSet>(result?)?;
+    debug!("Parsed as OptionSet");
+
     Ok(Some(a))
 }
 
@@ -93,6 +105,7 @@ pub async fn get_most_recent_public_sets(
     db: &MongoDatabase,
     count: usize,
 ) -> Result<Vec<Set>, mongodb::error::Error> {
+    debug!("Getting most recent public sets");
     let result: Vec<Set> = db
         .db()
         .collection::<Set>("sets")
@@ -103,6 +116,8 @@ pub async fn get_most_recent_public_sets(
         .await?
         .try_collect()
         .await?;
+    debug!("Recieved most recent public sets");
+
     Ok(result)
 }
 
@@ -111,6 +126,7 @@ pub async fn delete_set(
     id: &ObjectId,
     user_id: &ObjectId,
 ) -> Result<bool, mongodb::error::Error> {
+    debug!("Deleting Set");
     db.db()
         .collection::<Set>("sets")
         .delete_one(doc! {"_id":id,"user_id":user_id}, None)
@@ -122,10 +138,11 @@ pub async fn get_sets_from_user(
     db: &MongoDatabase,
     id: &ObjectId,
     count: i64,
-    include_users: bool,
+    include_user: bool,
     include_cards: bool,
 ) -> Result<Vec<OptionSet>, mongodb::error::Error> {
-    let mut query = if include_users {
+    let mut query = if include_user {
+        debug!("Including user");
         vec![
             doc! {
                 "$match": {
@@ -142,6 +159,8 @@ pub async fn get_sets_from_user(
             },
         ]
     } else {
+        debug!("Not including user");
+
         vec![doc! {
             "$match": {
                 "user_id":id,
@@ -150,12 +169,15 @@ pub async fn get_sets_from_user(
     };
 
     if include_cards {
+        debug!("Including cards");
         query.push(doc! {
             "$project": {
                 "cards": 0
             }
         });
     }
+    debug!("Running Query");
+    trace!("Query: {query:?}");
 
     let result: Vec<OptionSet> = db
         .db()
@@ -166,6 +188,6 @@ pub async fn get_sets_from_user(
         .take(count as usize)
         .collect()
         .await;
-
+    debug!("Recieved Result");
     Ok(result)
 }

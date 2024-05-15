@@ -7,23 +7,29 @@ use memory_server::{
     startup::{initialize_db, run, ServerConfig},
 };
 use mongodb::{options::ClientOptions, Client};
+use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
+use tracing_log::LogTracer;
+use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 use std::fs::File;
 use std::io::Write;
 
-use tracing::info;
+use tracing::{info, subscriber};
 
 
 
 #[tokio::main]
 async fn main() {
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("debug"));
-    // let formatting_layer = BunyanFormattingLayer::new("m3m0ry".into(), std::io::stdout);
-    // let subscriber = Registry::default()
-    //     .with()
-    //     .with(JsonStorageLayer)
-    //     .with(formatting_layer);
-    // tracing::subscriber::set_global_default(subscriber).unwrap();
+    //env_logger::init_from_env(env_logger::Env::new().default_filter_or("debug"));
+    LogTracer::init().expect("Unable to setup log tracer!");
 
+    let app_name = concat!(env!("CARGO_PKG_NAME"), "-", env!("CARGO_PKG_VERSION")).to_string();
+    let (non_blocking_writer, _guard) = tracing_appender::non_blocking(std::io::stdout());
+    let bunyan_formatting_layer = BunyanFormattingLayer::new(app_name, non_blocking_writer);
+    let subscriber = Registry::default()
+        .with(EnvFilter::new("DEBUG"))
+        .with(JsonStorageLayer)
+        .with(bunyan_formatting_layer);
+    tracing::subscriber::set_global_default(subscriber).unwrap();
     let client_options = ClientOptions::parse(
         &std::env::var("MONGO_URI").unwrap_or("mongodb://localhost:27017".to_string()),
     )

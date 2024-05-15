@@ -1,5 +1,6 @@
 use mongodb::bson::{doc, oid::ObjectId};
 use serde::{Deserialize, Serialize};
+use tracing::{debug, instrument};
 
 use super::{set::model::SetWithCards, MongoDatabase};
 
@@ -15,13 +16,15 @@ pub struct CardNoID {
     pub back: String,
 }
 
-
+#[instrument(skip(db), fields(user_id = %user_id, set_id = %set_id))]
 pub async fn add_card_to_set(
     db: &MongoDatabase,
     set_id: &ObjectId,
     user_id: &ObjectId,
     card: Card,
 ) -> Result<(), mongodb::error::Error> {
+    debug!("Adding card");
+
     db.db()
         .collection::<SetWithCards>("sets")
         .update_one(
@@ -30,15 +33,18 @@ pub async fn add_card_to_set(
             None,
         )
         .await?;
+    debug!("Card added");
+
     Ok(())
 }
-
+#[instrument(skip(db), fields(user_id = %user_id, set_id = %set_id))]
 pub async fn update_card_in_set(
     db: &MongoDatabase,
     set_id: &ObjectId,
     user_id: &ObjectId,
     card: &Card,
 ) -> Result<bool, anyhow::Error> {
+    debug!("Updating card");
     let result = db
         .db()
         .collection::<SetWithCards>("sets")
@@ -48,9 +54,11 @@ pub async fn update_card_in_set(
             None,
         )
         .await?;
+    debug!("Updated card");
 
     Ok(result.matched_count == 1)
 }
+#[instrument(skip(db))]
 
 pub async fn remove_card_from_set(
     db: &MongoDatabase,
@@ -58,6 +66,8 @@ pub async fn remove_card_from_set(
     user_id: &ObjectId,
     card_id: &bson::Uuid,
 ) -> Result<bool, mongodb::error::Error> {
+    debug!("Removing card");
+
     let result = db
         .db()
         .collection::<SetWithCards>("sets")
@@ -69,5 +79,7 @@ pub async fn remove_card_from_set(
             None,
         )
         .await?;
+    debug!("Removed card");
+
     Ok(result.modified_count == 1)
 }

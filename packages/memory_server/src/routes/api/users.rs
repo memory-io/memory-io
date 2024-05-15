@@ -8,10 +8,9 @@ use actix_web::{
     HttpMessage, HttpRequest, HttpResponse, Responder,
 };
 
-
 use serde::Deserialize;
 use tokio::time::sleep;
-use tracing::{debug, info, trace, warn};
+use tracing::{debug, info, instrument, trace, warn};
 
 use crate::{
     models::{
@@ -34,7 +33,7 @@ pub fn factory(cfg: &mut web::ServiceConfig) {
             .service(logout),
     );
 }
-
+#[instrument(skip(db,user,request),fields(user.email = %user.email,user.username = %user.username))]
 #[post("/signup")]
 pub async fn signup(
     request: HttpRequest,
@@ -60,6 +59,7 @@ pub async fn signup(
 }
 
 #[get("me")]
+#[instrument(skip( db,id),fields(user_id = %id.id().unwrap()))]
 pub async fn get_user(id: Identity, db: Data<MongoDatabase>) -> impl Responder {
     match user::get_user(&db, id.id().unwrap()).await {
         Ok(Some(user)) => HttpResponse::Ok().json(user),
@@ -76,6 +76,7 @@ struct ResetRequest {
     email: String,
 }
 #[post("password_reset")]
+#[instrument(skip(db, client),fields(email = %email.email))]
 pub async fn password_reset(
     email: Json<ResetRequest>,
     db: Data<MongoDatabase>,
@@ -92,6 +93,7 @@ pub async fn password_reset(
 }
 
 #[get("password_reset/{token}")]
+#[instrument(skip(db))]
 pub async fn validate_password_reset(
     token: Path<String>,
     db: Data<MongoDatabase>,
@@ -111,6 +113,7 @@ struct PasswordReset {
 }
 
 #[post("change_password")]
+#[instrument(skip(db),fields(token = %reset.token))]
 pub async fn change_password(
     reset: Json<PasswordReset>,
     db: Data<MongoDatabase>,
@@ -125,6 +128,7 @@ pub async fn change_password(
 }
 
 #[get("check_username/{username}")]
+#[instrument(skip(db))]
 pub async fn check_username(db: Data<MongoDatabase>, username: Path<String>) -> impl Responder {
     match user::check_username(&db, &username).await {
         Ok(_) => HttpResponse::Ok().await.unwrap(),
@@ -139,6 +143,7 @@ struct UserLogin {
 }
 
 #[post("/login")]
+#[instrument(skip(user, request, db), fields(user.email = %user.email))]
 pub async fn login(
     request: HttpRequest,
     user: Json<UserLogin>,
@@ -158,6 +163,7 @@ pub async fn login(
     };
 }
 #[post("/logout")]
+#[instrument(skip(id),fields(user_id = id.id().unwrap()))]
 pub async fn logout(id: Identity) -> impl Responder {
     id.logout();
 

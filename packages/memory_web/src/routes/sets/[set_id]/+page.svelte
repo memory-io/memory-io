@@ -39,7 +39,6 @@
         if (!out.error){
             invalidateAll()
             toast.success("Updated");
-            
         }else{
             toast.error(out.error);
         }

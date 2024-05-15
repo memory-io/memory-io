@@ -12,7 +12,7 @@ use actix_web::{
 use mongodb::{bson::oid::ObjectId, error::WriteFailure};
 
 use serde::Deserialize;
-use tracing::{debug, error};
+use tracing::{debug, error, instrument};
 
 use crate::models::card::CardNoID;
 use crate::models::set;
@@ -46,7 +46,7 @@ struct GetSetsOptions {
     limit: Option<usize>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct CreateSetRequest {
     pub title: String,
     pub description: Option<String>,
@@ -56,6 +56,7 @@ pub struct CreateSetRequest {
 }
 
 #[delete("/{id}")]
+#[instrument(skip(db,id,set_id), fields(set_id = %set_id, user_id = %id.id().unwrap()))]
 pub async fn delete_set(
     id: Identity,
     set_id: web::Path<String>,
@@ -72,6 +73,7 @@ pub async fn delete_set(
 }
 
 #[patch("/{id}")]
+#[instrument(skip(db,id,set_id), fields(set_id = %set_id, user_id = %id.id().unwrap()))]
 pub async fn patch_set(
     db: Data<MongoDatabase>,
     id: Identity,
@@ -132,6 +134,7 @@ pub async fn patch_set(
 }
 
 #[get("")]
+#[instrument(skip(db, id), fields(user_id = %id.id().unwrap()))]
 pub async fn get_sets(
     id: Identity,
     db: Data<MongoDatabase>,
@@ -157,6 +160,7 @@ pub async fn get_sets(
 }
 
 #[post("/create")]
+#[instrument(skip(db, id),fields(user_id = %id.id().unwrap()))]
 pub async fn create_set(
     id: Identity,
     set: Json<CreateSetRequest>,
@@ -216,6 +220,7 @@ pub async fn create_set(
 }
 
 #[get("/{id}")]
+#[instrument(skip(db,id), fields(user_id = %id.as_ref().map(|a| a.id().unwrap().to_string()).unwrap_or("None".to_string()), set_id = %set_id))]
 pub async fn get_set(
     id: Option<Identity>,
     set_id: web::Path<String>,
@@ -233,26 +238,32 @@ pub async fn get_set(
             HttpResponse::InternalServerError().body("Failed to get set")
         }
         Ok(Some(a)) => {
-            debug!("Set: {:?}", a);
             if let SetVisibility::Private = a.visibility {
                 if let Some(id) = id {
                     if let Ok(user_id) = id.id() {
                         if a.user_id.to_hex() != user_id {
+                            debug!("Not Authorized to view this set");
                             return HttpResponse::Unauthorized()
                                 .body("Not Authorized to view this set");
                         }
                     }
                 } else {
+                    debug!("Not Authorized to view this set");
                     return HttpResponse::Unauthorized().body("Not Authorized to view this set");
                 }
             }
+            debug!("Found set");
             HttpResponse::Ok().json(a)
         }
-        Ok(None) => HttpResponse::NotFound().body("Set not found"),
+        Ok(None) => {
+            debug!("Set not found");
+            return HttpResponse::NotFound().body("Set not found");
+        }
     }
 }
 
 #[get("/recents")]
+#[instrument(skip(db))]
 pub async fn get_recent_sets(db: Data<MongoDatabase>) -> impl Responder {
     match set::get_most_recent_public_sets(&db, 20).await {
         Err(err) => {

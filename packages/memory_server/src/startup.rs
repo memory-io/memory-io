@@ -17,8 +17,8 @@ use lettre::SmtpTransport;
 
 use mongodb::{bson::doc, options::IndexOptions, IndexModel};
 
-
 use tracing::info;
+use tracing_actix_web::TracingLogger;
 
 pub type EmailClient = SmtpTransport;
 
@@ -51,7 +51,7 @@ pub async fn run(
             )
             // .wrap(Governor::new(&governor_conf))
             .wrap(IdentityMiddleware::default())
-            .wrap(Logger::default())
+            .wrap(TracingLogger::default())
             .wrap(SessionMiddleware::new(
                 CookieSessionStore::default(),
                 secret_key.clone(),
