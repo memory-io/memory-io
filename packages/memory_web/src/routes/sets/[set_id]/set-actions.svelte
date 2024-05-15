@@ -5,6 +5,7 @@
     import { deleteSet, updateSet } from "$lib/api/sets";
     import { invalidate, invalidateAll } from "$app/navigation";
 	import type { StudySet } from "$lib/types";
+	import { Button } from "$lib/components/ui/button";
     export let set: StudySet;
     export let own_set: boolean;
     export let edit_set: boolean;
@@ -34,17 +35,7 @@
 
         <DropdownMenu.Group>
             
-            <DropdownMenu.Item on:click={async ()=>{
-                let out = await deleteSet(set?.id ??"nol");
-                if (!out.error){
-                    window.location.href = "/sets";
-                    invalidate("/api/sets")
-                }else{
-                    toast.error(out.error);
-                }
-            }}>
-                Delete
-            </DropdownMenu.Item>
+            
             <DropdownMenu.CheckboxItem on:click={async ()=>{
                 set.visibility = is_public ? "Private" : "Public";
                 let out = await updateSet(set);
@@ -59,6 +50,21 @@
             <DropdownMenu.CheckboxItem bind:checked={edit_set} >
                 Edit
             </DropdownMenu.CheckboxItem>
+            <DropdownMenu.Item >
+                <Button class="w-full h-6" variant="destructive" on:click={async ()=>{
+                    let out = await deleteSet(set?.id ??"nol");
+                    if (!out.error){
+                        window.location.href = "/sets";
+                        invalidate("/api/sets")
+                    }else{
+                        toast.error(out.error);
+                    }
+                }}>
+                Delete
+
+                </Button>
+                
+            </DropdownMenu.Item>
         </DropdownMenu.Group>
         {/if}
     </DropdownMenu.Content>

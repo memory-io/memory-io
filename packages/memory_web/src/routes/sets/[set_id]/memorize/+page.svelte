@@ -7,6 +7,6 @@
 </script>
 
 <section class="flex flex-col gap-4">
-    
+    <h1>Coming Soon ...</h1>
 </section>
 
