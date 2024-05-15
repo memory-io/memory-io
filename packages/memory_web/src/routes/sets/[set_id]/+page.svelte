@@ -37,6 +37,7 @@
             description: description
         });
         if (!out.error){
+            invalidateAll()
             toast.success("Updated");
             
         }else{

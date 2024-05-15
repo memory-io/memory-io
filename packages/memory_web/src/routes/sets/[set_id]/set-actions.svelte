@@ -3,7 +3,7 @@
     import { MoreVertical } from "lucide-svelte";
     import { toast } from "svelte-sonner";
     import { deleteSet, updateSet } from "$lib/api/sets";
-    import { invalidate } from "$app/navigation";
+    import { invalidate, invalidateAll } from "$app/navigation";
 	import type { StudySet } from "$lib/types";
     export let set: StudySet;
     export let own_set: boolean;
@@ -56,7 +56,7 @@
             }} bind:checked={is_public}>
                 Public
             </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem bind:checked={edit_set}>
+            <DropdownMenu.CheckboxItem bind:checked={edit_set} >
                 Edit
             </DropdownMenu.CheckboxItem>
         </DropdownMenu.Group>
