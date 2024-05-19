@@ -9,11 +9,11 @@
 	import SetCard from "./set-card.svelte";
     import { toast } from "svelte-sonner";
 	import { deleteSet, updateSet } from "$lib/api/sets";
-	import SetCarosel from "../../../lib/ucomponents/set_carosel.svelte";
 	import { MoreVertical } from "lucide-svelte";
 	import { invalidate, invalidateAll } from "$app/navigation";
 	import SetActions from "./set-actions.svelte";
 	import { Input } from "$lib/components/ui/input";
+	import SetCarosel from "$lib/ucomponents/set_carosel.svelte";
 
     export let data;
     if (data.set == undefined ){

@@ -5,6 +5,8 @@ interface User{
 	id: ObjectId,
     username:string,
 	email:string,
+	paid_user:boolean,
+	verified: boolean
 }
 interface StudySetWithCards{
 	id: ObjectId
@@ -13,13 +15,6 @@ interface StudySetWithCards{
 	user_id: ObjectId,
 	visibility: string,
 	cards: Card[]
-}
-interface User{
-	id: ObjectId,
-	email: string,
-	username: string,
-	paid_user: boolean
-
 }
 
 interface StudySet{
@@ -35,4 +30,18 @@ interface Card{
 	front: string,
 	back: string
 }
-export type {StudySet,Card,StudySetWithCards,User,ObjectId}
+
+interface MemorizeData{
+	id: ObjectId,
+    set_id: ObjectId,
+    user_id: ObjectId,
+    last_answered: string,
+    answers: MemorizeCardData[],
+}
+interface MemorizeCardData{
+	card_id: string,
+	correct: boolean,
+	last_answered: string,
+}
+
+export type {StudySet,Card,StudySetWithCards,User,ObjectId,MemorizeData,MemorizeCardData}

@@ -1,4 +1,4 @@
-import type { StudySetWithCards } from "$lib/types";
+import type { Card } from "$lib/types";
 
 
 type Question = {
@@ -8,16 +8,19 @@ type Question = {
 }
 
 
-function GenerateQuiz(set: StudySetWithCards): Question[]{
+function GenerateQuiz(cards: Card[],extra_answers?: string[]): Question[]{
     const questions: Question[] = [];
-    for (let i = 0; i < set.cards.length; i++){
-        const card = set.cards[i];
+    for (let i = 0; i < cards.length; i++){
+        const card = cards[i];
         const question: Question = {
             question: card.front,
             answer: card.back,
             options: []
         }
-        let options = set.cards.map(card => card.back);
+        let options = cards.map(card => card.back);
+        if (extra_answers){
+            options = options.concat(extra_answers);
+        }
         options = options.filter(option => option != card.back);
         options = options.sort(() => Math.random() - 0.5);
         question.options = options.slice(0,3);
@@ -25,10 +28,6 @@ function GenerateQuiz(set: StudySetWithCards): Question[]{
         questions.push(question);
     }
     return questions;
-
-
-    
-
 }
 
 

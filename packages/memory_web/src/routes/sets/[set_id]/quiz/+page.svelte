@@ -4,6 +4,7 @@
 	import Formatter from "$lib/ucomponents/formatter.svelte";
 	import { GenerateQuiz } from "$lib/generator/quiz.js";
 	import QuizSettings from "./quiz-settings.svelte";
+	import MultipleChoice from "$lib/ucomponents/multiple-choice.svelte";
     function shuffle(array: any[]) {
         let currentIndex = array.length;
 
@@ -24,19 +25,36 @@
     let currentQuestion = 0;
     let correct = 0;
     let wrong = 0;
+    let answered:string | null = null;
     if (data.set == undefined ){
         console.log("No set data")
         throw new Error("No set data")
         
     }
-    const quiz = GenerateQuiz(data.set);
-    let answered: string | null = null;
+    const quiz = GenerateQuiz(data.set.cards);
     
     let currentOptions;
     $:  {
         currentOptions = shuffle(quiz[currentQuestion].options);
         
     };
+    function nextQuestion(){
+        currentQuestion++;
+        answered = null;
+    }
+
+    function selected(choice:string){
+        answered = choice;
+        if (choice == quiz[currentQuestion].answer){
+            correct++;
+            
+        }else{
+            wrong++;
+            
+        }
+
+       
+    }
 
 
     
@@ -62,59 +80,18 @@
         </Card.Content>
     </Card.Root>
 
-    <Card.Root>
-        <Card.Header>
-            <span class="pl-4 text-wrap text-lg">
-                <Formatter data={quiz[currentQuestion].question}/>
-            </span>
-  
-        </Card.Header>
-        <Card.Content>
-            <div class="flex flex-col gap-3">
-               
-                <!-- Answer Choices -->
-                <div class="grid grid-cols-2 gap-2 ">
-                    {#each quiz[currentQuestion].options as choice}
-                        <Button class={"h-24 text-primary bg-primary-foreground hover:bg-secondary "+(answered != null ?  choice == quiz[currentQuestion].answer? "bg-green-800  hover:bg-green-700" : "bg-red-800 hover:bg-red-700" : "")} on:click={()=>{
-                            if (answered != null){
-                                return;
-                            }
-                            
-                            answered = choice
-                            if (quiz != undefined && choice == quiz[currentQuestion].answer){
-                                correct++;
-                                
-                            }else{
-                                wrong++;
-                            }
-                        }}>
-                            <Formatter data={choice}/>
-                        </Button>
-                    {/each}
-                    
+    <MultipleChoice 
+    question={quiz[currentQuestion].question} 
+    choices={quiz[currentQuestion].options} 
+    selected={selected}
+    answered={answered}
+    answer={quiz[currentQuestion].answer}
+    />
+    {#if answered != null}
+    <Button on:click={nextQuestion}>Next</Button>
+    {/if}
 
-                </div> 
-                {#if answered != null && currentQuestion + 1 != quiz.length}
-                    <Button on:click={()=>{
-                        answered = null;
-                        currentQuestion++;
-                    }}>
-                        Next
-                    </Button> 
-                {/if}
-                {#if answered != null && currentQuestion + 1 == quiz.length}
-                    <Button on:click={()=>{
-                        answered = null;
-                        currentQuestion++;
-                    }}>
-                        Complete
-                    </Button> 
-                {/if}
-               
-            </div>
-            
-        </Card.Content>
-    </Card.Root>
+    
     {/if}
     {#if quiz && data.set != undefined && currentQuestion+1 >= quiz.length}
     <Card.Root>

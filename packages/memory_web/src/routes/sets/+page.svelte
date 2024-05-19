@@ -32,7 +32,7 @@
     <div class="flex flex-row gap-5 justify-start">
         <NewSet/>
         <ImportSet/>
-        {#if data.user.paid_user}
+        {#if data.user?.paid_user ?? false}
         <Button variant="link" href="/sets/generation">Generate Set</Button>
         {:else}
         <Tooltip.Root>

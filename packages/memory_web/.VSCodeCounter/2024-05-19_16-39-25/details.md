@@ -1,0 +1,145 @@
+# Details
+
+Date : 2024-05-19 16:39:25
+
+Directory /Users/connerreplogle/dev/memory-io/packages/memory_web
+
+Total : 130 files,  10233 codes, 57 comments, 781 blanks, all 11071 lines
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Files
+| filename | language | code | comment | blank | total |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| [.dockerignore](/.dockerignore) | Ignore | 16 | 0 | 1 | 17 |
+| [.eslintrc.cjs](/.eslintrc.cjs) | JavaScript | 30 | 1 | 1 | 32 |
+| [.prettierignore](/.prettierignore) | Ignore | 3 | 1 | 1 | 5 |
+| [.prettierrc](/.prettierrc) | JSON | 15 | 0 | 1 | 16 |
+| [Dockerfile](/Dockerfile) | Docker | 16 | 0 | 1 | 17 |
+| [README.md](/README.md) | Markdown | 24 | 0 | 15 | 39 |
+| [components.json](/components.json) | JSON | 14 | 0 | 0 | 14 |
+| [my-server.js](/my-server.js) | JavaScript | 16 | 0 | 3 | 19 |
+| [package-lock.json](/package-lock.json) | JSON | 6,616 | 0 | 1 | 6,617 |
+| [package.json](/package.json) | JSON | 68 | 0 | 1 | 69 |
+| [postcss.config.cjs](/postcss.config.cjs) | JavaScript | 9 | 2 | 4 | 15 |
+| [src/app.d.ts](/src/app.d.ts) | TypeScript | 12 | 3 | 4 | 19 |
+| [src/app.html](/src/app.html) | HTML | 13 | 0 | 3 | 16 |
+| [src/app.pcss](/src/app.pcss) | PostCSS | 65 | 0 | 22 | 87 |
+| [src/hooks.server.ts](/src/hooks.server.ts) | TypeScript | 18 | 0 | 4 | 22 |
+| [src/lib/api/api.ts](/src/lib/api/api.ts) | TypeScript | 1 | 0 | 0 | 1 |
+| [src/lib/api/sets.ts](/src/lib/api/sets.ts) | TypeScript | 125 | 0 | 27 | 152 |
+| [src/lib/api/user.ts](/src/lib/api/user.ts) | TypeScript | 10 | 0 | 3 | 13 |
+| [src/lib/components/ui/avatar/avatar-fallback.svelte](/src/lib/components/ui/avatar/avatar-fallback.svelte) | Svelte | 13 | 0 | 4 | 17 |
+| [src/lib/components/ui/avatar/avatar-image.svelte](/src/lib/components/ui/avatar/avatar-image.svelte) | Svelte | 15 | 0 | 4 | 19 |
+| [src/lib/components/ui/avatar/avatar.svelte](/src/lib/components/ui/avatar/avatar.svelte) | Svelte | 15 | 0 | 4 | 19 |
+| [src/lib/components/ui/avatar/index.ts](/src/lib/components/ui/avatar/index.ts) | TypeScript | 11 | 1 | 2 | 14 |
+| [src/lib/components/ui/breadcrumb/breadcrumb-ellipsis.svelte](/src/lib/components/ui/breadcrumb/breadcrumb-ellipsis.svelte) | Svelte | 21 | 0 | 4 | 25 |
+| [src/lib/components/ui/breadcrumb/breadcrumb-item.svelte](/src/lib/components/ui/breadcrumb/breadcrumb-item.svelte) | Svelte | 13 | 0 | 4 | 17 |
+| [src/lib/components/ui/breadcrumb/breadcrumb-link.svelte](/src/lib/components/ui/breadcrumb/breadcrumb-link.svelte) | Svelte | 26 | 0 | 6 | 32 |
+| [src/lib/components/ui/breadcrumb/breadcrumb-list.svelte](/src/lib/components/ui/breadcrumb/breadcrumb-list.svelte) | Svelte | 20 | 0 | 4 | 24 |
+| [src/lib/components/ui/breadcrumb/breadcrumb-page.svelte](/src/lib/components/ui/breadcrumb/breadcrumb-page.svelte) | Svelte | 20 | 0 | 4 | 24 |
+| [src/lib/components/ui/breadcrumb/breadcrumb-separator.svelte](/src/lib/components/ui/breadcrumb/breadcrumb-separator.svelte) | Svelte | 22 | 0 | 4 | 26 |
+| [src/lib/components/ui/breadcrumb/breadcrumb.svelte](/src/lib/components/ui/breadcrumb/breadcrumb.svelte) | Svelte | 12 | 0 | 4 | 16 |
+| [src/lib/components/ui/breadcrumb/index.ts](/src/lib/components/ui/breadcrumb/index.ts) | TypeScript | 23 | 1 | 2 | 26 |
+| [src/lib/components/ui/button/button.svelte](/src/lib/components/ui/button/button.svelte) | Svelte | 22 | 0 | 4 | 26 |
+| [src/lib/components/ui/button/index.ts](/src/lib/components/ui/button/index.ts) | TypeScript | 43 | 1 | 6 | 50 |
+| [src/lib/components/ui/card/card-content.svelte](/src/lib/components/ui/card/card-content.svelte) | Svelte | 10 | 0 | 4 | 14 |
+| [src/lib/components/ui/card/card-description.svelte](/src/lib/components/ui/card/card-description.svelte) | Svelte | 10 | 0 | 4 | 14 |
+| [src/lib/components/ui/card/card-footer.svelte](/src/lib/components/ui/card/card-footer.svelte) | Svelte | 10 | 0 | 4 | 14 |
+| [src/lib/components/ui/card/card-header.svelte](/src/lib/components/ui/card/card-header.svelte) | Svelte | 10 | 0 | 4 | 14 |
+| [src/lib/components/ui/card/card-title.svelte](/src/lib/components/ui/card/card-title.svelte) | Svelte | 18 | 0 | 4 | 22 |
+| [src/lib/components/ui/card/card.svelte](/src/lib/components/ui/card/card.svelte) | Svelte | 13 | 0 | 4 | 17 |
+| [src/lib/components/ui/card/index.ts](/src/lib/components/ui/card/index.ts) | TypeScript | 21 | 1 | 3 | 25 |
+| [src/lib/components/ui/dialog/dialog-content.svelte](/src/lib/components/ui/dialog/dialog-content.svelte) | Svelte | 33 | 0 | 4 | 37 |
+| [src/lib/components/ui/dialog/dialog-description.svelte](/src/lib/components/ui/dialog/dialog-description.svelte) | Svelte | 13 | 0 | 4 | 17 |
+| [src/lib/components/ui/dialog/dialog-footer.svelte](/src/lib/components/ui/dialog/dialog-footer.svelte) | Svelte | 13 | 0 | 4 | 17 |
+| [src/lib/components/ui/dialog/dialog-header.svelte](/src/lib/components/ui/dialog/dialog-header.svelte) | Svelte | 10 | 0 | 4 | 14 |
+| [src/lib/components/ui/dialog/dialog-overlay.svelte](/src/lib/components/ui/dialog/dialog-overlay.svelte) | Svelte | 18 | 0 | 4 | 22 |
+| [src/lib/components/ui/dialog/dialog-portal.svelte](/src/lib/components/ui/dialog/dialog-portal.svelte) | Svelte | 7 | 0 | 2 | 9 |
+| [src/lib/components/ui/dialog/dialog-title.svelte](/src/lib/components/ui/dialog/dialog-title.svelte) | Svelte | 13 | 0 | 4 | 17 |
+| [src/lib/components/ui/dialog/index.ts](/src/lib/components/ui/dialog/index.ts) | TypeScript | 30 | 1 | 4 | 35 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte) | Svelte | 32 | 0 | 4 | 36 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-content.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-content.svelte) | Svelte | 24 | 0 | 4 | 28 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-item.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-item.svelte) | Svelte | 28 | 0 | 4 | 32 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-label.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-label.svelte) | Svelte | 16 | 0 | 4 | 20 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-radio-group.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-radio-group.svelte) | Svelte | 8 | 0 | 4 | 12 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-radio-item.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-radio-item.svelte) | Svelte | 32 | 0 | 4 | 36 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-separator.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-separator.svelte) | Svelte | 11 | 0 | 4 | 15 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-shortcut.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-shortcut.svelte) | Svelte | 10 | 0 | 4 | 14 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-sub-content.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-sub-content.svelte) | Svelte | 27 | 0 | 4 | 31 |
+| [src/lib/components/ui/dropdown-menu/dropdown-menu-sub-trigger.svelte](/src/lib/components/ui/dropdown-menu/dropdown-menu-sub-trigger.svelte) | Svelte | 29 | 0 | 4 | 33 |
+| [src/lib/components/ui/dropdown-menu/index.ts](/src/lib/components/ui/dropdown-menu/index.ts) | TypeScript | 45 | 1 | 3 | 49 |
+| [src/lib/components/ui/input/index.ts](/src/lib/components/ui/input/index.ts) | TypeScript | 24 | 1 | 3 | 28 |
+| [src/lib/components/ui/input/input.svelte](/src/lib/components/ui/input/input.svelte) | Svelte | 32 | 0 | 4 | 36 |
+| [src/lib/components/ui/label/index.ts](/src/lib/components/ui/label/index.ts) | TypeScript | 5 | 1 | 2 | 8 |
+| [src/lib/components/ui/label/label.svelte](/src/lib/components/ui/label/label.svelte) | Svelte | 18 | 0 | 4 | 22 |
+| [src/lib/components/ui/popover/index.ts](/src/lib/components/ui/popover/index.ts) | TypeScript | 15 | 1 | 2 | 18 |
+| [src/lib/components/ui/popover/popover-content.svelte](/src/lib/components/ui/popover/popover-content.svelte) | Svelte | 20 | 0 | 3 | 23 |
+| [src/lib/components/ui/select/index.ts](/src/lib/components/ui/select/index.ts) | TypeScript | 30 | 1 | 4 | 35 |
+| [src/lib/components/ui/select/select-content.svelte](/src/lib/components/ui/select/select-content.svelte) | Svelte | 35 | 0 | 5 | 40 |
+| [src/lib/components/ui/select/select-item.svelte](/src/lib/components/ui/select/select-item.svelte) | Svelte | 37 | 0 | 4 | 41 |
+| [src/lib/components/ui/select/select-label.svelte](/src/lib/components/ui/select/select-label.svelte) | Svelte | 13 | 0 | 4 | 17 |
+| [src/lib/components/ui/select/select-separator.svelte](/src/lib/components/ui/select/select-separator.svelte) | Svelte | 8 | 0 | 4 | 12 |
+| [src/lib/components/ui/select/select-trigger.svelte](/src/lib/components/ui/select/select-trigger.svelte) | Svelte | 24 | 0 | 4 | 28 |
+| [src/lib/components/ui/separator/index.ts](/src/lib/components/ui/separator/index.ts) | TypeScript | 5 | 1 | 2 | 8 |
+| [src/lib/components/ui/separator/separator.svelte](/src/lib/components/ui/separator/separator.svelte) | Svelte | 19 | 0 | 4 | 23 |
+| [src/lib/components/ui/sonner/index.ts](/src/lib/components/ui/sonner/index.ts) | TypeScript | 1 | 0 | 1 | 2 |
+| [src/lib/components/ui/sonner/sonner.svelte](/src/lib/components/ui/sonner/sonner.svelte) | Svelte | 18 | 0 | 3 | 21 |
+| [src/lib/components/ui/tabs/index.ts](/src/lib/components/ui/tabs/index.ts) | TypeScript | 15 | 1 | 3 | 19 |
+| [src/lib/components/ui/tabs/tabs-content.svelte](/src/lib/components/ui/tabs/tabs-content.svelte) | Svelte | 18 | 0 | 4 | 22 |
+| [src/lib/components/ui/tabs/tabs-list.svelte](/src/lib/components/ui/tabs/tabs-list.svelte) | Svelte | 16 | 0 | 4 | 20 |
+| [src/lib/components/ui/tabs/tabs-trigger.svelte](/src/lib/components/ui/tabs/tabs-trigger.svelte) | Svelte | 20 | 0 | 4 | 24 |
+| [src/lib/components/ui/textarea/index.ts](/src/lib/components/ui/textarea/index.ts) | TypeScript | 24 | 1 | 4 | 29 |
+| [src/lib/components/ui/textarea/textarea.svelte](/src/lib/components/ui/textarea/textarea.svelte) | Svelte | 28 | 0 | 4 | 32 |
+| [src/lib/components/ui/tooltip/index.ts](/src/lib/components/ui/tooltip/index.ts) | TypeScript | 12 | 1 | 3 | 16 |
+| [src/lib/components/ui/tooltip/tooltip-content.svelte](/src/lib/components/ui/tooltip/tooltip-content.svelte) | Svelte | 25 | 0 | 4 | 29 |
+| [src/lib/generator/learn.ts](/src/lib/generator/learn.ts) | TypeScript | 37 | 0 | 11 | 48 |
+| [src/lib/generator/quiz.ts](/src/lib/generator/quiz.ts) | TypeScript | 28 | 0 | 6 | 34 |
+| [src/lib/index.ts](/src/lib/index.ts) | TypeScript | 0 | 1 | 0 | 1 |
+| [src/lib/server/anthropic.ts](/src/lib/server/anthropic.ts) | TypeScript | 5 | 0 | 1 | 6 |
+| [src/lib/server/logger.ts](/src/lib/server/logger.ts) | TypeScript | 15 | 0 | 3 | 18 |
+| [src/lib/store.ts](/src/lib/store.ts) | TypeScript | 3 | 0 | 2 | 5 |
+| [src/lib/types.ts](/src/lib/types.ts) | TypeScript | 43 | 0 | 4 | 47 |
+| [src/lib/ucomponents/CardEditor.svelte](/src/lib/ucomponents/CardEditor.svelte) | Svelte | 10 | 0 | 8 | 18 |
+| [src/lib/ucomponents/Header.svelte](/src/lib/ucomponents/Header.svelte) | Svelte | 29 | 0 | 10 | 39 |
+| [src/lib/ucomponents/Sidebar.svelte](/src/lib/ucomponents/Sidebar.svelte) | Svelte | 23 | 0 | 5 | 28 |
+| [src/lib/ucomponents/formatter.svelte](/src/lib/ucomponents/formatter.svelte) | Svelte | 20 | 0 | 9 | 29 |
+| [src/lib/ucomponents/load/paste/paste_loader.svelte](/src/lib/ucomponents/load/paste/paste_loader.svelte) | Svelte | 74 | 0 | 14 | 88 |
+| [src/lib/ucomponents/load/quizlet/quizlet_loader.svelte](/src/lib/ucomponents/load/quizlet/quizlet_loader.svelte) | Svelte | 9 | 0 | 10 | 19 |
+| [src/lib/ucomponents/multiple-choice.svelte](/src/lib/ucomponents/multiple-choice.svelte) | Svelte | 28 | 1 | 11 | 40 |
+| [src/lib/ucomponents/set_carosel.svelte](/src/lib/ucomponents/set_carosel.svelte) | Svelte | 64 | 0 | 16 | 80 |
+| [src/lib/utils.ts](/src/lib/utils.ts) | TypeScript | 53 | 0 | 9 | 62 |
+| [src/routes/+layout.server.ts](/src/routes/+layout.server.ts) | TypeScript | 6 | 0 | 3 | 9 |
+| [src/routes/+layout.svelte](/src/routes/+layout.svelte) | Svelte | 31 | 0 | 9 | 40 |
+| [src/routes/+page.svelte](/src/routes/+page.svelte) | Svelte | 39 | 0 | 7 | 46 |
+| [src/routes/+page.ts](/src/routes/+page.ts) | TypeScript | 9 | 0 | 4 | 13 |
+| [src/routes/auth/login/+page.svelte](/src/routes/auth/login/+page.svelte) | Svelte | 69 | 1 | 15 | 85 |
+| [src/routes/auth/password_reset/+page.svelte](/src/routes/auth/password_reset/+page.svelte) | Svelte | 67 | 1 | 14 | 82 |
+| [src/routes/auth/password_reset/[token]/+page.svelte](/src/routes/auth/password_reset/%5Btoken%5D/+page.svelte) | Svelte | 62 | 1 | 11 | 74 |
+| [src/routes/auth/password_reset/[token]/+page.ts](/src/routes/auth/password_reset/%5Btoken%5D/+page.ts) | TypeScript | 13 | 0 | 3 | 16 |
+| [src/routes/auth/signup/+page.svelte](/src/routes/auth/signup/+page.svelte) | Svelte | 94 | 1 | 16 | 111 |
+| [src/routes/function/generate_set/+server.ts](/src/routes/function/generate_set/+server.ts) | TypeScript | 20 | 1 | 5 | 26 |
+| [src/routes/main-nav.svelte](/src/routes/main-nav.svelte) | Svelte | 57 | 0 | 13 | 70 |
+| [src/routes/search.svelte](/src/routes/search.svelte) | Svelte | 6 | 0 | 1 | 7 |
+| [src/routes/sets/+page.server.ts](/src/routes/sets/+page.server.ts) | TypeScript | 20 | 3 | 7 | 30 |
+| [src/routes/sets/+page.svelte](/src/routes/sets/+page.svelte) | Svelte | 62 | 0 | 22 | 84 |
+| [src/routes/sets/[set_id]/+layout.server.ts](/src/routes/sets/%5Bset_id%5D/+layout.server.ts) | TypeScript | 42 | 2 | 10 | 54 |
+| [src/routes/sets/[set_id]/+page.svelte](/src/routes/sets/%5Bset_id%5D/+page.svelte) | Svelte | 114 | 0 | 32 | 146 |
+| [src/routes/sets/[set_id]/memorize/+page.svelte](/src/routes/sets/%5Bset_id%5D/memorize/+page.svelte) | Svelte | 30 | 0 | 11 | 41 |
+| [src/routes/sets/[set_id]/quiz/+page.svelte](/src/routes/sets/%5Bset_id%5D/quiz/+page.svelte) | Svelte | 89 | 0 | 26 | 115 |
+| [src/routes/sets/[set_id]/quiz/quiz-settings.svelte](/src/routes/sets/%5Bset_id%5D/quiz/quiz-settings.svelte) | Svelte | 16 | 0 | 12 | 28 |
+| [src/routes/sets/[set_id]/set-actions.svelte](/src/routes/sets/%5Bset_id%5D/set-actions.svelte) | Svelte | 62 | 0 | 9 | 71 |
+| [src/routes/sets/[set_id]/set-card.svelte](/src/routes/sets/%5Bset_id%5D/set-card.svelte) | Svelte | 134 | 0 | 16 | 150 |
+| [src/routes/sets/generation/+page.svelte](/src/routes/sets/generation/+page.svelte) | Svelte | 98 | 0 | 20 | 118 |
+| [src/routes/sets/import-set.svelte](/src/routes/sets/import-set.svelte) | Svelte | 40 | 0 | 10 | 50 |
+| [src/routes/sets/new-set.svelte](/src/routes/sets/new-set.svelte) | Svelte | 74 | 0 | 9 | 83 |
+| [src/routes/settings/+page.svelte](/src/routes/settings/+page.svelte) | Svelte | 4 | 0 | 5 | 9 |
+| [src/routes/user-nav.svelte](/src/routes/user-nav.svelte) | Svelte | 70 | 1 | 8 | 79 |
+| [src/service-worker.ts](/src/service-worker.ts) | TypeScript | 54 | 12 | 14 | 80 |
+| [static/manifest.json](/static/manifest.json) | JSON | 14 | 0 | 3 | 17 |
+| [svelte.config.js](/svelte.config.js) | JavaScript | 9 | 6 | 4 | 19 |
+| [tailwind.config.js](/tailwind.config.js) | JavaScript | 61 | 1 | 3 | 65 |
+| [tsconfig.json](/tsconfig.json) | JSON with Comments | 14 | 4 | 1 | 19 |
+| [vite.config.ts](/vite.config.ts) | TypeScript | 12 | 0 | 8 | 20 |
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

@@ -1,0 +1,212 @@
+Date : 2024-05-19 16:39:25
+Directory : /Users/connerreplogle/dev/memory-io/packages/memory_web
+Total : 130 files,  10233 codes, 57 comments, 781 blanks, all 11071 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          5 |      6,727 |          0 |          6 |      6,733 |
+| Svelte             |         77 |      2,400 |          6 |        544 |      2,950 |
+| TypeScript         |         36 |        830 |         36 |        172 |      1,038 |
+| JavaScript         |          5 |        125 |         10 |         15 |        150 |
+| PostCSS            |          1 |         65 |          0 |         22 |         87 |
+| Markdown           |          1 |         24 |          0 |         15 |         39 |
+| Ignore             |          2 |         19 |          1 |          2 |         22 |
+| Docker             |          1 |         16 |          0 |          1 |         17 |
+| JSON with Comments |          1 |         14 |          4 |          1 |         19 |
+| HTML               |          1 |         13 |          0 |          3 |         16 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                           | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                              |        130 |     10,233 |         57 |        781 |     11,071 |
+| . (Files)                                                                                                                      |         15 |      6,923 |         15 |         45 |      6,983 |
+| src                                                                                                                            |        114 |      3,296 |         42 |        733 |      4,071 |
+| src (Files)                                                                                                                    |          5 |        162 |         15 |         47 |        224 |
+| src/lib                                                                                                                        |         83 |      1,806 |         16 |        388 |      2,210 |
+| src/lib (Files)                                                                                                                |          4 |         99 |          1 |         15 |        115 |
+| src/lib/api                                                                                                                    |          3 |        136 |          0 |         30 |        166 |
+| src/lib/components                                                                                                             |         64 |      1,229 |         14 |        239 |      1,482 |
+| src/lib/components/ui                                                                                                          |         64 |      1,229 |         14 |        239 |      1,482 |
+| src/lib/components/ui/avatar                                                                                                   |          4 |         54 |          1 |         14 |         69 |
+| src/lib/components/ui/breadcrumb                                                                                               |          8 |        157 |          1 |         32 |        190 |
+| src/lib/components/ui/button                                                                                                   |          2 |         65 |          1 |         10 |         76 |
+| src/lib/components/ui/card                                                                                                     |          7 |         92 |          1 |         27 |        120 |
+| src/lib/components/ui/dialog                                                                                                   |          8 |        137 |          1 |         30 |        168 |
+| src/lib/components/ui/dropdown-menu                                                                                            |         11 |        262 |          1 |         43 |        306 |
+| src/lib/components/ui/input                                                                                                    |          2 |         56 |          1 |          7 |         64 |
+| src/lib/components/ui/label                                                                                                    |          2 |         23 |          1 |          6 |         30 |
+| src/lib/components/ui/popover                                                                                                  |          2 |         35 |          1 |          5 |         41 |
+| src/lib/components/ui/select                                                                                                   |          6 |        147 |          1 |         25 |        173 |
+| src/lib/components/ui/separator                                                                                                |          2 |         24 |          1 |          6 |         31 |
+| src/lib/components/ui/sonner                                                                                                   |          2 |         19 |          0 |          4 |         23 |
+| src/lib/components/ui/tabs                                                                                                     |          4 |         69 |          1 |         15 |         85 |
+| src/lib/components/ui/textarea                                                                                                 |          2 |         52 |          1 |          8 |         61 |
+| src/lib/components/ui/tooltip                                                                                                  |          2 |         37 |          1 |          7 |         45 |
+| src/lib/generator                                                                                                              |          2 |         65 |          0 |         17 |         82 |
+| src/lib/server                                                                                                                 |          2 |         20 |          0 |          4 |         24 |
+| src/lib/ucomponents                                                                                                            |          8 |        257 |          1 |         83 |        341 |
+| src/lib/ucomponents (Files)                                                                                                    |          6 |        174 |          1 |         59 |        234 |
+| src/lib/ucomponents/load                                                                                                       |          2 |         83 |          0 |         24 |        107 |
+| src/lib/ucomponents/load/paste                                                                                                 |          1 |         74 |          0 |         14 |         88 |
+| src/lib/ucomponents/load/quizlet                                                                                               |          1 |          9 |          0 |         10 |         19 |
+| src/routes                                                                                                                     |         26 |      1,328 |         11 |        298 |      1,637 |
+| src/routes (Files)                                                                                                             |          7 |        218 |          1 |         45 |        264 |
+| src/routes/auth                                                                                                                |          5 |        305 |          4 |         59 |        368 |
+| src/routes/auth/login                                                                                                          |          1 |         69 |          1 |         15 |         85 |
+| src/routes/auth/password_reset                                                                                                 |          3 |        142 |          2 |         28 |        172 |
+| src/routes/auth/password_reset (Files)                                                                                         |          1 |         67 |          1 |         14 |         82 |
+| src/routes/auth/password_reset/[token]                                                                                         |          2 |         75 |          1 |         14 |         90 |
+| src/routes/auth/signup                                                                                                         |          1 |         94 |          1 |         16 |        111 |
+| src/routes/function                                                                                                            |          1 |         20 |          1 |          5 |         26 |
+| src/routes/function/generate_set                                                                                               |          1 |         20 |          1 |          5 |         26 |
+| src/routes/sets                                                                                                                |         12 |        781 |          5 |        184 |        970 |
+| src/routes/sets (Files)                                                                                                        |          4 |        196 |          3 |         48 |        247 |
+| src/routes/sets/[set_id]                                                                                                       |          7 |        487 |          2 |        116 |        605 |
+| src/routes/sets/[set_id] (Files)                                                                                               |          4 |        352 |          2 |         67 |        421 |
+| src/routes/sets/[set_id]/memorize                                                                                              |          1 |         30 |          0 |         11 |         41 |
+| src/routes/sets/[set_id]/quiz                                                                                                  |          2 |        105 |          0 |         38 |        143 |
+| src/routes/sets/generation                                                                                                     |          1 |         98 |          0 |         20 |        118 |
+| src/routes/settings                                                                                                            |          1 |          4 |          0 |          5 |          9 |
+| static                                                                                                                         |          1 |         14 |          0 |          3 |         17 |
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                                                       | language           | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/.dockerignore                                                          | Ignore             |         16 |          0 |          1 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/.eslintrc.cjs                                                          | JavaScript         |         30 |          1 |          1 |         32 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/.prettierignore                                                        | Ignore             |          3 |          1 |          1 |          5 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/.prettierrc                                                            | JSON               |         15 |          0 |          1 |         16 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/Dockerfile                                                             | Docker             |         16 |          0 |          1 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/README.md                                                              | Markdown           |         24 |          0 |         15 |         39 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/components.json                                                        | JSON               |         14 |          0 |          0 |         14 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/my-server.js                                                           | JavaScript         |         16 |          0 |          3 |         19 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/package-lock.json                                                      | JSON               |      6,616 |          0 |          1 |      6,617 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/package.json                                                           | JSON               |         68 |          0 |          1 |         69 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/postcss.config.cjs                                                     | JavaScript         |          9 |          2 |          4 |         15 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/app.d.ts                                                           | TypeScript         |         12 |          3 |          4 |         19 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/app.html                                                           | HTML               |         13 |          0 |          3 |         16 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/app.pcss                                                           | PostCSS            |         65 |          0 |         22 |         87 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/hooks.server.ts                                                    | TypeScript         |         18 |          0 |          4 |         22 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/api/api.ts                                                     | TypeScript         |          1 |          0 |          0 |          1 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/api/sets.ts                                                    | TypeScript         |        125 |          0 |         27 |        152 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/api/user.ts                                                    | TypeScript         |         10 |          0 |          3 |         13 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/avatar/avatar-fallback.svelte                    | Svelte             |         13 |          0 |          4 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/avatar/avatar-image.svelte                       | Svelte             |         15 |          0 |          4 |         19 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/avatar/avatar.svelte                             | Svelte             |         15 |          0 |          4 |         19 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/avatar/index.ts                                  | TypeScript         |         11 |          1 |          2 |         14 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/breadcrumb/breadcrumb-ellipsis.svelte            | Svelte             |         21 |          0 |          4 |         25 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/breadcrumb/breadcrumb-item.svelte                | Svelte             |         13 |          0 |          4 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/breadcrumb/breadcrumb-link.svelte                | Svelte             |         26 |          0 |          6 |         32 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/breadcrumb/breadcrumb-list.svelte                | Svelte             |         20 |          0 |          4 |         24 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/breadcrumb/breadcrumb-page.svelte                | Svelte             |         20 |          0 |          4 |         24 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/breadcrumb/breadcrumb-separator.svelte           | Svelte             |         22 |          0 |          4 |         26 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/breadcrumb/breadcrumb.svelte                     | Svelte             |         12 |          0 |          4 |         16 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/breadcrumb/index.ts                              | TypeScript         |         23 |          1 |          2 |         26 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/button/button.svelte                             | Svelte             |         22 |          0 |          4 |         26 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/button/index.ts                                  | TypeScript         |         43 |          1 |          6 |         50 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/card/card-content.svelte                         | Svelte             |         10 |          0 |          4 |         14 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/card/card-description.svelte                     | Svelte             |         10 |          0 |          4 |         14 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/card/card-footer.svelte                          | Svelte             |         10 |          0 |          4 |         14 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/card/card-header.svelte                          | Svelte             |         10 |          0 |          4 |         14 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/card/card-title.svelte                           | Svelte             |         18 |          0 |          4 |         22 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/card/card.svelte                                 | Svelte             |         13 |          0 |          4 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/card/index.ts                                    | TypeScript         |         21 |          1 |          3 |         25 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dialog/dialog-content.svelte                     | Svelte             |         33 |          0 |          4 |         37 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dialog/dialog-description.svelte                 | Svelte             |         13 |          0 |          4 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dialog/dialog-footer.svelte                      | Svelte             |         13 |          0 |          4 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dialog/dialog-header.svelte                      | Svelte             |         10 |          0 |          4 |         14 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dialog/dialog-overlay.svelte                     | Svelte             |         18 |          0 |          4 |         22 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dialog/dialog-portal.svelte                      | Svelte             |          7 |          0 |          2 |          9 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dialog/dialog-title.svelte                       | Svelte             |         13 |          0 |          4 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dialog/index.ts                                  | TypeScript         |         30 |          1 |          4 |         35 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte | Svelte             |         32 |          0 |          4 |         36 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-content.svelte       | Svelte             |         24 |          0 |          4 |         28 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-item.svelte          | Svelte             |         28 |          0 |          4 |         32 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-label.svelte         | Svelte             |         16 |          0 |          4 |         20 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-radio-group.svelte   | Svelte             |          8 |          0 |          4 |         12 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-radio-item.svelte    | Svelte             |         32 |          0 |          4 |         36 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-separator.svelte     | Svelte             |         11 |          0 |          4 |         15 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-shortcut.svelte      | Svelte             |         10 |          0 |          4 |         14 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-sub-content.svelte   | Svelte             |         27 |          0 |          4 |         31 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/dropdown-menu-sub-trigger.svelte   | Svelte             |         29 |          0 |          4 |         33 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/dropdown-menu/index.ts                           | TypeScript         |         45 |          1 |          3 |         49 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/input/index.ts                                   | TypeScript         |         24 |          1 |          3 |         28 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/input/input.svelte                               | Svelte             |         32 |          0 |          4 |         36 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/label/index.ts                                   | TypeScript         |          5 |          1 |          2 |          8 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/label/label.svelte                               | Svelte             |         18 |          0 |          4 |         22 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/popover/index.ts                                 | TypeScript         |         15 |          1 |          2 |         18 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/popover/popover-content.svelte                   | Svelte             |         20 |          0 |          3 |         23 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/select/index.ts                                  | TypeScript         |         30 |          1 |          4 |         35 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/select/select-content.svelte                     | Svelte             |         35 |          0 |          5 |         40 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/select/select-item.svelte                        | Svelte             |         37 |          0 |          4 |         41 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/select/select-label.svelte                       | Svelte             |         13 |          0 |          4 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/select/select-separator.svelte                   | Svelte             |          8 |          0 |          4 |         12 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/select/select-trigger.svelte                     | Svelte             |         24 |          0 |          4 |         28 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/separator/index.ts                               | TypeScript         |          5 |          1 |          2 |          8 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/separator/separator.svelte                       | Svelte             |         19 |          0 |          4 |         23 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/sonner/index.ts                                  | TypeScript         |          1 |          0 |          1 |          2 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/sonner/sonner.svelte                             | Svelte             |         18 |          0 |          3 |         21 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/tabs/index.ts                                    | TypeScript         |         15 |          1 |          3 |         19 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/tabs/tabs-content.svelte                         | Svelte             |         18 |          0 |          4 |         22 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/tabs/tabs-list.svelte                            | Svelte             |         16 |          0 |          4 |         20 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/tabs/tabs-trigger.svelte                         | Svelte             |         20 |          0 |          4 |         24 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/textarea/index.ts                                | TypeScript         |         24 |          1 |          4 |         29 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/textarea/textarea.svelte                         | Svelte             |         28 |          0 |          4 |         32 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/tooltip/index.ts                                 | TypeScript         |         12 |          1 |          3 |         16 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/components/ui/tooltip/tooltip-content.svelte                   | Svelte             |         25 |          0 |          4 |         29 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/generator/learn.ts                                             | TypeScript         |         37 |          0 |         11 |         48 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/generator/quiz.ts                                              | TypeScript         |         28 |          0 |          6 |         34 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/index.ts                                                       | TypeScript         |          0 |          1 |          0 |          1 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/server/anthropic.ts                                            | TypeScript         |          5 |          0 |          1 |          6 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/server/logger.ts                                               | TypeScript         |         15 |          0 |          3 |         18 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/store.ts                                                       | TypeScript         |          3 |          0 |          2 |          5 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/types.ts                                                       | TypeScript         |         43 |          0 |          4 |         47 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/ucomponents/CardEditor.svelte                                  | Svelte             |         10 |          0 |          8 |         18 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/ucomponents/Header.svelte                                      | Svelte             |         29 |          0 |         10 |         39 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/ucomponents/Sidebar.svelte                                     | Svelte             |         23 |          0 |          5 |         28 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/ucomponents/formatter.svelte                                   | Svelte             |         20 |          0 |          9 |         29 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/ucomponents/load/paste/paste_loader.svelte                     | Svelte             |         74 |          0 |         14 |         88 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/ucomponents/load/quizlet/quizlet_loader.svelte                 | Svelte             |          9 |          0 |         10 |         19 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/ucomponents/multiple-choice.svelte                             | Svelte             |         28 |          1 |         11 |         40 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/ucomponents/set_carosel.svelte                                 | Svelte             |         64 |          0 |         16 |         80 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/lib/utils.ts                                                       | TypeScript         |         53 |          0 |          9 |         62 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/+layout.server.ts                                           | TypeScript         |          6 |          0 |          3 |          9 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/+layout.svelte                                              | Svelte             |         31 |          0 |          9 |         40 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/+page.svelte                                                | Svelte             |         39 |          0 |          7 |         46 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/+page.ts                                                    | TypeScript         |          9 |          0 |          4 |         13 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/auth/login/+page.svelte                                     | Svelte             |         69 |          1 |         15 |         85 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/auth/password_reset/+page.svelte                            | Svelte             |         67 |          1 |         14 |         82 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/auth/password_reset/[token]/+page.svelte                    | Svelte             |         62 |          1 |         11 |         74 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/auth/password_reset/[token]/+page.ts                        | TypeScript         |         13 |          0 |          3 |         16 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/auth/signup/+page.svelte                                    | Svelte             |         94 |          1 |         16 |        111 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/function/generate_set/+server.ts                            | TypeScript         |         20 |          1 |          5 |         26 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/main-nav.svelte                                             | Svelte             |         57 |          0 |         13 |         70 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/search.svelte                                               | Svelte             |          6 |          0 |          1 |          7 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/+page.server.ts                                        | TypeScript         |         20 |          3 |          7 |         30 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/+page.svelte                                           | Svelte             |         62 |          0 |         22 |         84 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/[set_id]/+layout.server.ts                             | TypeScript         |         42 |          2 |         10 |         54 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/[set_id]/+page.svelte                                  | Svelte             |        114 |          0 |         32 |        146 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/[set_id]/memorize/+page.svelte                         | Svelte             |         30 |          0 |         11 |         41 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/[set_id]/quiz/+page.svelte                             | Svelte             |         89 |          0 |         26 |        115 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/[set_id]/quiz/quiz-settings.svelte                     | Svelte             |         16 |          0 |         12 |         28 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/[set_id]/set-actions.svelte                            | Svelte             |         62 |          0 |          9 |         71 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/[set_id]/set-card.svelte                               | Svelte             |        134 |          0 |         16 |        150 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/generation/+page.svelte                                | Svelte             |         98 |          0 |         20 |        118 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/import-set.svelte                                      | Svelte             |         40 |          0 |         10 |         50 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/sets/new-set.svelte                                         | Svelte             |         74 |          0 |          9 |         83 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/settings/+page.svelte                                       | Svelte             |          4 |          0 |          5 |          9 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/routes/user-nav.svelte                                             | Svelte             |         70 |          1 |          8 |         79 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/src/service-worker.ts                                                  | TypeScript         |         54 |         12 |         14 |         80 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/static/manifest.json                                                   | JSON               |         14 |          0 |          3 |         17 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/svelte.config.js                                                       | JavaScript         |          9 |          6 |          4 |         19 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/tailwind.config.js                                                     | JavaScript         |         61 |          1 |          3 |         65 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/tsconfig.json                                                          | JSON with Comments |         14 |          4 |          1 |         19 |
+| /Users/connerreplogle/dev/memory-io/packages/memory_web/vite.config.ts                                                         | TypeScript         |         12 |          0 |          8 |         20 |
+| Total                                                                                                                          |                    |     10,233 |         57 |        781 |     11,071 |
++--------------------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
