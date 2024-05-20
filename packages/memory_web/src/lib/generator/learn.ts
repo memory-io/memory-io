@@ -1,8 +1,8 @@
-import type { MemorizeData, StudySetWithCards } from "$lib/types";
+import type { MemorizeCardQuestionData, MemorizeData, ObjectId, StudySetWithCards } from "$lib/types";
 import { GenerateQuiz } from "./quiz";
 
 
-async function GenerateRound(data: MemorizeData | null, set: StudySetWithCards,size: number){
+ function GenerateRound(data: MemorizeData | null, set: StudySetWithCards,size: number){
     const cards = set.cards;
     if (data == null || data.answers.length == 0){
         const round = [];
@@ -22,8 +22,11 @@ async function GenerateRound(data: MemorizeData | null, set: StudySetWithCards,s
         if (card_data.correct){
             card_score.correct++;
         }else{
-            card_score.wrong++;
+            card_score.wrong+=1;
+            card_score.wrong += card_data.difficulty -3;
         }
+
+       
         scores.set(data!.answers[i].card_id, card_score);
     }
     console.log(scores);
@@ -32,7 +35,7 @@ async function GenerateRound(data: MemorizeData | null, set: StudySetWithCards,s
     );
     console.log(scores_sorted);
     const round = [];
-    for (let i = 0; i < size; i++){
+    for (let i = 0; i < Math.min(scores_sorted.length,size) ; i++){
         round.push(cards.find(card => card.id == scores_sorted[i][0])!);
     }
 
@@ -43,6 +46,16 @@ async function GenerateRound(data: MemorizeData | null, set: StudySetWithCards,s
     return quiz;
 
 }
+async function submitResults(results: MemorizeCardQuestionData[],set_id:ObjectId){
+    await fetch(`/api/memorize/${set_id.$oid}`, { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(results)
+    });
 
 
-export { GenerateRound}
+}
+
+export { GenerateRound,submitResults}

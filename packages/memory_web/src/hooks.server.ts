@@ -14,6 +14,10 @@ export const handle: Handle = async ({ event, resolve }) => {
         const user:User = await data.json();
         logger.trace(`Got user ${user}`)
 	    event.locals.user = user;
+    }else{
+        event.locals.user = null;
+
+
     }
     
 	const response = await resolve(event);

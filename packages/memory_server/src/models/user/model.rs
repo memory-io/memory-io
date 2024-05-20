@@ -35,6 +35,9 @@ pub struct UserSignup {
     pub password: String,
     #[serde(default, skip_deserializing)]
     pub paid_user: bool,
+    #[serde(default, skip_deserializing)]
+    pub verified: bool,
+
 }
 
 #[derive(Deserialize, Serialize, Debug)]

@@ -3,8 +3,8 @@ use std::mem;
 use bson::{doc, oid::ObjectId};
 use tracing::debug;
 use tracing_subscriber::field::debug;
-
-use crate::models::memorize::model::Memorize;
+use anyhow::bail;
+use crate::models::{memorize::model::Memorize, set::get_set};
 
 use super::MongoDatabase;
 
@@ -29,7 +29,7 @@ pub async fn add_memorize_data(
     db: &MongoDatabase,
     user_id: ObjectId,
     set_id: ObjectId,
-    mut answers: Vec<model::MemorizeCardData>,
+    mut answers: Vec<model::MemorizeCardQuestionData>,
 ) -> Result<(), mongodb::error::Error> {
     debug!("Adding memorise data");
     let memorize = get_memorize_data(db, user_id, set_id).await?;
@@ -61,3 +61,4 @@ pub async fn add_memorize_data(
     debug!("Finished adding memorize data");
     return Ok(());
 }
+

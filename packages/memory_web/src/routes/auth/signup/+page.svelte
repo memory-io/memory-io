@@ -23,10 +23,9 @@
     }else{
       check_username(username).then((res) => {
         valid_username = true;
-        username_error =""
-
+        username_error ="";
       }).catch((e) => {
-        valid_username=false;
+        valid_username = false;
         username_error = e.message;
       });
       

@@ -2,9 +2,11 @@ import type { MemorizeData, StudySetWithCards } from "$lib/types";
 import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = async ({params ,fetch}) => {
+export const load: LayoutServerLoad = async ({params ,fetch,locals}) => {
     const set_id = params.set_id;
-
+    if (locals.user == null){
+        throw redirect(301,"/auth/login");
+    }
     //request the url at localhost:8000/api/auth/signup
     const set_response = await fetch(`/api/sets/${set_id}?includeCards=true`, { 
         method: 'GET',

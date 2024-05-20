@@ -1,9 +1,10 @@
 use mongodb::{Client, Database};
 pub mod card;
 pub mod folder;
+pub mod memorize;
 pub mod set;
 pub mod user;
-pub mod memorize;
+
 #[derive(Clone)]
 pub struct MongoDatabase {
     pub client: Client,

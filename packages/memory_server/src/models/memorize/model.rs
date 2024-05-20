@@ -4,17 +4,18 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Memorize {
     #[serde(alias = "_id")]
+    #[serde(skip_serializing)]
     pub id: ObjectId,
     pub set_id: ObjectId,
     pub user_id: ObjectId,
     pub last_answered: bson::DateTime,
-    pub answers: Vec<MemorizeCardData>,
+    pub answers: Vec<MemorizeCardQuestionData>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
-pub struct MemorizeCardData {
+pub struct MemorizeCardQuestionData {
     pub card_id: bson::Uuid,
     pub correct: bool,
-    pub when: bson::DateTime,
-    
+    pub answer: String,
+    pub difficulty: Option<u32>,
 }

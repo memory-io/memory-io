@@ -36,12 +36,13 @@ interface MemorizeData{
     set_id: ObjectId,
     user_id: ObjectId,
     last_answered: string,
-    answers: MemorizeCardData[],
+    answers: MemorizeCardQuestionData[],
 }
-interface MemorizeCardData{
+interface MemorizeCardQuestionData{
 	card_id: string,
+	answer: string,
 	correct: boolean,
-	last_answered: string,
+	difficulty: number ,
 }
 
-export type {StudySet,Card,StudySetWithCards,User,ObjectId,MemorizeData,MemorizeCardData}
+export type {StudySet,Card,StudySetWithCards,User,ObjectId,MemorizeData,MemorizeCardQuestionData}

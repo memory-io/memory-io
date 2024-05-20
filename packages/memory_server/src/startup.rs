@@ -12,7 +12,7 @@ use actix_cors::Cors;
 use actix_identity::IdentityMiddleware;
 use actix_session::storage::CookieSessionStore;
 use actix_session::SessionMiddleware;
-use actix_web::{cookie::Key, dev::Server, web, App, HttpServer};
+use actix_web::{cookie::Key, dev::Server, middleware::Logger, web, App, HttpServer};
 use lettre::SmtpTransport;
 
 use mongodb::{bson::doc, options::IndexOptions, IndexModel};
@@ -51,7 +51,7 @@ pub async fn run(
             )
             // .wrap(Governor::new(&governor_conf))
             .wrap(IdentityMiddleware::default())
-            .wrap(TracingLogger::default())
+            .wrap(Logger::default())
             .wrap(SessionMiddleware::new(
                 CookieSessionStore::default(),
                 secret_key.clone(),

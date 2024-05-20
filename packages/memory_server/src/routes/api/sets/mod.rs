@@ -10,17 +10,13 @@ use actix_web::{
     HttpResponse, Responder,
 };
 
-use mongodb::{bson::oid::ObjectId};
+use mongodb::bson::oid::ObjectId;
 
 use serde::Deserialize;
 use tracing::{debug, error, instrument};
 
-
 use crate::models::set;
-use crate::models::{
-    set::model::{SetVisibility},
-    MongoDatabase,
-};
+use crate::models::{set::model::SetVisibility, MongoDatabase};
 use modify::*;
 
 pub fn factory(cfg: &mut web::ServiceConfig) {

@@ -23,7 +23,7 @@
             <!-- Answer Choices -->
             <div class="grid grid-cols-2 gap-2 ">
                 {#each choices as choice}
-                    <Button class={"h-24 text-primary bg-primary-foreground hover:bg-secondary "+(answered != null ? (answered == choice? "bg-green-800  hover:bg-green-700" : "bg-red-800 hover:bg-red-700" ): "")} on:click={()=>selected(choice)}>
+                    <Button class={"h-24 text-primary bg-primary-foreground hover:bg-secondary "+(answered != null ? (choice == answer? "bg-green-800  hover:bg-green-700" : "bg-red-800 hover:bg-red-700" ): "")} on:click={()=>selected(choice)}>
                         <Formatter data={choice}/>
                     </Button>
                 {/each}

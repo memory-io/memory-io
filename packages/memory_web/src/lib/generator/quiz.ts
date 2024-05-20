@@ -2,6 +2,7 @@ import type { Card } from "$lib/types";
 
 
 type Question = {
+    card_id: string,
     question: string,
     answer: string,
     options: string[]
@@ -13,6 +14,7 @@ function GenerateQuiz(cards: Card[],extra_answers?: string[]): Question[]{
     for (let i = 0; i < cards.length; i++){
         const card = cards[i];
         const question: Question = {
+            card_id: card.id,
             question: card.front,
             answer: card.back,
             options: []
