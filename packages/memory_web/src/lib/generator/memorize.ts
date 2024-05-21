@@ -51,9 +51,10 @@ class MemorizeGenerator{
 
         // Make it so older answers are disregarded
         // Make it select randomly from the top 20% of cards for new card
+        const usable_scores = this.scores.filter(score => !this.last_seen.includes(score.id));
         let index;
-        if (Math.random() < 0.9){
-            index = Math.floor(rSkewNorm(0,0,2,0,this.scores.length));
+        if (Math.random() < 0.8){
+            index = Math.floor(rSkewNorm(0,0,4,0,usable_scores.length));
         }else{
             const indexOfHidden = this.scores.findIndex(score => score.correct == 0 && score.wrong == 0);
             const middle_of_hidden = indexOfHidden + (this.scores.length-indexOfHidden)/2;
@@ -61,7 +62,7 @@ class MemorizeGenerator{
             index = Math.floor(rSkewNorm(0,middle_of_hidden,5,indexOfHidden,this.scores.length));
         }
         console.log(index)
-        const card = this.set.cards.find(card => card.id == this.scores[index]?.id);
+        const card = this.set.cards.find(card => card.id == usable_scores[index]?.id);
         if (card == undefined){
             throw new Error("card not found");
         }
@@ -90,6 +91,9 @@ class MemorizeGenerator{
 
     async SubmitAnswer(this: MemorizeGenerator, answer: string,  difficulty: number){
         this.last_seen.push(this.question!.card_id);
+        if (this.last_seen.length > 5){
+            this.last_seen.shift();
+        }
         const data = {card_id: this.question!.card_id, answer, correct:this.question!.answer == answer, difficulty};
         this.data.answers.push(data);
         this.CalculateScore();

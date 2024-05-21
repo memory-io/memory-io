@@ -32,13 +32,14 @@
     function selected(choice:string){
         answered = choice;
     }
-    let results:Array<{question:string,correct:number,wrong:number,struggling: boolean}> | null = null;
+    let results:Array<{question:string,correct:number,wrong:number,struggling: boolean,cooldown: number}> | null = null;
     $: results = Array.from(generator.scores?.values()!).map((score) => {
         return {
             question:data.set.cards.find((a)=> a.id == score.id)!.front,
             correct:score.correct,
             wrong:score.wrong,
-            struggling: score.struggling
+            struggling: score.struggling,
+            cooldown: generator.last_seen.findIndex((a) => a == score.id)
         }
     });
     
@@ -93,7 +94,7 @@
             {#if score.correct != 0 || score.wrong != 0}
             <div class="flex flex-row max-w-full w-full justify-between">
                 <div class="overflow-hidden text-nowrap text-ellipsis">
-                    <p>{score.question}</p>
+                    <p>{score.question} {score.cooldown == -1 ? "":score.cooldown}</p>
                 </div>
 
                 <div class="w-96  h-6 flex-row flex justify-between">
