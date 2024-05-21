@@ -8,7 +8,6 @@
 	import Difficulty from "./difficulty.svelte";
     export let data;
     let generator = new MemorizeGenerator(data.memorize_data ?? null,data.set!);  
-    generator.NextQuestion();
     
     let answered:string | null = null;
     if (data.set == undefined ){
@@ -25,16 +24,21 @@
         difficulty = 3;
         answered = null;
     }
+    async function start(){
+        generator.NextQuestion();
+        generator = generator;
+    }
 
     function selected(choice:string){
         answered = choice;
     }
-    let results:Array<{question:string,correct:number,wrong:number}> | null = null;
-    $: results = Array.from(generator.scores?.values()!).sort((a,b) => b.correct - a.correct).map((score) => {
+    let results:Array<{question:string,correct:number,wrong:number,struggling: boolean}> | null = null;
+    $: results = Array.from(generator.scores?.values()!).map((score) => {
         return {
             question:data.set.cards.find((a)=> a.id == score.id)!.front,
             correct:score.correct,
-            wrong:score.wrong
+            wrong:score.wrong,
+            struggling: score.struggling
         }
     });
     
@@ -46,6 +50,11 @@
 </script>
 
 <section class="flex flex-col gap-4">
+    {#if !generator.question}
+    <div class="flex flex-row justify-center gap-4">
+        <Button on:click={start}>Start</Button>
+    </div>
+    {/if}
     {#if generator.question && data.set != undefined }
 
     <MultipleChoice 
@@ -74,32 +83,43 @@
 
     
     {/if}
-    {#each results as score}
-    {#if score.correct != 0 || score.wrong != 0}
+    
     <Card.Root>
         <Card.Header>
-            <Card.Title>{score.question}</Card.Title>
-  
+            <Card.Title>Memorize Data</Card.Title>
         </Card.Header>
-        <Card.Content>
-            <div class="flex flex-row max-w-full w-full">
-                <div class="bg-green-600 h-6 flex flex-row justify-center" style="width: {score.correct * 10}%">
-                    {#if score.correct != 0}
-                    <p>{score.correct}</p>
-                    {/if}
+        <Card.Content class="flex flex-col gap-2">
+            {#each results as score}
+            {#if score.correct != 0 || score.wrong != 0}
+            <div class="flex flex-row max-w-full w-full justify-between">
+                <div class="overflow-hidden text-nowrap text-ellipsis">
+                    <p>{score.question}</p>
                 </div>
-                <div class="bg-red-600 h-6 flex flex-row justify-center" style="width: {score.wrong * 10}%">
-                    {#if score.wrong != 0}
-                    <p>{score.wrong}</p>
-                    {/if}
+
+                <div class="w-96  h-6 flex-row flex justify-between">
+                    <div class={'w-20 mr-2' + (score.struggling ? " text-red-500":"")}>
+                        <p>{((score.correct/(score.wrong+score.correct))*100).toFixed(0)}%</p>
+                    </div>
+                    <div class="bg-green-600 h-6 flex flex-row justify-center rounded-md" style="width: {(score.correct/(score.wrong+score.correct))*100}%">
+                        {#if score.correct != 0}
+                        <p>{score.correct}</p>
+                        {/if}
+                    </div>
+                    <div class="bg-red-600 h-6 flex flex-row justify-center rounded-md" style="width: {(score.wrong/(score.wrong+score.correct))*100}%">
+                        {#if score.wrong != 0}
+                        <p>{score.wrong}</p>
+                        {/if}
+                    </div>
+                  
                 </div>
+            </div>
+            {/if}
+            {/each}
       
         </Card.Content>
    
     </Card.Root>
-    {/if}
-        
-    {/each}
+   
 
 </section>
 
