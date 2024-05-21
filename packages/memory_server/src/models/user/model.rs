@@ -1,5 +1,6 @@
 use bson::oid::ObjectId;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
+use serde_json::Value;
 use validator::Validate;
 #[derive(Deserialize, Serialize, Debug)]
 pub struct User {
@@ -13,6 +14,8 @@ pub struct User {
     #[serde(default)]
     pub verified: bool,
 }
+
+
 
 impl User {
     pub fn validate(&self) -> Result<(), &str> {
@@ -47,7 +50,9 @@ pub struct UserSendable {
     pub id: ObjectId,
     pub username: String,
     pub email: String,
+    #[serde(default)]
     pub paid_user: bool,
+    #[serde(default)]
     pub verified: bool,
 }
 
