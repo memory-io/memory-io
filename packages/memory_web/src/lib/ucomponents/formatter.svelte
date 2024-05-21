@@ -20,7 +20,7 @@
 {#await html }
     <h1>Loading..</h1>
 {:then cleaned} 
-    <markdown >
+    <markdown class="text-wrap">
     {@html cleaned}
     </markdown>
 {/await}

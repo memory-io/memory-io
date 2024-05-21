@@ -8,7 +8,9 @@ pub struct User {
     pub username: String,
     pub email: String,
     pub password: String,
+    #[serde(default)]
     pub paid_user: bool,
+    #[serde(default)]
     pub verified: bool,
 }
 
@@ -37,7 +39,6 @@ pub struct UserSignup {
     pub paid_user: bool,
     #[serde(default, skip_deserializing)]
     pub verified: bool,
-
 }
 
 #[derive(Deserialize, Serialize, Debug)]

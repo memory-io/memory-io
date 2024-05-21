@@ -1,61 +1,27 @@
 <script lang="ts">
     import Button from "$lib/components/ui/button/button.svelte";
     import * as Card from "$lib/components/ui/card";
-	import Formatter from "$lib/ucomponents/formatter.svelte";
-	import { GenerateQuiz } from "$lib/generator/quiz.js";
+    
 	import MultipleChoice from "$lib/ucomponents/multiple-choice.svelte";
-	import { GenerateRound, submitResults } from "$lib/generator/learn.js";
-	import type { MemorizeCardQuestionData } from "$lib/types.js";
-	import Slider from "$lib/components/ui/slider/slider.svelte";
+	import {  MemorizeGenerator } from "$lib/generator/memorize.js";
+
 	import Difficulty from "./difficulty.svelte";
-    function shuffle(array: any[]) {
-        let currentIndex = array.length;
-
-        // While there remain elements to shuffle...
-        while (currentIndex != 0) {
-
-            // Pick a remaining element...
-            let randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-
-            // And swap it with the current element.
-            [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
-        }
-    }
     export let data;
-
-    let currentQuestion = 0;
-    let correct = 0;
-    let wrong = 0;
-    let results:MemorizeCardQuestionData[] = [];
+    let generator = new MemorizeGenerator(data.memorize_data ?? null,data.set!);  
+    generator.NextQuestion();
+    
     let answered:string | null = null;
     if (data.set == undefined ){
         console.log("No set data")
         throw new Error("No set data")
         
     }
-    const quiz =  GenerateRound(data.memorize_data,data.set,data.set.cards.length/3);
     let difficulty = 3;
-    let currentOptions;
-    $:  {
-        currentOptions = shuffle(quiz[currentQuestion].options);
-        
-    };
+    
     async function nextQuestion(){
-        results.push({
-            card_id: quiz[currentQuestion].card_id,
-            answer:quiz[currentQuestion].answer,
-            difficulty: difficulty,
-            correct:answered == quiz[currentQuestion].answer,
-        });
-        currentQuestion++;
-        if (currentQuestion+1 >= quiz.length){
-            console.log("submitting results")
-            console.log(results);
-            
-            await submitResults(results,data.set!.id);
-        }
+        await generator.SubmitAnswer(answered!,difficulty);
+        generator.NextQuestion();
+        generator = generator;
         difficulty = 3;
         answered = null;
     }
@@ -63,6 +29,16 @@
     function selected(choice:string){
         answered = choice;
     }
+    let results:Array<{question:string,correct:number,wrong:number}> | null = null;
+    $: results = Array.from(generator.scores?.values()!).sort((a,b) => b.correct - a.correct).map((score) => {
+        return {
+            question:data.set.cards.find((a)=> a.id == score.id)!.front,
+            correct:score.correct,
+            wrong:score.wrong
+        }
+    });
+    
+
 
 
     
@@ -70,29 +46,14 @@
 </script>
 
 <section class="flex flex-col gap-4">
-    {#if quiz && data.set != undefined && currentQuestion+1 < quiz.length}
-
-    <Card.Root>
-        <Card.Header>
-            <Card.Title class="flex justify-between">
-                {data.set.title} Memorize                     
-            </Card.Title>
-        </Card.Header>
-        <Card.Content>
-            <div class="flex flex-col gap-3">
-                <span>Question {currentQuestion + 1} of {quiz.length}</span>
-                <span class="">
-                </span>
-            </div>
-        </Card.Content>
-    </Card.Root>
+    {#if generator.question && data.set != undefined }
 
     <MultipleChoice 
-    question={quiz[currentQuestion].question} 
-    choices={quiz[currentQuestion].options} 
+    question={generator.question.question} 
+    choices={generator.question.options} 
     selected={selected}
     answered={answered}
-    answer={quiz[currentQuestion].answer}
+    answer={generator.question.answer}
     />
     {#if answered != null}
     <div class="flex flex-row mx-4 justify-center gap-5">
@@ -110,24 +71,35 @@
     </div>
     {/if}
 
+
     
     {/if}
-    {#if quiz && data.set != undefined && currentQuestion+1 >= quiz.length}
+    {#each results as score}
+    {#if score.correct != 0 || score.wrong != 0}
     <Card.Root>
         <Card.Header>
-            <Card.Title>Results</Card.Title>
+            <Card.Title>{score.question}</Card.Title>
   
         </Card.Header>
         <Card.Content>
-            <div class="flex flex-col gap-3">
-                <span>Correct: {correct}</span>
-                <span>Wrong: {wrong}</span>
-                <span>Percentage: {correct / (correct + wrong) * 100}%</span>
-            </div>
-            
+            <div class="flex flex-row max-w-full w-full">
+                <div class="bg-green-600 h-6 flex flex-row justify-center" style="width: {score.correct * 10}%">
+                    {#if score.correct != 0}
+                    <p>{score.correct}</p>
+                    {/if}
+                </div>
+                <div class="bg-red-600 h-6 flex flex-row justify-center" style="width: {score.wrong * 10}%">
+                    {#if score.wrong != 0}
+                    <p>{score.wrong}</p>
+                    {/if}
+                </div>
+      
         </Card.Content>
+   
     </Card.Root>
     {/if}
+        
+    {/each}
 
 </section>
 
