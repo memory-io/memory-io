@@ -66,6 +66,7 @@
                         let out = await updateCard(set_id,card);
                         if (!out.error){
                             console.log("invalidated")
+                            toast.success("Card Updated");    
                             invalidateAll();                    
                         }else{
                             toast.error(out.error);
@@ -103,7 +104,8 @@
         <Button on:click={async () => {
             let out = await addCard(set_id,card.front,card.back);
             if (!out.error){
-                invalidateAll();                    
+                invalidateAll(); 
+                toast.success("Card Added");                   
             }else{
                 toast.error(out.error);
             }

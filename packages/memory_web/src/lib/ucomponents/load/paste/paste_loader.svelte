@@ -6,6 +6,13 @@
 	import type { Card } from "$lib/types";
 	import SetCarosel from "$lib/ucomponents/set_carosel.svelte";
 	import { Reload } from "svelte-radix";
+    import * as RadioGroup from "$lib/components/ui/radio-group";
+	import Input from "$lib/components/ui/input/input.svelte";
+
+    let card_term_seperator = "Comma";
+    let card_seperator = "newline";
+    let custom_card_term_separator = "";
+    let custom_card_separator = "";
 
     let paste_data = "";
     let generated_set: {
@@ -18,11 +25,36 @@
     let create_set_loading = false
     async function GenerateSet(){
         //parse comma seperated sets
+        let seperator: string = "";
+        switch(card_term_seperator){
+            case "Comma":
+                seperator = ",";
+                break;
+            case "Tabs":
+                seperator = "\t";
+                break;
+            case "Custom":
+                seperator = custom_card_term_separator;
+                break;
+        }
+        let card_sep:string = "";
+        switch(card_seperator){
+            case "semicolon":
+                card_sep = ";";
+                break;
+            case "newline":
+                card_sep = "\n";
+                break;
+            case "Custom":
+                card_sep = custom_card_separator;
+                break;
+        }
         loading = true;
-        let content = paste_data.split("\n").map((line)=>{
-            let [front, back] = line.split(",");
+        let content = paste_data.split(card_sep).map((line)=>{
+            let [front, back] = line.split(seperator);
+          
             return {front, back}
-        });
+        }).filter((a)=> a.front != undefined && a.back != undefined && a.front.length > 0 && a.back.length > 0);
         loading = false;
 
         generated_set = {
@@ -51,17 +83,47 @@
         let body = await response.json();
         goto(`/sets/${body.id.$oid}`)
     }
-
-
-
-    
-
-
-    
 </script>
 
 <span class="flex flex-col gap-2 overflow-y-scroll">
-    <Label for="file">Paste comma seperated data here.</Label>
+    <div class="flex flex-row gap-3">
+        <div>
+            <Label>Card Term Seperator</Label>
+        <RadioGroup.Root bind:value={card_term_seperator}>
+            <div class="flex items-center space-x-2">
+                <RadioGroup.Item value="Comma" id="Comma" />
+                <Label for="Comma">Comma</Label>
+            </div>
+            <div class="flex items-center space-x-2">
+                <RadioGroup.Item value="Tabs" id="Tabs" />
+                <Label for="Tabs">Tabs</Label>
+            </div>
+            <div class="flex items-center space-x-2">
+                <RadioGroup.Item value="Custom" id="Custom" />
+                <Label for="Custom"><Input  bind:value={custom_card_term_separator}/></Label>
+            </div>
+        </RadioGroup.Root>
+    </div>
+    <div>
+        <Label>Card Seperator</Label>
+        <RadioGroup.Root bind:value={card_seperator}>
+            <div class="flex items-center space-x-2">
+                <RadioGroup.Item value="semicolon" id="semicolon" />
+                <Label for="semicolon">;</Label>
+            </div>
+            <div class="flex items-center space-x-2">
+                <RadioGroup.Item value="newline" id="newline" />
+                <Label for="newline">New Line</Label>
+            </div>
+            <div class="flex items-center space-x-2">
+                <RadioGroup.Item value="Custom" id="Custom" />
+                <Label for="Custom"><Input class="w-min"  bind:value={custom_card_separator}/></Label>
+            </div>
+        </RadioGroup.Root>
+        </div>
+        
+</div>
+
     <textarea bind:value={paste_data} name="paste" class="w-full h-full"></textarea>
     {#if loading}
         <Button disabled>
