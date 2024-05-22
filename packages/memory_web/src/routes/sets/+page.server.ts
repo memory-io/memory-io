@@ -4,7 +4,6 @@ import {   redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageLoad} */
 export async function load({fetch,locals}) {
-    console.log("running ")
     if (locals.user == null){
         throw redirect(301,"/auth/login");
     }

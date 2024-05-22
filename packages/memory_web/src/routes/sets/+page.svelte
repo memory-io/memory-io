@@ -28,7 +28,7 @@
     
 </script>
 
-<section class="flex flex-col gap-5 justify-items-center">
+<section class="flex flex-col gap-5 justify-items-center m-5">
     <div class="flex flex-row gap-5 justify-start">
         <NewSet/>
         <ImportSet/>

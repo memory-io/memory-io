@@ -10,10 +10,10 @@
 
 </script>
 <Toaster />
-<div class="flex-col flex">
+<div class="flex-col flex w-lvw h-lvh">
 	<div class="border-b">
 		<div class="flex h-16 items-center px-4">
-			<h1 class="md:ml-10 " ><a href="/" >Memory</a></h1>
+			<h1 class="md:ml-10 " ><a href="/" >M3m0ry</a></h1>
 			<MainNav  class="mx-6 ml-20 w-max min-w-max " />
 			<span class="w-full"></span>
 			<div class="w-full flex-row flex items-center justify-end mr-4 md:mr">
@@ -26,7 +26,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="flex-1 space-y-4 p-1 pt-6 sm:p-8">
+	<div class="flex-1 ">
 	
 		<slot/>
 		
