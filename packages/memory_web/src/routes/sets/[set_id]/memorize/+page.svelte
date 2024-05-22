@@ -49,7 +49,7 @@
     
 </script>
 
-<section class="flex flex-col gap-4">
+<section class="flex flex-col gap-4 m-5">
     {#if !generator.question}
     <div class="flex flex-row justify-center gap-4">
         <Button on:click={start}>Start</Button>

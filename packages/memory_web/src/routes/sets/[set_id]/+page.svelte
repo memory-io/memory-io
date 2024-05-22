@@ -46,7 +46,7 @@
 
 </script>
 
-<section class="flex flex-col max-w-screen-md h-full gap-5 justify-items-center ">
+<section class="flex flex-col max-w-screen-md h-full gap-5 justify-items-center m-5 ">
 
 {#if data.set != undefined}
     <Card.Root>

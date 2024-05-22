@@ -60,7 +60,7 @@
     
 </script>
 
-<section class="flex flex-col gap-4">
+<section class="flex flex-col gap-4 m-5">
     {#if quiz && data.set != undefined && currentQuestion+1 < quiz.length}
 
     <Card.Root>

@@ -11,7 +11,6 @@ import SetCarosel from "../../../lib/ucomponents/set_carosel.svelte";
 import { Reload } from "svelte-radix";
 import {toast} from "svelte-sonner";
 import { goto } from "$app/navigation";
-	import { logger } from "$lib/server/logger";
 
 let dialogOpen = false;
 
@@ -32,7 +31,6 @@ async function GenerateSet(content:string){
     loading = false
 
     if (response.status != 200){
-        logger.error(response.statusText);
         toast.error("Failed to generate set");
         return;
     }
@@ -53,8 +51,6 @@ async function CreateSet(){
     create_set_loading = false
 
     if (response.status != 200){
-        logger.error(response.statusText);
-
         return;
     }
     let body = await response.json();

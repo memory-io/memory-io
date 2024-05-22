@@ -3,6 +3,7 @@ import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 import { logger } from "$lib/server/logger";
 
+
 export const load: LayoutServerLoad = async ({params ,fetch}) => {
     const set_id = params.set_id;
 

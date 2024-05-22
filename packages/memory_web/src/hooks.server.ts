@@ -1,6 +1,6 @@
+import { logger } from '$lib/server/logger';
 import type { User } from '$lib/types';
 import {  type Handle } from '@sveltejs/kit';
-import { logger } from '$lib/server/logger';
 export const handle: Handle = async ({ event, resolve }) => {
     if (event.url.pathname.startsWith('/auth') || event.url.pathname.startsWith('/api')) {
 		const response = await resolve(event);

@@ -1,4 +1,3 @@
-import { logger } from "$lib/server/logger";
 import type { Card, ObjectId, StudySet } from "$lib/types";
 import { redirect } from "@sveltejs/kit";
 
@@ -53,7 +52,7 @@ async function deleteSet(set_id: ObjectId) {
 }
 
 async function updateCard(set_id: ObjectId,card: Card) {
-    logger.trace(`updating card ${card.id} in set ${set_id.$oid}`);
+    console.log(`updating card ${card.id} in set ${set_id.$oid}`);
     const response = await fetch(`/api/sets/${set_id.$oid}`, { 
         method: 'PATCH',
         headers: {
@@ -101,7 +100,7 @@ async function updateSet(set:StudySet) {
 }
 
 async function createSet(title: string,description:string,visibility: string) {
-    logger.trace(`creating set ${title}`);
+    console.log(`creating set ${title}`);
     const response = await fetch('/api/sets/create', { 
         method: 'POST',
         headers: {

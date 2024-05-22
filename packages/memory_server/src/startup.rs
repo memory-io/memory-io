@@ -2,7 +2,8 @@ use std::{net::TcpListener, time::Duration};
 
 use crate::{
     models::{
-        user::{model::PasswordReset, model::User},
+        memorize::model::Memorize,
+        user::model::{PasswordReset, User},
         MongoDatabase,
     },
     routes::factory,
@@ -96,6 +97,22 @@ pub async fn initialize_db(client: &MongoDatabase) -> Result<(), mongodb::error:
                 .options(
                     IndexOptions::builder()
                         .expire_after(Duration::from_secs(60 * 10))
+                        .build(),
+                )
+                .build(),
+            None,
+        )
+        .await?;
+
+    client
+        .db()
+        .collection::<Memorize>("memorize")
+        .create_index(
+            IndexModel::builder()
+                .keys(doc! {"last_answered":1})
+                .options(
+                    IndexOptions::builder()
+                        .expire_after(Duration::from_secs(60 * 24 * 30 * 3))
                         .build(),
                 )
                 .build(),
