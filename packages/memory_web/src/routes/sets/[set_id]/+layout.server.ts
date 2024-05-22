@@ -1,6 +1,7 @@
 import type { MemorizeData, StudySetWithCards } from "$lib/types";
 import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
+import { logger } from "$lib/server/logger";
 
 export const load: LayoutServerLoad = async ({params ,fetch}) => {
     const set_id = params.set_id;
@@ -14,8 +15,7 @@ export const load: LayoutServerLoad = async ({params ,fetch}) => {
         redirect(301,"/auth/login");
     }
     if (set_response.status !== 200) {
-        console.log(set_response)
-        console.log(set_id)
+        logger.error(`error loading set ${set_id}`);
         return {
             error:"error loading set"
         };
@@ -40,7 +40,6 @@ export const load: LayoutServerLoad = async ({params ,fetch}) => {
     if (memorize_response.status !== 404){
         memorize_data = await memorize_response.json();
     }
-    console.log(memorize_data);
 
 	return {
 		set,

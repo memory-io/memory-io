@@ -14,7 +14,6 @@
   let loading = false;
 
   $: password_stength = passwordStrength(password);
-  console.log(password_stength)
 
   async function login(){
     loading = true;

@@ -11,7 +11,6 @@
     
     let answered:string | null = null;
     if (data.set == undefined ){
-        console.log("No set data")
         throw new Error("No set data")
         
     }

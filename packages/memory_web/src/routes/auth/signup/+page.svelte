@@ -52,10 +52,8 @@
   }
 
   async function check_username(username: string){
-    console.log(username)
     const response = await fetch(`/api/users/check_username/${username}`)
     if (response.ok) {
-      console.log("valid")
       return true;
     } else if (response.status === 409) {
       throw new Error(await response.json());

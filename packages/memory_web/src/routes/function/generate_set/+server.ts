@@ -7,7 +7,6 @@ export const GET: RequestHandler = async ({url,locals}) => {
     }
     const content = url.searchParams.get('data')?.toString();
 
-    console.log("Requesting Data")
     if (content === undefined ) {   
         return new Response(null,{status:400,statusText:"Bad Request"});
         
@@ -19,7 +18,6 @@ export const GET: RequestHandler = async ({url,locals}) => {
         model: 'claude-3-haiku-20240307',
         max_tokens: 4096,
     });
-    console.log(message);
     // const sets: Omit<Card,"id">[] = JSON.parse(message.content[0].text);
     
     return new Response(message.content[0].text);

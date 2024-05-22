@@ -8,6 +8,7 @@
 	import { Reload } from "svelte-radix";
     import * as RadioGroup from "$lib/components/ui/radio-group";
 	import Input from "$lib/components/ui/input/input.svelte";
+	import { logger } from "$lib/server/logger";
 
     let card_term_seperator = "Comma";
     let card_seperator = "newline";
@@ -77,7 +78,7 @@
         create_set_loading = false
 
         if (response.status != 200){
-            console.log(response.statusText);
+            logger.error("Failed to create set", response);
             return;
         }
         let body = await response.json();

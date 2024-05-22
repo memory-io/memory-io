@@ -44,7 +44,6 @@ class MemorizeGenerator{
             return {id: score.id, correct: score.correct, wrong: score.wrong, struggling: this.PercentCorrect(score) >0.3};
         });
         this.scores = scores_sorted;
-        console.log(this.scores);
     }
     NextQuestion(this: MemorizeGenerator): void{
 
@@ -58,10 +57,8 @@ class MemorizeGenerator{
         }else{
             const indexOfHidden = this.scores.findIndex(score => score.correct == 0 && score.wrong == 0);
             const middle_of_hidden = indexOfHidden + (this.scores.length-indexOfHidden)/2;
-            console.log(`middle of hidden: ${middle_of_hidden} length: ${this.scores.length} indexOfHidden: ${indexOfHidden}`); 
             index = Math.floor(rSkewNorm(0,middle_of_hidden,5,indexOfHidden,this.scores.length));
         }
-        console.log(index)
         const card = this.set.cards.find(card => card.id == usable_scores[index]?.id);
         if (card == undefined){
             throw new Error("card not found");
@@ -73,7 +70,6 @@ class MemorizeGenerator{
             options: []
     
         };
-        console.log(question)
         question.options.push(card.back);
         for(let i = 0; i < 3; i++){
             let option_card = this.set.cards[Math.floor(Math.random()*this.set.cards.length)].back;

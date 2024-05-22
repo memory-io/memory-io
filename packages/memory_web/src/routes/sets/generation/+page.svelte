@@ -9,7 +9,9 @@ import { enhance } from "$app/forms";
 import type { Card } from "$lib/types";
 import SetCarosel from "../../../lib/ucomponents/set_carosel.svelte";
 import { Reload } from "svelte-radix";
+import {toast} from "svelte-sonner";
 import { goto } from "$app/navigation";
+	import { logger } from "$lib/server/logger";
 
 let dialogOpen = false;
 
@@ -23,7 +25,6 @@ let generated_set: {
 let loading = false;
 let create_set_loading = false;
 async function GenerateSet(content:string){
-    console.log(content);
     loading= true;
     let response = await fetch(`/function/generate_set?data=${content}`, {
         method: "GET",
@@ -31,7 +32,8 @@ async function GenerateSet(content:string){
     loading = false
 
     if (response.status != 200){
-        console.log(response.statusText);
+        logger.error(response.statusText);
+        toast.error("Failed to generate set");
         return;
     }
     const data = await response.text();
@@ -51,7 +53,8 @@ async function CreateSet(){
     create_set_loading = false
 
     if (response.status != 200){
-        console.log(response.statusText);
+        logger.error(response.statusText);
+
         return;
     }
     let body = await response.json();

@@ -65,7 +65,6 @@
                     <DropdownMenu.CheckboxItem on:click={async ()=>{
                         let out = await updateCard(set_id,card);
                         if (!out.error){
-                            console.log("invalidated")
                             toast.success("Card Updated");    
                             invalidateAll();                    
                         }else{
@@ -85,7 +84,7 @@
                 <DropdownMenu.CheckboxItem on:click={async ()=>{
                     let out = await deleteCard(set_id,card.id);
                     if (!out.error){
-                        console.log('deleted')
+                        toast.success("Card Deleted");
                         invalidateAll();                    
                     }else{
                         toast.error(out.error);

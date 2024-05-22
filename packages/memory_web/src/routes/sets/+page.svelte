@@ -71,7 +71,6 @@
                     toast.error(out.error);
                 }else{
                     invalidate((url) => {
-                        console.log(url.pathname);
                         return url.pathname === "/api/sets"
                     });
                 }
