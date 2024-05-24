@@ -6,7 +6,8 @@ class MemorizeGenerator{
     public data: MemorizeData ;
     set: StudySetWithCards;
     public question: Question | null = null;
-    public scores: {id:string,correct:number,wrong:number,struggling: boolean}[] = [];
+    public finished = false;
+    public scores: {id:string,correct:number,wrong:number,struggling: boolean, seen: boolean}[] = [];
     public last_seen: string[] = []
     constructor(data: MemorizeData | null, set: StudySetWithCards){
         this.data = data ?? {id: set.id, set_id: set.id, user_id: set.user_id, last_answered: new Date().toISOString(), answers: []};
@@ -38,10 +39,10 @@ class MemorizeGenerator{
             }
         }
     
-        const scores_sorted = Array.from(scores.values()).sort(
+        const scores_sorted = Array.from(scores.values()).sort(() => Math.random() - 0.5).sort(
             (a,b) =>  this.PercentCorrect(b) -this.PercentCorrect(a)
         ).map(score => {
-            return {id: score.id, correct: score.correct, wrong: score.wrong, struggling: this.PercentCorrect(score) >0.3};
+            return {id: score.id, correct: score.correct, wrong: score.wrong, struggling: this.PercentCorrect(score) >0.3,seen: !(score.correct == 0 && score.wrong == 0)};
         });
         this.scores = scores_sorted;
     }
@@ -51,14 +52,20 @@ class MemorizeGenerator{
         // Make it so older answers are disregarded
         // Make it select randomly from the top 20% of cards for new card
         const usable_scores = this.scores.filter(score => !this.last_seen.includes(score.id));
+        const unseen_cards = this.scores.filter(score => !score.seen);
+        const struggling_cards = this.scores.filter(score => score.struggling);
+        if (unseen_cards.length == 0 && struggling_cards.length == 0){
+            this.question = null;
+            this.finished = true;
+            return;
+        }
         let index;
-        if (Math.random() < 0.8){
+        if (Math.random() < 0.8 && struggling_cards.length > 0){
             index = Math.floor(rSkewNorm(0,0,4,0,usable_scores.length));
         }else{
-            const indexOfHidden = this.scores.findIndex(score => score.correct == 0 && score.wrong == 0);
-            const middle_of_hidden = indexOfHidden + (this.scores.length-indexOfHidden)/2;
-            index = Math.floor(rSkewNorm(0,middle_of_hidden,5,indexOfHidden,this.scores.length));
+            index = Math.floor(rSkewNorm(0,unseen_cards.length/2,5,0,unseen_cards.length));
         }
+       
         const card = this.set.cards.find(card => card.id == usable_scores[index]?.id);
         if (card == undefined){
             throw new Error("card not found");
@@ -87,7 +94,7 @@ class MemorizeGenerator{
 
     async SubmitAnswer(this: MemorizeGenerator, answer: string,  difficulty: number){
         this.last_seen.push(this.question!.card_id);
-        if (this.last_seen.length > 5){
+        if (this.last_seen.length > 3){
             this.last_seen.shift();
         }
         const data = {card_id: this.question!.card_id, answer, correct:this.question!.answer == answer, difficulty};
