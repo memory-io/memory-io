@@ -1,12 +1,8 @@
-
-
 use anyhow::bail;
 
 use chrono::Utc;
 use lettre::{message::header::ContentType, Message, Transport};
-use mongodb::{
-    bson::{doc},
-};
+use mongodb::bson::doc;
 use tracing::{debug, trace};
 use uuid::Uuid;
 
@@ -114,7 +110,7 @@ pub(crate) async fn password_reset(
             .header(ContentType::TEXT_HTML)
             .body(format!(
                 "Click <a href='{}/auth/password_reset/{}'>here</a> to reset your password",
-                option_env!("DOMAIN").unwrap_or("http://localhost:5173"),
+                std::env::var("DOMAIN").unwrap_or("http://localhost:5173".into()),
                 token
             ))
             .unwrap();
