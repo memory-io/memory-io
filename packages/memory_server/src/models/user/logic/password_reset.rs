@@ -110,7 +110,7 @@ pub(crate) async fn password_reset(
             .header(ContentType::TEXT_HTML)
             .body(format!(
                 "Click <a href='{}/auth/password_reset/{}'>here</a> to reset your password",
-                std::env::var("DOMAIN").unwrap_or("http://localhost:5173".into()),
+                option_env!("DOMAIN").unwrap_or("http://localhost:5173".into()),
                 token
             ))
             .unwrap();
