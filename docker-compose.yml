@@ -3,7 +3,10 @@ version: "3.0"
 services:
   server:
     image: ghcr.io/memory-io/memory_server:latest
-    build: ./packages/memory_server
+    build: 
+      context: ./packages/memory_server
+      args:
+        - DOMAIN=https://m3m0ry.io
     ports:
       - "6969:8000"
     environment:
