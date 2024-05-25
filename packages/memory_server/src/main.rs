@@ -21,7 +21,7 @@ use tracing::{info};
 async fn main() {
     //env_logger::init_from_env(env_logger::Env::new().default_filter_or("debug"));
     LogTracer::init().expect("Unable to setup log tracer!");
-
+  
     let app_name = concat!(env!("CARGO_PKG_NAME"), "-", env!("CARGO_PKG_VERSION")).to_string();
     let (non_blocking_writer, _guard) = tracing_appender::non_blocking(std::io::stdout());
     let bunyan_formatting_layer = BunyanFormattingLayer::new(app_name, non_blocking_writer);
@@ -35,6 +35,9 @@ async fn main() {
     )
     .await
     .unwrap();
+
+    let domain = option_env!("DOMAIN").unwrap_or("localhost");  
+    info!("Domain: {domain}");
 
     info!("Connecting to database {client_options:?}");
     let address = TcpListener::bind("0.0.0.0:8000").unwrap();
