@@ -1,6 +1,7 @@
 <script lang="ts">
     import * as Card from "$lib/components/ui/card";
     export let data;
+    console.log(data.recent_sets)
 </script>
 
 <section class="m-5 flex flex-col gap-x-32">
@@ -17,7 +18,10 @@
             <Card.Root class="w-64" >
                 <Card.Header >
                     <Card.Title >{set.title}</Card.Title>
-                    <Card.Description>{set.description}</Card.Description>
+                    <Card.Description>
+                        {set.description}
+                        {set.user?.username ?? "Unknown"}
+                    </Card.Description>
                 </Card.Header>
             </Card.Root>
         </a>

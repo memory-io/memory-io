@@ -45,8 +45,9 @@ pub async fn run(
             .app_data(web::Data::new(email_client.clone()))
             .wrap(
                 Cors::default()
-                    .allowed_origin("http://localhost:3000")
-                    .allowed_origin("https://m3m0ry.io")
+                    .allow_any_method()
+                    .allow_any_header()
+                    .allowed_origin(option_env!("DOMAIN").unwrap_or("http://localhost:5173"))
                     .supports_credentials(),
             )
             // .wrap(Governor::new(&governor_conf))

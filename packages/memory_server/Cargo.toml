@@ -13,6 +13,7 @@ mail-send = "0.4.7"
 actix-cors = "0.7.0"
 actix-identity = "0.7.0"
 actix-session = { version = "0.9.0", features = ["cookie-session"] }
+
 actix-web = "4.5.1"
 anyhow = "1.0.80"
 bcrypt = "0.15.0"

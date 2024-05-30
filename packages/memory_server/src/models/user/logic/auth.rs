@@ -1,8 +1,4 @@
-
-
 use anyhow::bail;
-
-
 
 use mongodb::{
     bson::{doc, oid::ObjectId},
@@ -13,11 +9,9 @@ use tracing::{debug, error, trace};
 use validator::Validate;
 use zxcvbn::zxcvbn;
 
-use crate::{
-    models::{
-        user::model::{User, UserSignup},
-        MongoDatabase,
-    },
+use crate::models::{
+    user::model::{User, UserSignup},
+    MongoDatabase,
 };
 
 pub async fn check_username(db: &MongoDatabase, username: &str) -> Result<(), anyhow::Error> {
@@ -88,4 +82,20 @@ pub async fn authenticate_user(
         }
     }
     Ok(None)
+}
+
+pub(crate) async fn delete_user(
+    db: &actix_web::web::Data<MongoDatabase>,
+    user_id: ObjectId,
+) -> Result<(), mongodb::error::Error> {
+    db.db()
+        .collection::<User>("users")
+        .delete_one(
+            doc! {
+                "_id": user_id
+            },
+            None,
+        )
+        .await?;
+    return Ok(());
 }

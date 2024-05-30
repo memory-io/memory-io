@@ -2,23 +2,19 @@ mod auth;
 mod password_reset;
 mod verify;
 
-
 use actix_identity::Identity;
 
 use actix_web::{
     get,
-    web::{self, Data}, HttpResponse, Responder,
+    web::{self, Data},
+    HttpResponse, Responder,
 };
-
-
 
 use tracing::{instrument, warn};
 
-use crate::{
-    models::{
-        user::{self},
-        MongoDatabase,
-    },
+use crate::models::{
+    user::{self},
+    MongoDatabase,
 };
 use auth::*;
 use password_reset::*;
@@ -35,6 +31,7 @@ pub fn factory(cfg: &mut web::ServiceConfig) {
             .service(change_password)
             .service(validate_password_reset)
             .service(logout)
+            .service(delete_user)
             .service(user_verfication),
     );
 }

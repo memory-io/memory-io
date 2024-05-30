@@ -1,12 +1,13 @@
-import type { User } from "$lib/types";
 
 
-export async function getUser(user_cookie:string): Promise<User> {
-    return fetch('http://localhost:8000/users/get_user', { 
-        method: 'GET',
+
+
+async function deleteUser(){
+    return await fetch('/api/users/delete', { 
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Cookie': `id=${user_cookie};`
         }
-    }).then(response => response.json())
+    });
 }
+export { deleteUser}

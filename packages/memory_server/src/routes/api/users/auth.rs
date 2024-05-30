@@ -1,4 +1,4 @@
-
+use std::str::FromStr;
 
 use actix_identity::Identity;
 
@@ -7,13 +7,11 @@ use actix_web::{
     web::{Data, Json, Path},
     HttpMessage, HttpRequest, HttpResponse, Responder,
 };
+use bson::oid::ObjectId;
 
-
-use crate::{
-    models::{
-        user::{self, model::UserSignup},
-        MongoDatabase,
-    },
+use crate::models::{
+    user::{self, model::UserSignup},
+    MongoDatabase,
 };
 use serde::Deserialize;
 
@@ -83,6 +81,23 @@ pub async fn signup(
                 a.inserted_id.as_object_id().unwrap().to_hex(),
             )
             .unwrap();
+            HttpResponse::Ok().into()
+        }
+    };
+}
+#[instrument(skip(db, id),fields(user_id = id.id().unwrap()))]
+#[post("/delete")]
+pub async fn delete_user(id: Identity, db: Data<MongoDatabase>) -> impl Responder {
+    let user_id = id.id().unwrap();
+    let user_id = ObjectId::from_str(&user_id).unwrap();
+    return match auth::delete_user(&db, user_id).await {
+        Err(err) => {
+            warn!("Failed to create user: {}", err);
+            HttpResponse::InternalServerError().body(err.to_string())
+        }
+        Ok(a) => {
+            trace!("User Signed Up");
+            id.logout();
             HttpResponse::Ok().into()
         }
     };

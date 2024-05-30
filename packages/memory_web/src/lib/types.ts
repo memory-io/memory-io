@@ -21,6 +21,7 @@ interface StudySet{
 	id: ObjectId
 	title: string,
 	description: string,
+	user?: User,
 	user_id: ObjectId,
 	visibility: string,
 
