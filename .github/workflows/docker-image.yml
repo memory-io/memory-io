@@ -30,6 +30,9 @@ jobs:
             with:
               context: ./packages/memory_server
               push: true
+              build-args: |
+                DOMAIN=https://m3m0ry.io
+                
               tags: |
                 ghcr.io/memory-io/memory_server:${{github.run_number}}
                 ghcr.io/memory-io/memory_server:latest
