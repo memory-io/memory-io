@@ -10,7 +10,7 @@ services:
     ports:
       - "6969:8000"
     environment:
-      - MONGO_URI=mongodb+srv://connerlreplogle:poH4LtWfmRQQsXf9@cluster0.mf9snea.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - MONGO_URI=
       - DATABASE_NAME=memory
       - DOMAIN=https://m3m0ry.io
       - RUST_LOG=off,memory_server=debug
@@ -23,7 +23,7 @@ services:
     environment:
       - API_URL=http://localhost:6969
       - ORIGIN=https://m3m0ry.io
-      - ANTHROPIC_API_KEY=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
+      - ANTHROPIC_API_KEY=
     links:
       - "server:server"
     depends_on:
