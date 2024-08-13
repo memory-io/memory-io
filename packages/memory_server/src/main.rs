@@ -76,9 +76,7 @@ async fn main() {
     info!("Setting up email...");
     let creds = Credentials::new(
         "apikey".to_owned(),
-        std::env::var("SEND_GRID_API_KEY").unwrap_or(
-            "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".to_string(),
-        ),
+        std::env::var("SEND_GRID_API_KEY").unwrap()
     );
 
     // Open a remote connection to gmail
